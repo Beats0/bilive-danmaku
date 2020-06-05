@@ -1,0 +1,18 @@
+{
+  "name": "bilive-danmaku",
+  "productName": "bilive-danmaku",
+  "version": "1.0.0",
+  "description": "bilibili live danmaku client",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "bilive-danmaku",
+    "email": "Beats01998@gmail.com",
+    "url": "https://github.com/Beats0"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r ../internals/scripts/BabelRegister.js ../internals/scripts/ElectronRebuild.js",
+    "postinstall": "yarn electron-rebuild"
+  },
+  "license": "MIT",
+  "dependencies": {}
+}

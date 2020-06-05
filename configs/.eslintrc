@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "no-console": "off",
+    "no-shadow": "off",
+    "camelcase": "off",
+    "global-require": "off",
+    "import/no-dynamic-require": "off",
+    "prefer-destructuring":"off"
+  }
+}
