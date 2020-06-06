@@ -191,13 +191,6 @@ export default class Socket {
       const body = n.body ? n.body[0] : [];
       for (let i = 0; i < body.length; i++) {
         const d = body[i];
-
-        // FIXME: b站临时维护导致错误cmd，什么时候好了就删掉
-        const re = /DANMU_MSG/g;
-        if (re.test(d.cmd)) {
-          d.cmd = 'DANMU_MSG';
-        }
-
         // 弹幕过滤
         if (d.cmd === CmdType.DANMU_MSG) {
           if (!danmakuFilter(d.info)) {

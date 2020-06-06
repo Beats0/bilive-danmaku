@@ -38,6 +38,9 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
+.flex {
+  display: flex;
+}
 .cursor {
   cursor: pointer;
 }
@@ -1071,7 +1074,7 @@ span.danmaku-content {
   background: #FA5A57;
 }
 .danmaku-adjust-label {
-  width: 90px;
+  width: 120px;
 }
 .danmaku-adjust-label-about {
   width: 70px;
@@ -2725,4 +2728,8 @@ li.item {
   vertical-align: baseline;
   display: inline-block;
   font-size: 10px;
+}
+input.custom-style {
+  flex-grow: 1;
+  text-align: left;
 }

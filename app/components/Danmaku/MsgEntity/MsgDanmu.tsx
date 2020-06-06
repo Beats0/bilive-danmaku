@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import styled from 'styled-components';
 import Tooltip from 'rc-tooltip';
 import { TFunction } from 'i18next';
 import MsgVip from './MsgVip';
@@ -14,12 +15,31 @@ import { updateConfig } from '../../../actions/config';
 import { currentTranslateToCode, translate } from '../../../utils/translation';
 import { openLink } from '../../../utils/common';
 import { read } from '../../../utils/vioce';
+import StyledDao, { StyledDaoNS } from '../../../dao/StyledDao';
 
 interface MsgDanmuProps extends DanmakuMsg {
   t: TFunction;
   config: configStateType;
   updateConfig: typeof updateConfig;
 }
+
+/**
+ * userName 样式
+ * eg:
+ * const UserWrapper =  styled.span`
+ *    text-shadow: 1px 1px 2px #E91E63, 0 0 0.2em #E91E63;
+ * `
+ * */
+const UserWrapperStr = StyledDao.get(StyledDaoNS.UserWrapper);
+const UserWrapper = styled.span`
+  ${UserWrapperStr}
+`;
+
+// content 样式
+const ContentWrapperStr = StyledDao.get(StyledDaoNS.ContentWrapper);
+const ContentWrapper = styled.span`
+  ${ContentWrapperStr}
+`;
 
 function MsgDanmu(props: MsgDanmuProps) {
   const { t, config, updateConfig } = props;
@@ -29,6 +49,7 @@ function MsgDanmu(props: MsgDanmuProps) {
 
   // 翻译文字
   const handleTranslate = () => {
+    console.log('currentTranslateToCode()', currentTranslateToCode())
     translate(props.content, {
       from: 'auto',
       to: currentTranslateToCode()
@@ -108,7 +129,9 @@ function MsgDanmu(props: MsgDanmuProps) {
         config.showLvLabel === 1 && <div className={`user-level-icon dp-i-block p-relative v-middle ${props.userLevel && `lv-${props.userLevel}`}`}>UL {props.userLevel}</div>
       }
        <span className={`user-name v-middle pointer open-menu ${props.guardLevel ? 'guard' : ''}`}>
-        {props.username}:
+         <UserWrapper>
+           {props.username}:
+         </UserWrapper>
       </span>
       <Tooltip
         visible={showToolTip}
@@ -119,8 +142,10 @@ function MsgDanmu(props: MsgDanmuProps) {
         overlay={danmakuActionMenu(props.userID, props.username, props.content)}
       >
         <span className="danmaku-content v-middle pointer ts-dot-2 open-menu">
-          {translateContent}
-          {props.repeat > 0 && (<span className={`repeatNum repeat-num-${props.repeat}`}>{props.repeat}</span>)}
+          <ContentWrapper>
+            {translateContent}
+            {props.repeat > 0 && (<span className={`repeatNum repeat-num-${props.repeat}`}>{props.repeat}</span>)}
+          </ContentWrapper>
         </span>
       </Tooltip>
     </div>
@@ -142,4 +167,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MsgDanmu);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(MsgDanmu));

@@ -25,6 +25,7 @@ import Switch from '../../Base/Switch';
 import Slider from '../../Base/Slider';
 import { parseData } from '../MsgModel';
 import LanguagePanel from './LanguagePanel';
+import CustomStyledPanel from './CustomStyledPanel';
 
 const win = remote.getCurrentWindow();
 
@@ -225,7 +226,7 @@ function DanmakuControl(props: Props) {
         </Tooltip>
         <span title={t('DanmakuControlClearHistory')} onClick={() => handleClickControl(ControlType.CLEAR)} className="icon-item icon-font icon-clear" />
         <span title={t('DanmakuControlBlockScroll')} onClick={() => handleClickControl(ControlType.BLOCK)} className={`icon-item icon-font ${config.blockScrollBar ? 'icon-lock-1 active' : 'icon-unlock-1'}`} />
-        <span title="Dev Tool" onClick={() => win.webContents.toggleDevTools()} className="icon-font icon-item icon-no-modified" />
+        <span title="Dev Tools" onClick={() => win.webContents.toggleDevTools()} className="icon-font icon-item icon-no-modified" />
         <Tooltip
           visible={currentName === ControlType.ABOUT}
           animation="zoom"
@@ -402,6 +403,7 @@ function SettingContent(props: {
       <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('ResetConfig')} <span onClick={() => resetConfig()} className="icon-font icon-item icon-replace icon-config-reset" /></span>
       </div>
+      <CustomStyledPanel t={t} />
     </div>
   );
 }

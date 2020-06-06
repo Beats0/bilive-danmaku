@@ -85,5 +85,8 @@
   "DanmakuLive": "放送を開始",
   "DanmakuWelcome": "ようこそ",
   "DanmakuWelcomeLiveRoom": "ライブルームに入る",
-  "TranslateFailed": "翻訳に失敗しました"
+  "TranslateFailed": "翻訳に失敗しました",
+  "CustomStyleTitle": "ユーザー定義のスタイル",
+  "CustomStyledUserName": "ユーザーのニックネームスタイルをカスタマイズ",
+  "CustomStyledDanmakuContent": "ユーザー定義の弾幕の内容スタイル"
 }

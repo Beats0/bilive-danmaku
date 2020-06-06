@@ -1,6 +1,19 @@
-## bilive-danmaku
+# bilive-danmaku
 
+<div align="center">
+
+![logo](https://beats0.github.io/bilive-danmaku/resources/icons/96x96.png)
+<br>
 bilibili直播弹幕客户端(非官方)，支持windows和IOS
+<br>
+</div>
+
+[>_<]:
+![yaya](https://wx1.sinaimg.cn/large/006nOlwNly1gfiygt1rr4j31hc0tvqv5.jpg)
+
+[>_<]:
+![](https://wx1.sinaimg.cn/large/006nOlwNly1gfiz0kobi3j31hc0u0qv6.jpg)
+
 
 ### 使用
 
@@ -14,9 +27,14 @@ bilibili直播弹幕客户端(非官方)，支持windows和IOS
 
 尽管已经做了限定，但还是有小几率会因大量访问api导致被ban ip，大约10分钟后自动解封。换言之，只要用户数据保存得越多，被ban的几率就越小。
 
-2. Dev Tool
+2. 翻译和朗读
 
-release 版也可开启Dev Tool，用来检查线上版本错误和日志，`Ctrl+R` 可重载。
+大量使用google translate api，超出官方调用频率会导致请求超时，翻译或朗读失败。
+
+3. 自定义样式(仅支持昵称样式和弹幕样式)
+
+release 版也可开启Dev Tools，用来检查线上版本错误和日志，点击Dev Tools，编写对应的编辑CSS样式，只复制css声明语句，例如 `text-shadow: 1px 1px 2px #E91E63, 0 0 0.2em #E91E63;` 然后填入到 `设置` > `自定义样式` 中，`Ctrl+R` 重载即可。
+
 
 
 ### 功能
@@ -43,13 +61,13 @@ SUPER_CHAT_MESSAGE  // SC消息
 ### TODO
 
 - [ ] 完善消息类型
-- [ ] 样式优化
+- [ ] 性能优化
 - [ ] 热更新
 
 
 ### 开发
 
-dev
+调试 dev
 
 ```sh
 # install
@@ -57,9 +75,14 @@ $ yarn -i
 
 # run dev
 $ yarn dev
+
+# 生产模式调试
+$ yarn start
 ```
 
-build
+打包 build
+
+默认打包输出到release文件夹中
 
 ```sh
 # 本平台打包

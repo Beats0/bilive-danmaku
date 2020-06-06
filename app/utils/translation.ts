@@ -182,7 +182,7 @@ export function translate(text: string, opts?: Options): Promise<Result> {
   }
 
   opts.from = opts.from || 'auto';
-  opts.to = opts.to || 'en';
+  opts.to = opts.to || 'zh-cn';
 
   opts.from = getCode(opts.from);
   opts.to = getCode(opts.to);

@@ -85,5 +85,8 @@
   "DanmakuLive": "开播啦",
   "DanmakuWelcome": "欢迎",
   "DanmakuWelcomeLiveRoom": "进入直播间",
-  "TranslateFailed": "翻译失败"
+  "TranslateFailed": "翻译失败",
+  "CustomStyleTitle": "自定义样式",
+  "CustomStyledUserName": "自定义用户昵称样式",
+  "CustomStyledDanmakuContent": "自定义弹幕内容样式"
 }

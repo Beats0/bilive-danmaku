@@ -55,7 +55,7 @@ const API_LIVEROOM_INFO =
   'https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom';
 const API_GIFT_CONFIG = `http://api.live.bilibili.com/gift/v3/live/gift_config`;
 const API_RESENT_SUPER_CHAT = `https://api.live.bilibili.com/av/v1/SuperChat/enable`;
-const API_SERVER_PACKAGE = `https://beats0.github.io/scripter/taobao_api_spider/package.json`;
+const API_SERVER_PACKAGE = `https://beats0.github.io/bilive-danmaku/package.json`;
 
 // 获取用户信息
 export async function getUserInfo(mid: number): Promise<UserInfo> {
