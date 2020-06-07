@@ -479,30 +479,30 @@ function EffectBlock(props: {
     <div className="block-effect-ctnr h-100 border-box p-relative">
       <h1 className="title">{t('BlockEffectTitle')}</h1>
       <ul className="list danmaku-adjust-row">
-        <li className="item">
+        <li onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem0)} className="item">
           <span className={`cb-icon svg-icon v-middle p-absolute checkbox-${config.blockEffectItem0 ? 'selected' : 'default'}`} />
           <input id="block-effect-item-0" type="checkbox" className="pointer v-middle" />
-          <label onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem0)}  htmlFor="block-effect-item-0 "className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem0')}</label>
+          <label className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem0')}</label>
         </li>
-        <li className="item">
+        <li onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem1)} className="item">
           <span className={`cb-icon svg-icon v-middle p-absolute checkbox-${config.blockEffectItem1 ? 'selected' : 'default'}`} />
           <input id="block-effect-item-1" type="checkbox" className="pointer v-middle" />
-          <label onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem1)} htmlFor="block-effect-item-1" className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem1')}</label>
+          <label className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem1')}</label>
         </li>
-        <li className="item">
+        <li onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem2)} className="item">
           <span className={`cb-icon svg-icon v-middle p-absolute checkbox-${config.blockEffectItem2 ? 'selected' : 'default'}`} />
           <input id="block-effect-item-2" type="checkbox" className="pointer v-middle" />
-          <label onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem2)} htmlFor="block-effect-item-2" className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem2')}</label>
+          <label className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem2')}</label>
         </li>
-        <li className="item">
+        <li onClick={() => { clearSCMessage(); handleUpdateConfig(ConfigKey.blockEffectItem3)}} className="item">
           <span className={`cb-icon svg-icon v-middle p-absolute checkbox-${config.blockEffectItem3 ? 'selected' : 'default'}`} />
           <input id="block-effect-item-3" type="checkbox" className="pointer v-middle" />
-          <label onClick={() => { clearSCMessage(); handleUpdateConfig(ConfigKey.blockEffectItem3);}} htmlFor="block-effect-item-3" className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem3')}</label>
+          <label className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem3')}</label>
         </li>
-        <li className="item">
+        <li onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem4)} className="item">
           <span className={`cb-icon svg-icon v-middle p-absolute checkbox-${config.blockEffectItem4 ? 'selected' : 'default'}`} />
           <input id="block-effect-item-4" type="checkbox" className="pointer v-middle" />
-          <label onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem4)} htmlFor="block-effect-item-2" className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem4')}</label>
+          <label className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem4')}</label>
         </li>
       </ul>
     </div>

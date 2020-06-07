@@ -94,11 +94,14 @@ const GiftContainer = (props: GiftContainerProps) => {
                     {/*  <span className="crit-num crit-num-0"></span> */}
                     {/*  <span className="crit-percent"></span> */}
                     {/* </div> */}
-                    <img
-                      src={`${giftItem.gif}`}
-                      className="giftImg"
-                      style={{ width: 50, height: 50 }}
-                    />
+                    {/*过期的礼物或没有图片的礼物不显示图片*/}
+                    {
+                      giftItem.gif && (<img
+                        src={`${giftItem.gif}`}
+                        className="giftImg"
+                        style={{ width: 50, height: 50 }}
+                      />)
+                    }
                     {/* 不包含连击效果 count = giftCount */}
                     {/* <div className={`count-amount ${superBatchGiftNum ? 'di-i-block p-absolute' : 'dp-i-block'}`}> */}
                     {/*  <span className="multiply dp-i-block" /> */}

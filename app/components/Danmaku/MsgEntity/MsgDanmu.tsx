@@ -49,7 +49,6 @@ function MsgDanmu(props: MsgDanmuProps) {
 
   // 翻译文字
   const handleTranslate = () => {
-    console.log('currentTranslateToCode()', currentTranslateToCode())
     translate(props.content, {
       from: 'auto',
       to: currentTranslateToCode()
