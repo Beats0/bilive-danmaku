@@ -30,19 +30,19 @@ bilibili 直播弹幕客户端(非官方)，支持 win 和 mac
 
 支持的消息类型
 
-```js
-LIVE; // 开播消息
-POPULAR; // 人气
-DANMU_MSG; // 弹幕消息
-SEND_GIFT; // 礼物消息
-SPECIAL_GIFT; // TODO
-COMBO_SEND; // 礼物连击消息
-COMBO_END; // TODO 礼物连击结束消息
-NOTICE_MSG; // 广播消息
-WELCOME; // 欢迎进入直播间
-WELCOME_GUARD; // 欢迎舰长进入直播间
-GUARD_BUY; // 上舰消息
-SUPER_CHAT_MESSAGE; // SC消息
+```
+LIVE                // 开播消息
+POPULAR             // 人气
+DANMU_MSG           // 弹幕消息
+SEND_GIFT           // 礼物消息
+SPECIAL_GIFT        // TODO
+COMBO_SEND          // 礼物连击消息
+COMBO_END           // TODO 礼物连击结束消息
+NOTICE_MSG          // 广播消息
+WELCOME             // 欢迎进入直播间
+WELCOME_GUARD       // 欢迎舰长进入直播间
+GUARD_BUY           // 上舰消息
+SUPER_CHAT_MESSAGE  // SC消息
 ```
 
 ### TODO
