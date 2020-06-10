@@ -178,12 +178,6 @@ export default class MenuBuilder {
       {
         label: 'Help',
         submenu: [
-          {
-            label: 'Learn More',
-            click() {
-              shell.openExternal('https://electronjs.org');
-            }
-          },
           // NOTE: 给 yarn start 生产模式调试用
           {
             label: '&Reload',
