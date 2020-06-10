@@ -150,7 +150,7 @@ function DanmakuControl(props: Props) {
     updateConfig({ k, v });
   };
 
-  const newVersion = hasNewVersion(config.latestVersion, config.version);
+  const newVersion = hasNewVersion(config.version, config.latestVersion);
 
   return (
     <div id="danmakuControlOuter">

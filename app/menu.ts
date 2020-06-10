@@ -55,17 +55,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate() {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'bilive-danmaku',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About bilive-danmaku',
           selector: 'orderFrontStandardAboutPanel:'
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide bilive-danmaku',
           accelerator: 'Command+H',
           selector: 'hide:'
         },
@@ -82,22 +82,6 @@ export default class MenuBuilder {
           click: () => {
             app.quit();
           }
-        }
-      ]
-    };
-    const subMenuEdit: DarwinMenuItemConstructorOptions = {
-      label: 'Edit',
-      submenu: [
-        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
-        { type: 'separator' },
-        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
-        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
-        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
-        {
-          label: 'Select All',
-          accelerator: 'Command+A',
-          selector: 'selectAll:'
         }
       ]
     };
@@ -127,18 +111,6 @@ export default class MenuBuilder {
         }
       ]
     };
-    const subMenuViewProd: MenuItemConstructorOptions = {
-      label: 'View',
-      submenu: [
-        {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
-          click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-          }
-        }
-      ]
-    };
     const subMenuWindow: DarwinMenuItemConstructorOptions = {
       label: 'Window',
       submenu: [
@@ -156,102 +128,52 @@ export default class MenuBuilder {
       label: 'Help',
       submenu: [
         {
-          label: 'Learn More',
+          label: 'Source code',
           click() {
-            shell.openExternal('https://electronjs.org');
+            shell.openExternal('https://github.com/Beats0/bilive-danmaku');
           }
         },
         {
-          label: 'Documentation',
+          label: 'Check update',
           click() {
             shell.openExternal(
-              'https://github.com/electron/electron/tree/master/docs#readme'
+              'https://github.com/Beats0/bilive-danmaku/releases'
             );
-          }
-        },
-        {
-          label: 'Community Discussions',
-          click() {
-            shell.openExternal('https://www.electronjs.org/community');
-          }
-        },
-        {
-          label: 'Search Issues',
-          click() {
-            shell.openExternal('https://github.com/electron/electron/issues');
           }
         }
       ]
     };
 
-    const subMenuView =
-      process.env.NODE_ENV === 'development' ||
-      process.env.DEBUG_PROD === 'true'
-        ? subMenuViewDev
-        : subMenuViewProd;
-
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [subMenuAbout, subMenuViewDev, subMenuWindow, subMenuHelp];
   }
 
   buildDefaultTemplate() {
     const templateDefault = [
       {
-        label: '&File',
+        label: '&View',
         submenu: [
           {
-            label: '&Open',
-            accelerator: 'Ctrl+O'
+            label: '&Reload',
+            accelerator: 'Ctrl+R',
+            click: () => {
+              this.mainWindow.webContents.reload();
+            }
           },
           {
-            label: '&Close',
-            accelerator: 'Ctrl+W',
+            label: 'Toggle &Full Screen',
+            accelerator: 'F11',
             click: () => {
-              this.mainWindow.close();
+              this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+            }
+          },
+          {
+            label: 'Toggle &Developer Tools',
+            accelerator: 'Alt+Ctrl+I',
+            click: () => {
+              this.mainWindow.webContents.toggleDevTools();
             }
           }
         ]
-      },
-      {
-        label: '&View',
-        submenu:
-          process.env.NODE_ENV === 'development' ||
-          process.env.DEBUG_PROD === 'true'
-            ? [
-                {
-                  label: '&Reload',
-                  accelerator: 'Ctrl+R',
-                  click: () => {
-                    this.mainWindow.webContents.reload();
-                  }
-                },
-                {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
-                  }
-                },
-                {
-                  label: 'Toggle &Developer Tools',
-                  accelerator: 'Alt+Ctrl+I',
-                  click: () => {
-                    this.mainWindow.webContents.toggleDevTools();
-                  }
-                }
-              ]
-            : [
-                {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
-                    );
-                  }
-                }
-              ]
       },
       {
         label: 'Help',
@@ -279,23 +201,17 @@ export default class MenuBuilder {
           },
           // END
           {
-            label: 'Documentation',
+            label: 'Source code',
+            click() {
+              shell.openExternal('https://github.com/Beats0/bilive-danmaku');
+            }
+          },
+          {
+            label: 'Check update',
             click() {
               shell.openExternal(
-                'https://github.com/electron/electron/tree/master/docs#readme'
+                'https://github.com/Beats0/bilive-danmaku/releases'
               );
-            }
-          },
-          {
-            label: 'Community Discussions',
-            click() {
-              shell.openExternal('https://www.electronjs.org/community');
-            }
-          },
-          {
-            label: 'Search Issues',
-            click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
             }
           }
         ]

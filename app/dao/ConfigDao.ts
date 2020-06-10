@@ -94,6 +94,7 @@ export default class ConfigDao {
     const configData: configStateType = JSON.parse(configStr);
     configData.roomid = resentLiveData.roomid;
     configData.shortid = resentLiveData.shortid;
+    configData.version = pkg.version;
     return configData;
   }
 

@@ -1,8 +1,9 @@
 import { shell } from 'electron';
+import { lt } from 'semver';
 
 function openLink(href: string) {
   shell.openExternal(href).catch(e => {
-    console.log(e);
+    console.warn(e);
   });
 }
 
@@ -81,34 +82,15 @@ function tranNumber(num: number, point = 2): string {
 }
 
 /**
- * @param {string} serverVersion 服务器端版本.
  * @param {string} clientVersion 客户端版本
+ * @param {string} serverVersion 服务器端版本.
  * @return {boolean} 判断是否能更新
  */
 const hasNewVersion = (
-  serverVersion: string,
-  clientVersion: string
+  clientVersion: string,
+  serverVersion: string
 ): boolean => {
-  const arr1 = serverVersion.split('.');
-  const arr2 = clientVersion.split('.');
-  // 将两个版本号拆成数字
-  const minL = Math.min(arr1.length, arr2.length);
-  let pos = 0; // 当前比较位
-  let diff = 0; // 当前为位比较是否相等
-
-  // 逐个比较如果当前位相等则继续比较下一位
-  while (pos < minL) {
-    diff = parseInt(arr1[pos], 10) - parseInt(arr2[pos], 10);
-    if (diff !== 0) {
-      break;
-    }
-    pos++;
-  }
-
-  if (diff > 0) {
-    return true;
-  }
-  return false;
+  return lt(clientVersion, serverVersion);
 };
 
 export {
