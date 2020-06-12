@@ -36,7 +36,6 @@ interface MsgEntityProps extends DanmakuDataFormatted {
 }
 
 export default function MsgEntity(props: MsgEntityProps) {
-  // console.log('props.cmd===>', props.cmd)
   const { cmd, showTransition } = props;
   let Msg = null;
   switch (cmd) {

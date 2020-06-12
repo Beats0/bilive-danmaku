@@ -11,10 +11,14 @@ bilibili 直播弹幕客户端(非官方)，支持 win 和 mac
 
 ### 预览
 
-![yaya](https://wx1.sinaimg.cn/large/006nOlwNly1gfiygt1rr4j31hc0tvqv5.jpg)
+![https://wx1.sinaimg.cn/large/006nOlwNly1gfiygt1rr4j31hc0tvqv5.jpg](https://wx1.sinaimg.cn/large/006nOlwNly1gfiygt1rr4j31hc0tvqv5.jpg)
 
-[>_<]:
-![](https://wx1.sinaimg.cn/large/006nOlwNly1gfiz0kobi3j31hc0u0qv6.jpg)
+<details>
+<summary>展开查看</summary>
+
+![https://wx1.sinaimg.cn/large/006nOlwNly1gfiz0kobi3j31hc0u0qv6.jpg](https://wx1.sinaimg.cn/large/006nOlwNly1gfiz0kobi3j31hc0u0qv6.jpg)
+
+</details>
 
 ### 使用
 

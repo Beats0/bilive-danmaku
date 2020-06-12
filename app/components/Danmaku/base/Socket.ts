@@ -37,6 +37,7 @@ const l = {
   '-5': 'buffer error',
   '-6': 'incompatible version'
 };
+const defaultUid = 598848;
 
 export default class Socket {
   private readonly roomid: number;
@@ -71,7 +72,7 @@ export default class Socket {
     getDecoder: TextDecoder;
   };
 
-  constructor(roomid: number, uid = 598848) {
+  constructor(roomid: number, uid = defaultUid) {
     this.roomid = roomid;
     this.uid = uid;
     this._docker = new WebSocket(wsUrl);
@@ -290,9 +291,6 @@ export default class Socket {
     this._docker.close();
   }
 
-  /**
-   * 执行函数
-   */
   private _call(...args) {
     for (let i = 0, l = this._methods.length; i < l; i++) {
       const fn = this._methods[i];
@@ -301,9 +299,7 @@ export default class Socket {
     }
   }
 
-  /**
-   * 发送加入房间包
-   */
+  // 发送加入房间包
   private _joinRoom(roomid, uid) {
     const packet = JSON.stringify({
       uid,
@@ -312,9 +308,7 @@ export default class Socket {
     return generatePacket(7, packet);
   }
 
-  /**
-   * 发送心跳包，表明连接激活
-   */
+  // 发送心跳包，表明连接激活
   private _sendBeat() {
     this._timer = setInterval(() => {
       this._docker.send(generatePacket());

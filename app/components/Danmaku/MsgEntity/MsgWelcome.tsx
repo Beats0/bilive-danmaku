@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TFunction } from 'i18next';
 import MsgVip from './MsgVip';
-import { configStateType, rootStatePropsType } from '../../../reducers/types';
+import { rootStatePropsType } from '../../../reducers/types';
 
 interface MsgWelcomeProps extends MsgWelcome {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
 }
 
 function MsgWelcome(props: MsgWelcomeProps) {

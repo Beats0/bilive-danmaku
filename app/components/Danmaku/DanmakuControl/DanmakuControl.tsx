@@ -5,11 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import Tooltip from 'rc-tooltip';
-import {
-  ConfigKey,
-  configStateType,
-  rootStatePropsType
-} from '../../../reducers/types';
+import { ConfigKey, rootStatePropsType } from '../../../reducers/types';
 import { updateConfig, resetConfig } from '../../../actions/config';
 import voice, { queryTask } from '../../../utils/vioce';
 import {
@@ -42,7 +38,7 @@ export enum ControlType {
 }
 
 type Props = {
-  config: configStateType;
+  config: ConfigStateType;
   popular: number;
   updateConfig: typeof updateConfig;
   resetConfig: typeof resetConfig;
@@ -298,7 +294,7 @@ function DanmakuTest(props: { onMessage: OnMessageFunc }) {
 
 function SettingContent(props: {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
   handleUpdateConfig: HandleUpdateConfigFunc;
   resetConfig: typeof resetConfig;
 }) {
@@ -410,7 +406,7 @@ function SettingContent(props: {
 
 function TranslateSetting(props: {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
   handleUpdateConfig: HandleUpdateConfigFunc;
 }) {
   const { t, config, handleUpdateConfig } = props;
@@ -469,7 +465,7 @@ function TranslateSetting(props: {
 
 function EffectBlock(props: {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
   clearSCMessage: () => void;
   handleUpdateConfig: HandleUpdateConfigFunc;
 }) {
@@ -511,7 +507,7 @@ function EffectBlock(props: {
 
 function DanmakuBlock(props: {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
   updateConfig: typeof updateConfig;
   handleUpdateConfig: HandleUpdateConfigFunc;
 }) {
@@ -683,7 +679,7 @@ function DanmakuBlock(props: {
 
 function About(props: {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
   newVersion: boolean;
 }) {
   const { t, config, newVersion } = props;

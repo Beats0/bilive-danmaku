@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import { animated } from 'react-spring';
 import { useList } from './Provider';
 import { DanmakuSuperChat } from '../MsgModel';
-import { configStateType } from '../../../reducers/types';
 
 export interface SuperChatItemProps {
   id: number;
   ttl: number;
   msg: DanmakuSuperChat;
-  config: configStateType;
+  config: ConfigStateType;
 }
 
 const Wrapper = styled(animated.div)`

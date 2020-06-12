@@ -8,7 +8,6 @@ import MsgVip from './MsgVip';
 import MsgUserAvatar from './MsgUserAvatar';
 import {
   ConfigKey,
-  configStateType,
   rootStatePropsType
 } from '../../../reducers/types';
 import { updateConfig } from '../../../actions/config';
@@ -19,7 +18,7 @@ import StyledDao, { StyledDaoNS } from '../../../dao/StyledDao';
 
 interface MsgDanmuProps extends DanmakuMsg {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
   updateConfig: typeof updateConfig;
 }
 

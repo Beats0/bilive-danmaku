@@ -48,8 +48,8 @@ export enum ConfigKey {
 }
 
 export type counterStateType = {
-  counter1: number;
-  counter2: number;
+  count1: number;
+  count2: number;
 };
 
 export type danmakuStateType = {
@@ -59,14 +59,10 @@ export type danmakuStateType = {
   userAvatarMap: Map<number, string>;
 };
 
-export type configStateType = {
-  [key in ConfigKey]: number | string | number[] | string[];
-};
-
 export type rootStatePropsType = {
-  count: configStateType;
+  counter: counterStateType;
   danmaku: danmakuStateType;
-  config: configStateType;
+  config: ConfigStateType;
 };
 
 export type GetState = () => rootStatePropsType;

@@ -2,13 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Menu, { Item as MenuItem } from 'rc-menu';
 import Dropdown from 'rc-dropdown';
-import { ConfigKey, configStateType } from '../../../reducers/types';
+import { ConfigKey } from '../../../reducers/types';
 import { HandleUpdateConfigFunc } from './DanmakuControl';
 import lang from '../../../i18n/locales/lang.json';
 
 interface Props {
   configKey: 'languageCode' | 'translateTo' | 'voiceTranslateTo';
-  config: configStateType;
+  config: ConfigStateType;
   handleUpdateConfig: HandleUpdateConfigFunc;
 }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { configStateType, rootStatePropsType } from '../../../reducers/types';
+import { rootStatePropsType } from '../../../reducers/types';
 
 interface VipProps {
-  config: configStateType;
+  config: ConfigStateType;
   isVip: boolean;
   isVipM: boolean;
   isVipY: boolean;

@@ -8,9 +8,9 @@ import {
   incrementAsync
 } from '../actions/counter';
 import { updateConfig } from '../actions/config';
-import { counterStateType } from '../reducers/types';
+import { rootStatePropsType } from '../reducers/types';
 
-function mapStateToProps(state: counterStateType) {
+function mapStateToProps(state: rootStatePropsType) {
   return {
     count1: state.counter.count1
   };

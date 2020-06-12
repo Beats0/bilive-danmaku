@@ -11,7 +11,7 @@ import { SocketInstanceType } from './base/Socket';
 import MsgEntity from './MsgEntity/MsgEntity';
 import DanmakuControl from './DanmakuControl/DanmakuControl';
 import voice from '../../utils/vioce';
-import { ConfigKey, configStateType } from '../../reducers/types';
+import { ConfigKey } from '../../reducers/types';
 import SuperChatPanel from './SuperChatPanel/SuperChatPanel';
 import GiftBubble from './GiftBubble/GiftBubble';
 import { setCssVariable } from '../../utils/common';
@@ -26,7 +26,7 @@ type Props = {
   roomid: number;
   shortid: number;
   socket: SocketInstanceType;
-  config: configStateType;
+  config: ConfigStateType;
   fetchGiftData: () => void;
   fetchVersionData: () => void;
   updateConfig: (config: { k: string; v: string | number }) => void;

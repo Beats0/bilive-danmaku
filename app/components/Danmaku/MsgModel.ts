@@ -26,10 +26,6 @@ function assertUnknownCmdType(cmd: any): string {
 }
 
 export async function parseData(data: DanmakuData) {
-  // console.log(data.cmd)
-  // if((data.cmd === CmdType.SEND_GIFT && data.data.coin_type === 'gold') || data.cmd === CmdType.COMBO_SEND || data.cmd === CmdType.COMBO_END) {
-  //   console.log(data.cmd, data, JSON.stringify(data));
-  // }
   const msg: DanmakuDataFormatted = {
     cmd: data.cmd,
     timesMap: Date.now()
@@ -72,7 +68,6 @@ export async function parseData(data: DanmakuData) {
       }
       break;
     case CmdType.SEND_GIFT:
-      // console.log('SEND_GIFT', data);
       msg.username = data.data.uname;
       msg.userID = data.data.uid;
       msg.face = data.data.face;
@@ -112,13 +107,11 @@ export async function parseData(data: DanmakuData) {
       msg.guardLevel = data.data.guard_level;
       msg.giftName = ['', '总督', '提督', '舰长'][msg.guardLevel];
       msg.giftCount = data.data.num;
-      console.log(CmdType.GUARD_BUY, JSON.stringify(msg));
       break;
     case CmdType.SUPER_CHAT_MESSAGE:
       msg.data = data.data;
       break;
     case CmdType.COMBO_SEND:
-      // console.log('COMBO_SEND', data)
       msg.userID = data.data.uid;
       msg.username = data.data.uname;
       msg.giftName = data.data.gift_name;
@@ -130,12 +123,11 @@ export async function parseData(data: DanmakuData) {
       msg.action = data.data.action;
       break;
     case CmdType.COMBO_END:
-      // console.log('COMBO_END', data)
+      // TODO:
       break;
     case CmdType.POPULAR:
       break;
     default:
-      // console.log('Unknown cmd:', data.cmd, data);
       assertUnknownCmdType(data.cmd);
       break;
   }

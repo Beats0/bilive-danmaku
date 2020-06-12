@@ -36,7 +36,6 @@ const ListProvider = ({ children, removeItemCb }) => {
 
   const clear = useCallback(
     () => {
-      console.log('clear===>')
       setLists([]);
     },
     [setLists]

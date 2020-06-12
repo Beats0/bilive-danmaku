@@ -1,12 +1,12 @@
 import React, { CSSProperties, useState } from 'react';
 import { connect } from 'react-redux';
 import { currentTranslateToCode, translate } from '../../../utils/translation';
-import { configStateType, rootStatePropsType } from '../../../reducers/types';
+import { rootStatePropsType } from '../../../reducers/types';
 import { TFunction } from 'i18next';
 
 interface SuperChatCardProps {
   t: TFunction;
-  config: configStateType;
+  config: ConfigStateType;
   msg: SUPER_CHAT_MESSAGE_DATA;
   style?: CSSProperties;
 }
