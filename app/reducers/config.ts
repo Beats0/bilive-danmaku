@@ -20,8 +20,7 @@ export default function config(
       return newState;
     case RESETCONFIG:
       const data = ConfigDao.reset();
-      console.log('data', data)
-      return data
+      return data;
     case FETCHVERSIONDATA:
       const { latestVersion } = action.payload;
       return { ...state, latestVersion };
