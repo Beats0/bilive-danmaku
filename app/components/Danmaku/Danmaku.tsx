@@ -12,10 +12,10 @@ import MsgEntity from './MsgEntity/MsgEntity';
 import DanmakuControl from './DanmakuControl/DanmakuControl';
 import voice from '../../utils/vioce';
 import { ConfigKey } from '../../reducers/types';
-import SuperChatPanel from './SuperChatPanel/SuperChatPanel';
-import GiftBubble from './GiftBubble/GiftBubble';
+import SuperChatPanel, { SuperChatPanelRef } from './SuperChatPanel/SuperChatPanel';
+import GiftBubble, { GiftBubbleRef } from './GiftBubble/GiftBubble';
 import { setCssVariable } from '../../utils/common';
-import DanmakuList from './DanmakuList/DanmakuList';
+import DanmakuList, { DanmakuListRef } from './DanmakuList/DanmakuList';
 import { CmdType } from './MsgModel';
 import { getLiveRoomInfo, getResentSuperChat, LiveRoom } from '../../api';
 import LiveRoomLists from './LiveRoomLists';
@@ -47,9 +47,9 @@ function Danmaku(props: Props) {
   const [roomID, setRoomID] = useState(shortid);
   const [popular, setPopular] = useState(0);
   const [lockMode, setLockMode] = useState(false);
-  const danmakuRef = useRef({});
-  const scRef = useRef({});
-  const giftRef = useRef({});
+  const danmakuRef = useRef<DanmakuListRef>(null);
+  const scRef = useRef<SuperChatPanelRef>(null);
+  const giftRef = useRef<GiftBubbleRef>(null);
   const currentConfig = useRef(config);
   currentConfig.current = config;
 
@@ -58,7 +58,7 @@ function Danmaku(props: Props) {
   // onMessage必须使用useRef.current,否则会造成更新不会实时同步
   function onMessage(res: DanmakuDataFormatted[]) {
     // console.log('res====>', res)
-    let renderDanmakuLists: React.ReactElement[] = [];
+    const renderDanmakuLists: React.ReactElement[] = [];
     if (currentConfig.current.blockScrollBar) return;
     for (let i = 0; i < res.length; i++) {
       const msg = res[i];

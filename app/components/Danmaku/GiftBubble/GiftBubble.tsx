@@ -6,14 +6,18 @@ import React, {
   useState
 } from 'react';
 import ListProvider from './Provider';
-import GiftBubbleEntity from './GiftBubbleEntity';
+import GiftBubbleEntity, { GiftBubbleEntityRef } from './GiftBubbleEntity';
 
-function GiftBubble(props, ref: React.Ref<any>) {
+export interface GiftBubbleRef {
+  onMessage: (msg: GiftBubbleMsg) => void;
+}
+
+function GiftBubble(props, ref: React.Ref<GiftBubbleRef>) {
   const [lists, setLists] = useState([]);
-  const giftRef = useRef({});
+  const giftRef = useRef<GiftBubbleEntityRef>(null);
 
   const onMessage = useCallback(
-    msg => {
+    (msg: GiftBubbleMsg) => {
       lists.push(msg);
       setLists([...lists]);
       onGiftBubbleMessage(msg);

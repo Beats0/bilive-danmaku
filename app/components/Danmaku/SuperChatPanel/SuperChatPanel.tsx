@@ -6,20 +6,25 @@ import React, {
   useState
 } from 'react';
 import ListProvider from './Provider';
-import SuperChatEntity from './SuperChatEntity';
+import SuperChatEntity, { SuperChatEntityProps } from './SuperChatEntity';
 import { SuperChatItemProps } from './SuperChatItem';
 
-function SuperChatPanel(props, ref: React.Ref<any>) {
+export interface SuperChatPanelRef {
+  onScEntityMessage: (msg: SUPER_CHAT_MESSAGE_DATA) => void;
+  clearMessage: () => void;
+}
+
+function SuperChatPanel(props, ref: React.Ref<SuperChatPanelRef>) {
   const [lists, setLists] = useState<SuperChatItemProps[]>([]);
   const [prevVisible, setPrevVisible] = useState<boolean>(false);
   const [nextVisible, setNextVisible] = useState<boolean>(false);
-  const scEntityRef = useRef({});
-  const sliderRef = useRef(null);
+  const scEntityRef = useRef<SuperChatEntityProps>(null);
+  const sliderRef = useRef<HTMLElement>(null);
   const offsetWidthValue = sliderRef.current ? sliderRef.current.offsetWidth : 0;
   const scrollWidthValue = sliderRef.current ? sliderRef.current.scrollWidth : 0;
 
   const onMessage = useCallback(
-    msg => {
+    (msg: SUPER_CHAT_MESSAGE) => {
       lists.push(msg);
       setLists([...lists]);
       onScEntityMessage(msg);

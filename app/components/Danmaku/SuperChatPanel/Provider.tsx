@@ -10,7 +10,7 @@ const ListProvider = ({ children, removeItemCb }) => {
   let [lists, setLists] = useState([]);
 
   const addItem = useCallback(
-    (msg, ttl) => {
+    (msg: SUPER_CHAT_MESSAGE_DATA, ttl: number) => {
       setLists(lists => [
         ...lists,
         {

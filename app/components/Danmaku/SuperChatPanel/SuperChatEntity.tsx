@@ -1,11 +1,16 @@
 import React, { forwardRef, useCallback, useImperativeHandle } from 'react';
 import { useList } from './Provider';
 
-const ListEntity = (props, ref: React.Ref<any>) => {
+export interface SuperChatEntityProps {
+  onMessage: (msg: SUPER_CHAT_MESSAGE_DATA) => void;
+  clearMessage: () => void;
+}
+
+const ListEntity = (props, ref: React.Ref<SuperChatEntityProps>) => {
   const { addItem, clear } = useList();
 
   const onMessage = useCallback(
-    msg => {
+    (msg: SUPER_CHAT_MESSAGE_DATA) => {
       handleAddItem(msg);
     },
     [addItem]

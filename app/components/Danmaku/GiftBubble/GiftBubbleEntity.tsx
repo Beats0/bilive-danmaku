@@ -2,9 +2,13 @@ import React, { forwardRef, useCallback, useImperativeHandle } from 'react';
 import { useList } from './Provider';
 import { CmdType } from '../MsgModel';
 
+export interface GiftBubbleEntityRef {
+  onMessage: () => void;
+}
+
 const defaultTtl = 1;
 
-const ListEntity = (props, ref: React.Ref<any>) => {
+const ListEntity = (props, ref: React.Ref<GiftBubbleEntityRef>) => {
   const { addItem, updateItem } = useList();
 
   const onMessage = useCallback(

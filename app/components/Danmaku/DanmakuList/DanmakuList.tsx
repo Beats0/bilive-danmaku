@@ -10,10 +10,17 @@ interface DanmakuListProps {
   maxMessageCount: number;
 }
 
-function DanmakuList(props: DanmakuListProps, ref) {
+export interface DanmakuListRef {
+  onMessage: (lists: React.ReactElement[]) => void;
+  clearMessage: () => void;
+}
+
+function DanmakuList(props: DanmakuListProps, ref: React.Ref<DanmakuListRef>) {
   const { maxMessageCount } = props;
   let [direction, setDirection] = useState('down');
-  let [renderDanmakuLists, setRenderDanmakuLists] = useState([]);
+  let [renderDanmakuLists, setRenderDanmakuLists] = useState<
+    React.ReactElement[]
+  >([]);
 
   const onMessage = useCallback(lists => {
     renderDanmakuLists = [...renderDanmakuLists, ...lists];
