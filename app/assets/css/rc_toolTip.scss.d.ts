@@ -1,0 +1,36 @@
+declare const styles: {
+  readonly "rc-tooltip": string;
+  readonly "rc-tooltip-zoom-enter": string;
+  readonly "rc-tooltip-zoom-leave": string;
+  readonly "rc-tooltip-fade-leave": string;
+  readonly "rc-tooltip-zoom-appear": string;
+  readonly "rc-tooltip-zoom-enter-active": string;
+  readonly "rc-tooltip-zoom-appear-active": string;
+  readonly "rcToolTipZoomIn": string;
+  readonly "rc-tooltip-zoom-leave-active": string;
+  readonly "rcToolTipZoomOut": string;
+  readonly "rc-tooltip-fade-enter": string;
+  readonly "rc-tooltip-fade-appear": string;
+  readonly "rc-tooltip-fade-enter-active": string;
+  readonly "rc-tooltip-fade-appear-active": string;
+  readonly "fadeInDown": string;
+  readonly "rc-tooltip-fade-leave-active": string;
+  readonly "fadeOutUp": string;
+  readonly "rc-tooltip-hidden": string;
+  readonly "rc-tooltip-placement-top": string;
+  readonly "rc-tooltip-placement-topLeft": string;
+  readonly "rc-tooltip-placement-topRight": string;
+  readonly "rc-tooltip-placement-right": string;
+  readonly "rc-tooltip-placement-rightTop": string;
+  readonly "rc-tooltip-placement-rightBottom": string;
+  readonly "rc-tooltip-placement-bottom": string;
+  readonly "rc-tooltip-placement-bottomLeft": string;
+  readonly "rc-tooltip-placement-bottomRight": string;
+  readonly "rc-tooltip-placement-left": string;
+  readonly "rc-tooltip-placement-leftTop": string;
+  readonly "rc-tooltip-placement-leftBottom": string;
+  readonly "rc-tooltip-inner": string;
+  readonly "rc-tooltip-arrow": string;
+};
+export = styles;
+

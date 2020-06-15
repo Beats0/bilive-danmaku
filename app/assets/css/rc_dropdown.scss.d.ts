@@ -1,0 +1,32 @@
+declare const styles: {
+  readonly "rc-dropdown": string;
+  readonly "rc-dropdown-hidden": string;
+  readonly "rc-dropdown-menu": string;
+  readonly "rc-dropdown-menu-item": string;
+  readonly "rc-dropdown-menu-item-active": string;
+  readonly "rc-dropdown-menu-item-selected": string;
+  readonly "rc-dropdown-menu-item-disabled": string;
+  readonly "rc-dropdown-menu-item-divider": string;
+  readonly "rc-dropdown-slide-up-enter": string;
+  readonly "rc-dropdown-slide-up-appear": string;
+  readonly "rc-dropdown-slide-up-leave": string;
+  readonly "rc-dropdown-slide-up-enter-active": string;
+  readonly "rc-dropdown-placement-bottomLeft": string;
+  readonly "rc-dropdown-slide-up-appear-active": string;
+  readonly "rc-dropdown-placement-bottomCenter": string;
+  readonly "rc-dropdown-placement-bottomRight": string;
+  readonly "rcDropdownSlideUpIn": string;
+  readonly "rc-dropdown-placement-topLeft": string;
+  readonly "rc-dropdown-placement-topCenter": string;
+  readonly "rc-dropdown-placement-topRight": string;
+  readonly "rcDropdownSlideDownIn": string;
+  readonly "rc-dropdown-slide-up-leave-active": string;
+  readonly "rcDropdownSlideUpOut": string;
+  readonly "rcDropdownSlideDownOut": string;
+  readonly "rc-dropdown-arrow": string;
+  readonly "rc-dropdown-show-arrow": string;
+  readonly "rc-dropdown-placement-top": string;
+  readonly "rc-dropdown-placement-bottom": string;
+};
+export = styles;
+

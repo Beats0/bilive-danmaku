@@ -1,3 +1,6 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable consistent-return */
+
 import UserInfoApiTask, { apiTaskConfig } from '../../api';
 import config from '../../config';
 import UserAvatarDao from '../../dao/UserAvatarDao';
@@ -21,39 +24,42 @@ export enum CmdType {
   UNKNOWN = 'UNKNOWN'
 }
 
-function assertUnknownCmdType(cmd: any): string {
-  return `Unknown cmd: ${cmd}`;
+function assertUnknownCmdType(cmd: any): UnknownMsg {
+  return {
+    cmd,
+    content: `Unknown cmd: ${cmd}`
+  };
 }
 
-export async function parseData(data: DanmakuData) {
-  const msg: DanmakuDataFormatted = {
-    cmd: data.cmd,
-    timesMap: Date.now()
-  };
-
+export async function parseData(
+  data: DanmakuData
+): Promise<DanmakuDataFormatted> {
   switch (data.cmd) {
     case CmdType.LIVE:
       break;
     case CmdType.DANMU_MSG:
       const userID = data.info['2']['0'];
-      msg.username = data.info['2']['1'];
-      msg.userID = userID;
-      msg.isAdmin = !!data.info['2']['2'];
-      msg.isVip = !!data.info['2']['3'];
-      msg.isVipM = !!data.info['2']['3'];
-      msg.isVipY = !!data.info['2']['4'];
-      msg.guardLevel = data.info['7'];
-      msg.content = data.info['1'];
-      msg.fanLv = data.info['3']['0'];
-      msg.fanName = data.info['3']['1'];
-      msg.liveUp = data.info['3']['2'];
-      msg.liveRoomID = data.info['3']['3'];
-      msg.userLevel = data.info['4']['0'] || 0;
-      msg.repeat = 0;
+      const danmakuMsg: DanmakuMsg = {
+        cmd: CmdType.DANMU_MSG,
+        username: data.info['2']['1'],
+        userID,
+        isAdmin: !!data.info['2']['2'],
+        isVip: !!data.info['2']['3'],
+        isVipM: !!data.info['2']['3'],
+        isVipY: !!data.info['2']['4'],
+        guardLevel: data.info['7'],
+        content: data.info['1'],
+        fanLv: data.info['3']['0'],
+        fanName: data.info['3']['1'],
+        liveUp: data.info['3']['2'],
+        liveRoomID: data.info['3']['3'],
+        userLevel: data.info['4']['0'] || 0,
+        repeat: 0
+      };
       if (config.showAvatar) {
         // 先查询Dao,如果有就直接添加
         if (UserAvatarDao.has(userID)) {
-          msg.face = UserAvatarDao.get(userID).avatar;
+          danmakuMsg.face = UserAvatarDao.get(userID).avatar;
         } else {
           // 如果没有添加UserInfoApiTask，
           UserInfoApiTask.push(userID);
@@ -63,73 +69,93 @@ export async function parseData(data: DanmakuData) {
           ) {
             await sleep(apiTaskConfig.sleepMs);
           }
-          msg.face = UserAvatarDao.get(userID).avatar;
+          danmakuMsg.face = UserAvatarDao.get(userID).avatar;
         }
       }
-      break;
+      return danmakuMsg;
     case CmdType.SEND_GIFT:
-      msg.username = data.data.uname;
-      msg.userID = data.data.uid;
-      msg.face = data.data.face;
-      msg.giftName = data.data.giftName;
-      msg.action = data.data.action;
-      msg.giftCount = data.data.num;
-      msg.coinType = data.data.coin_type;
-      msg.totalCoin = data.data.total_coin;
-      msg.price = data.data.num * data.data.price;
-      msg.giftAction = data.data.action;
-      msg.giftId = data.data.giftId;
+      const danmakuGiftMsg: GiftBubbleMsg = {
+        cmd: CmdType.SEND_GIFT,
+        username: data.data.uname,
+        userID: data.data.uid,
+        face: data.data.face,
+        giftName: data.data.giftName,
+        action: data.data.action,
+        giftCount: data.data.num,
+        coinType: data.data.coin_type,
+        totalCoin: data.data.total_coin,
+        price: data.data.num * data.data.price,
+        giftAction: data.data.action,
+        giftId: data.data.giftId
+      };
+
       if (data.data.batch_combo_id) {
-        msg.batchComboId = data.data.batch_combo_id;
+        danmakuGiftMsg.batchComboId = data.data.batch_combo_id;
       }
       if (data.data.super_gift_num) {
-        msg.superGiftNum = data.data.super_gift_num;
-        msg.superBatchGiftNum = data.data.super_batch_gift_num;
-        msg.comboStayTime = data.data.combo_stay_time;
+        danmakuGiftMsg.superGiftNum = data.data.super_gift_num;
+        danmakuGiftMsg.superBatchGiftNum = data.data.super_batch_gift_num;
+        danmakuGiftMsg.comboStayTime = data.data.combo_stay_time;
       }
-      break;
+      return danmakuGiftMsg;
     case CmdType.WELCOME:
-      msg.username = data.data.uname;
-      msg.userID = data.data.uid;
-      msg.isAdmin = !!data.data.is_admin;
-      msg.isVip = !!data.data.vip;
-      msg.isVipM = data.data.vip === 1;
-      msg.isVipY = data.data.svip === 1;
-      break;
+      const welcomeMsg: MsgWelcome = {
+        cmd: CmdType.WELCOME,
+        username: data.data.uname,
+        userID: data.data.uid,
+        isAdmin: !!data.data.is_admin,
+        isVip: !!data.data.vip,
+        isVipM: data.data.vip === 1,
+        isVipY: data.data.svip === 1
+      };
+      return welcomeMsg;
     case CmdType.WELCOME_GUARD:
-      msg.username = data.data.username;
-      msg.userID = data.data.uid;
-      msg.guardLevel = data.data.guard_level;
-      break;
+      const welcomeguardMsg: MsgWelcomeGuard = {
+        cmd: CmdType.WELCOME_GUARD,
+        username: data.data.username,
+        userID: data.data.uid,
+        guardLevel: data.data.guard_level
+      };
+      return welcomeguardMsg;
     case CmdType.GUARD_BUY:
-      msg.username = data.data.username;
-      msg.userID = data.data.uid;
-      msg.guardLevel = data.data.guard_level;
-      msg.giftName = ['', '总督', '提督', '舰长'][msg.guardLevel];
-      msg.giftCount = data.data.num;
-      break;
+      const guardBuyMsg: GuardBuyMsg = {
+        cmd: CmdType.GUARD_BUY,
+        username: data.data.username,
+        userID: data.data.uid,
+        guardLevel: data.data.guard_level,
+        giftName: ['', '总督', '提督', '舰长'][data.data.guard_level],
+        giftCount: data.data.num
+      };
+      return guardBuyMsg;
     case CmdType.SUPER_CHAT_MESSAGE:
-      msg.data = data.data;
-      break;
+      const superChatMsg: SUPER_CHAT_MESSAGE = {
+        cmd: CmdType.SUPER_CHAT_MESSAGE,
+        data: data.data
+      };
+      return superChatMsg;
     case CmdType.COMBO_SEND:
-      msg.userID = data.data.uid;
-      msg.username = data.data.uname;
-      msg.giftName = data.data.gift_name;
-      msg.giftId = data.data.gift_id;
-      msg.comboId = data.data.combo_id;
-      msg.comboId = data.data.combo_id;
-      msg.comboNum = data.data.combo_num;
-      msg.batchComboId = data.data.batch_combo_id;
-      msg.action = data.data.action;
-      break;
-    case CmdType.COMBO_END:
-      // TODO:
-      break;
+      const comboSendMsg: GiftBubbleMsg = {
+        cmd: CmdType.COMBO_SEND,
+        userID: data.data.uid,
+        username: data.data.uname,
+        giftName: data.data.gift_name,
+        giftId: data.data.gift_id,
+        comboId: data.data.combo_id,
+        comboNum: data.data.combo_num,
+        batchComboId: data.data.batch_combo_id,
+        action: data.data.action
+      };
+      return comboSendMsg;
     case CmdType.POPULAR:
-      break;
+      const popularMsg: POPULAR = {
+        cmd: CmdType.POPULAR,
+        popular: data.popular
+      };
+      return popularMsg;
+    // case CmdType.COMBO_END:
+    //   // TODO:
+    //   break;
     default:
-      assertUnknownCmdType(data.cmd);
-      break;
+      return assertUnknownCmdType(data.cmd);
   }
-  return msg;
 }

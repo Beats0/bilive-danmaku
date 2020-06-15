@@ -1,26 +1,12 @@
-/**
- * @author Beats0 https://github.com/Beats0
- * */
-
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/class-name-casing */
 
 interface Connecting {
-  cmd: CmdType.CONNECTING;
+  cmd: string;
 }
 
-interface DanmakuBase {
-  [key: string]: any;
-  roomID?: number;
-  cmd: CmdType;
-  fanLv: number;
-  fanName: string;
-  liveUp: string;
-  liveRoomID: number | string;
-  timesMap: number;
-}
-
-interface DanmakuUser extends DanmakuBase {
+interface DanmakuMsg {
+  cmd: string;
   username: string;
   userID: number;
   isAdmin: boolean;
@@ -29,11 +15,17 @@ interface DanmakuUser extends DanmakuBase {
   isVipY: boolean;
   guardLevel: number;
   userLevel: number;
-  face: string;
+  face?: string;
+  fanLv: number;
+  fanName: string;
+  liveUp: string;
+  liveRoomID: number | string;
+  content: string;
+  repeat: number;
 }
 
 interface DanmakuGift {
-  cmd: CmdType.SEND_GIFT;
+  cmd: string;
   username: string;
   userID: number;
   face: string;
@@ -50,14 +42,11 @@ interface DanmakuGift {
 }
 
 interface GiftSend {
-  username: number;
-  /** 送礼人 */
-  userID: string;
-  /** 连击次数 */
+  cmd: string;
+  username: string;
+  userID: number;
   comboNum: number;
-  /** 礼物名 */
   giftName: string;
-  /** 礼物ID */
   giftId: number;
   action: '赠送' | '投喂';
   comboId: string;
@@ -65,12 +54,8 @@ interface GiftSend {
   comboStayTime: number;
 }
 
-interface DanmakuMsg extends DanmakuBase, DanmakuUser {
-  content: string;
-  repeat: number;
-}
-
 interface GuardBuyMsg {
+  cmd: string;
   username: string;
   userID: number;
   guardLevel: number;
@@ -79,25 +64,38 @@ interface GuardBuyMsg {
 }
 
 interface MsgWelcomeGuard {
+  cmd: string;
   username: string;
+  userID: number;
   guardLevel: number;
 }
 
 interface MsgWelcome {
+  cmd: string;
   username: string;
+  userID: number;
+  isAdmin: boolean;
+  isVip: boolean;
+  isVipM: boolean;
+  isVipY: boolean;
 }
 
-type GiftBubbleMsg = COMBO_SEND | COMBO_END | DanmakuGift | GiftSend;
+type GiftBubbleMsg = Partial<DanmakuGift & GiftSend>;
 
-type DanmakuDataFormatted = Partial<
-  Connecting &
-    DanmakuMsg &
-    POPULAR &
-    GiftBubbleMsg &
-    GuardBuyMsg &
-    MsgWelcomeGuard &
-    MsgWelcome
->;
+interface UnknownMsg {
+  cmd: string;
+  content: string;
+}
+
+type DanmakuDataFormatted =
+  | Connecting
+  | DanmakuMsg
+  | POPULAR
+  | GiftBubbleMsg
+  | GuardBuyMsg
+  | MsgWelcomeGuard
+  | MsgWelcome
+  | UnknownMsg;
 
 type GiftRaw = {
   id: number;
