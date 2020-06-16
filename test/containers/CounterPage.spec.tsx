@@ -9,7 +9,7 @@ import { configureStore } from '../../app/store/configureStore';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-function setup(initialState = {}) {
+function setup(initialState = { counter: { count1: 0, count2: 0 } }) {
   const store = configureStore(initialState);
   const history = createBrowserHistory();
   const provider = (
@@ -53,7 +53,7 @@ describe('containers', () => {
     });
 
     it('should change if odd and if odd button clicked', () => {
-      const { buttons, p } = setup({ counter: 1 });
+      const { buttons, p } = setup({ counter: { count1: 1, count2: 0 } });
       buttons.at(2).simulate('click');
       expect(p.text()).toMatch(/^2$/);
     });

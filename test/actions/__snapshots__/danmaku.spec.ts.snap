@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions should increment should create fetch gift data api action 1`] = `"FETCHGIFTDATA"`;
+
+exports[`actions should increment should create init websocket action 1`] = `"CREATESOCKET"`;

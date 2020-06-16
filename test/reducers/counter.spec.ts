@@ -7,19 +7,25 @@ import {
 describe('reducers', () => {
   describe('counter', () => {
     it('should handle initial state', () => {
-      expect(counter(undefined, {})).toMatchSnapshot();
+      expect(counter({ count1: 0, count2: 0 }, {})).toMatchSnapshot();
     });
 
     it('should handle INCREMENT_COUNTER', () => {
-      expect(counter(1, { type: INCREMENT_COUNTER })).toMatchSnapshot();
+      expect(
+        counter({ count1: 0, count2: 0 }, { type: INCREMENT_COUNTER })
+      ).toMatchSnapshot();
     });
 
     it('should handle DECREMENT_COUNTER', () => {
-      expect(counter(1, { type: DECREMENT_COUNTER })).toMatchSnapshot();
+      expect(
+        counter({ count1: 1, count2: 0 }, { type: DECREMENT_COUNTER })
+      ).toMatchSnapshot();
     });
 
     it('should handle unknown action type', () => {
-      expect(counter(1, { type: 'unknown' })).toMatchSnapshot();
+      expect(
+        counter({ count1: 0, count2: 0 }, { type: 'unknown' })
+      ).toMatchSnapshot();
     });
   });
 });

@@ -5,7 +5,7 @@ const prefixKey = 'config';
 
 const resentLiveData = LiveRoomDao.getResent();
 
-const defaultConfig: ConfigStateType = {
+export const defaultConfig: ConfigStateType = {
   version: pkg.version,
   latestVersion: pkg.version,
   languageCode: 'zhCn',
