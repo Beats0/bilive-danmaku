@@ -4,7 +4,7 @@
 
 ![logo](https://beats0.github.io/bilive-danmaku/resources/icons/96x96.png)
 <br>
-bilibili 直播弹幕客户端(非官方)，支持 win 和 mac
+bilibili 直播弹幕姬(非官方)，支持 win 和 mac
 <br>
 
 </div>
@@ -13,12 +13,7 @@ bilibili 直播弹幕客户端(非官方)，支持 win 和 mac
 
 ![https://wx1.sinaimg.cn/large/006nOlwNly1gfiygt1rr4j31hc0tvqv5.jpg](https://wx1.sinaimg.cn/large/006nOlwNly1gfiygt1rr4j31hc0tvqv5.jpg)
 
-<details>
-<summary>展开查看</summary>
-
-![https://wx1.sinaimg.cn/large/006nOlwNly1gfiz0kobi3j31hc0u0qv6.jpg](https://wx1.sinaimg.cn/large/006nOlwNly1gfiz0kobi3j31hc0u0qv6.jpg)
-
-</details>
+[视频预览](https://www.bilibili.com/video/av328551804)
 
 ### 使用
 
@@ -81,7 +76,7 @@ text-shadow: 1px 1px 2px #e91e63, 0 0 0.2em #e91e63;
 
 ### 已知 BUG
 
-- mac 在全屏模式下无法至于顶层
+- mac 在全屏模式下无法置于顶层
 
 ### 开发
 
