@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState
 } from 'react';
 
@@ -17,6 +18,8 @@ export interface DanmakuListRef {
 
 function DanmakuList(props: DanmakuListProps, ref: React.Ref<DanmakuListRef>) {
   const { maxMessageCount } = props;
+  const maxMessageCountRef = useRef(maxMessageCount);
+  maxMessageCountRef.current = maxMessageCount;
   let [direction, setDirection] = useState('down');
   let [renderDanmakuLists, setRenderDanmakuLists] = useState<
     React.ReactElement[]
