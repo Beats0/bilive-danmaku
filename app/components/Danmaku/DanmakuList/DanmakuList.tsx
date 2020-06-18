@@ -27,8 +27,8 @@ function DanmakuList(props: DanmakuListProps, ref: React.Ref<DanmakuListRef>) {
 
   const onMessage = useCallback(lists => {
     renderDanmakuLists = [...renderDanmakuLists, ...lists];
-    if (renderDanmakuLists.length > maxMessageCount) {
-      renderDanmakuLists.splice(0, renderDanmakuLists.length - maxMessageCount);
+    if (renderDanmakuLists.length > maxMessageCountRef.current) {
+      renderDanmakuLists.splice(0, renderDanmakuLists.length - maxMessageCountRef.current);
     }
     setRenderDanmakuLists([...renderDanmakuLists]);
   }, []);
