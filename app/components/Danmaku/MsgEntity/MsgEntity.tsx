@@ -33,17 +33,20 @@ interface MsgEntityProps extends DanmakuDataFormatted {
   key: string;
   showTransition: boolean;
   data?: any;
+  showGift?: boolean;
 }
 
 export default function MsgEntity(props: MsgEntityProps) {
-  const { cmd, showTransition } = props;
+  const { cmd, showTransition, showGift = false } = props;
   let Msg = null;
   switch (cmd) {
     case CmdType.DANMU_MSG:
       Msg = <MsgDanmu {...props} />;
       break;
     case CmdType.SEND_GIFT:
-      Msg = <MsgSendGift {...props} />;
+      if (showGift) {
+        Msg = <MsgSendGift { ...props } />;
+      }
       break;
     case CmdType.CONNECTING:
       Msg = <MsgConnecting {...props} />;

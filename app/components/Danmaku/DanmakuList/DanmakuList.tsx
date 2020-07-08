@@ -8,6 +8,8 @@ import React, {
 } from 'react';
 
 interface DanmakuListProps {
+  showGiftDanmakuList: boolean;
+  height: number;
   maxMessageCount: number;
 }
 
@@ -17,7 +19,7 @@ export interface DanmakuListRef {
 }
 
 function DanmakuList(props: DanmakuListProps, ref: React.Ref<DanmakuListRef>) {
-  const { maxMessageCount } = props;
+  const { showGiftDanmakuList, height, maxMessageCount } = props;
   const maxMessageCountRef = useRef(maxMessageCount);
   maxMessageCountRef.current = maxMessageCount;
   let [direction, setDirection] = useState('down');
@@ -69,13 +71,20 @@ function DanmakuList(props: DanmakuListProps, ref: React.Ref<DanmakuListRef>) {
     if (!chatListEl) return;
     const { scrollHeight, scrollTop, clientHeight } = chatListEl;
     if (direction === 'up') return;
-    // 距离底部1/4后自动定位到底部
-    if (scrollHeight - (scrollTop + clientHeight) > scrollHeight / 4) return;
+    // 距离底部1/3后自动定位到底部
+    if (scrollHeight - (scrollTop + clientHeight) > scrollHeight / 3) return;
     chatListEl.scrollTop = scrollHeight;
   }
 
   return (
-    <div className="chat-history-list scrollbar">
+    <div
+      className="chat-history-list scrollbar"
+      style={{
+        height: showGiftDanmakuList
+          ? `calc(100vh - ${height + 170}px)`
+          : `calc(100vh - 125px)`
+      }}
+    >
       {[...renderDanmakuLists]}
     </div>
   );

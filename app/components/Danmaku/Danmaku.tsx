@@ -17,8 +17,10 @@ import GiftBubble, { GiftBubbleRef } from './GiftBubble/GiftBubble';
 import { setCssVariable } from '../../utils/common';
 import DanmakuList, { DanmakuListRef } from './DanmakuList/DanmakuList';
 import { CmdType } from './MsgModel';
+import { updateConfig } from '../../../actions/config';
 import { getLiveRoomInfo, getResentSuperChat, LiveRoom } from '../../api';
 import LiveRoomLists from './LiveRoomLists';
+import DanmakuGiftList, { DanmakuGiftListRef } from './DanmakuGiftList/DanmakuGiftList';
 
 const win = remote.getCurrentWindow();
 
@@ -29,7 +31,7 @@ type Props = {
   config: ConfigStateType;
   fetchGiftData: () => void;
   fetchVersionData: () => void;
-  updateConfig: (config: { k: string; v: string | number }) => void;
+  updateConfig: typeof updateConfig;
   createSocket: (roomid: number) => void;
 };
 
@@ -48,6 +50,7 @@ function Danmaku(props: Props) {
   const [popular, setPopular] = useState(0);
   const [lockMode, setLockMode] = useState(false);
   const danmakuRef = useRef<DanmakuListRef>(null);
+  const danmakuGiftList = useRef<DanmakuGiftListRef>(null);
   const scRef = useRef<SuperChatPanelRef>(null);
   const giftRef = useRef<GiftBubbleRef>(null);
   const currentConfig = useRef(config);
@@ -59,6 +62,7 @@ function Danmaku(props: Props) {
   function onMessage(res: DanmakuDataFormatted[]) {
     // console.log('res====>', res)
     const renderDanmakuLists: React.ReactElement[] = [];
+    const renderDanmakuGiftLists: React.ReactElement[] = [];
     if (currentConfig.current.blockScrollBar) return;
     for (let i = 0; i < res.length; i++) {
       const msg = res[i];
@@ -73,8 +77,16 @@ function Danmaku(props: Props) {
         }
       }
       if (currentConfig.current.blockEffectItem4 === 0) {
-        if (msg.cmd === CmdType.COMBO_SEND || (msg.cmd === CmdType.SEND_GIFT && msg.coinType === 'gold')) {
-          onGiftBubbleMessage(msg);
+        if (msg.cmd === CmdType.SEND_GIFT || msg.cmd === CmdType.COMBO_SEND) {
+          const giftElement = <MsgEntity { ...msg }
+                                         showGift={ true }
+                                         t={ t }
+                                         showTransition={ currentConfig.current.showTransition === 1 }
+                                         key={ String(Math.random()) }/>;
+          renderDanmakuGiftLists.push(giftElement);
+          if (msg.coinType === 'gold') {
+            onGiftBubbleMessage(msg);
+          }
         }
       }
 
@@ -91,10 +103,11 @@ function Danmaku(props: Props) {
       const renderElement = <MsgEntity { ...msg }
                                        t={t}
                                        showTransition={ currentConfig.current.showTransition === 1 }
-                                       key={ String(Math.random()) }/>;
+                                       key={ String(Math.random()) } />;
       renderDanmakuLists.push(renderElement);
     }
     onDanmakuMessage(renderDanmakuLists);
+    onGiftMessage(renderDanmakuGiftLists);
   }
 
   async function fetchResentSuperChat(roomid: number) {
@@ -109,6 +122,10 @@ function Danmaku(props: Props) {
   const handleClearMessage = useCallback(() => {
     danmakuRef.current.clearMessage && danmakuRef.current.clearMessage();
   }, []);
+
+  const onGiftMessage = useCallback((lists: React.ReactElement[]) => {
+    danmakuGiftList.current.onMessage && danmakuGiftList.current.onMessage(lists);
+  }, [])
 
   const onScMessage = useCallback((msg: SUPER_CHAT_MESSAGE) => {
     scRef.current.onMessage && scRef.current.onMessage(msg.data);
@@ -211,7 +228,19 @@ function Danmaku(props: Props) {
       </div>
       <SuperChatPanel ref={scRef} />
       <GiftBubble ref={giftRef} />
-      <DanmakuList ref={danmakuRef} maxMessageCount={currentConfig.current.maxMessageCount} />
+      <div className="danmakuWrap">
+        <DanmakuList
+          ref={danmakuRef}
+          showGiftDanmakuList={currentConfig.current.showGiftDanmakuList === 1}
+          height={config.danmakuGiftListHeight}
+          maxMessageCount={currentConfig.current.maxMessageCount} />
+        <DanmakuGiftList
+          ref={danmakuGiftList}
+          showGiftDanmakuList={currentConfig.current.showGiftDanmakuList === 1}
+          height={currentConfig.current.danmakuGiftListHeight}
+          maxGiftCount={currentConfig.current.maxDanmakuGiftCount}
+          updateConfig={updateConfig} />
+      </div>
       <DanmakuControl t={t} popular={popular} onMessage={onMessage} clearMessage={handleClearMessage} clearSCMessage={clearSCMessage} />
     </div>
   );

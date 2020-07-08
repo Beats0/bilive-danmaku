@@ -82,7 +82,7 @@ github.com/develar/app-builder/pkg/download.(*Part).download
 
 ## 已知 BUG
 
-- dev 模式无法使用透明背景, 生产模式又可以了= =，不影响功能
+- mac dev 模式无法使用透明背景, 生产模式又可以了= =，不影响功能
 
 参考
 

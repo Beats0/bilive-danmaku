@@ -13,12 +13,15 @@ function MsgSendGift(props: GiftProps) {
   if (msg.coinType === 'gold' && msg.price < config.blockMinGoldSeed) return null;
   if (msg.coinType === 'silver' && msg.price < config.blockMinSilverSeed) return null;
 
-  const giftItem = giftMap.get(msg.giftId) || {};
-  return (
-    <div className="danmakuItem">
-      <span className="gift-item user-name">{msg.username}</span>&nbsp;{msg.giftAction} {msg.giftName} <img src={giftItem.gif} alt="" className="giftImg" /> x{msg.giftCount}
-    </div>
-  );
+  const giftItem = giftMap.get(msg.giftId);
+  if (giftItem) {
+    return (
+      <div className="danmakuItem">
+        <span className="gift-item user-name">{msg.username}</span>&nbsp;{msg.giftAction} {msg.giftName} <img src={giftItem.webp} className="giftImg" /> x {msg.giftCount}
+      </div>
+    );
+  }
+  return null;
 }
 
 function mapStateToProps(state: rootStatePropsType) {

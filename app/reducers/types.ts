@@ -42,6 +42,9 @@ export enum ConfigKey {
   blockUserLv = 'blockUserLv',
   blockUserNotMember = 'blockUserNotMember',
   blockUserNotBindPhone = 'blockUserNotBindPhone',
+  showGiftDanmakuList = 'showGiftDanmakuList',
+  maxDanmakuGiftCount = 'maxDanmakuGiftCount',
+  danmakuGiftListHeight = 'danmakuGiftListHeight',
   region = 'region',
   cursor = 'cursor',
   showTransition = 'showTransition'

@@ -4,6 +4,7 @@ import UserAvatarDao from '../dao/UserAvatarDao';
 import { CmdType } from '../components/Danmaku/MsgModel';
 import LiveRoomDao, { LiveRoomData } from '../dao/LiveRoomDao';
 import pkg from '../package.json';
+import config from '../config';
 
 export interface UserInfo {
   face: string;
@@ -53,15 +54,35 @@ export interface ResentSuperChatResponse {
 const API_USER_INFO = 'https://api.bilibili.com/x/space/acc/info';
 const API_LIVEROOM_INFO =
   'https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom';
-const API_GIFT_CONFIG = `http://api.live.bilibili.com/gift/v3/live/gift_config`;
+const API_GIFT_CONFIG = `https://api.live.bilibili.com/gift/v3/live/gift_config`;
 const API_RESENT_SUPER_CHAT = `https://api.live.bilibili.com/av/v1/SuperChat/enable`;
 const API_SERVER_PACKAGE = `https://beats0.github.io/bilive-danmaku/package.json`;
 
 // 获取用户信息
 export async function getUserInfo(mid: number): Promise<UserInfo> {
+  const defaultUserInfo: UserInfo = {
+    face: 'https://static.hdslb.com/images/member/noface.gif',
+    level: 0,
+    mid,
+    name: ''
+  };
+
   return new Promise<UserInfo>((resolve, reject) => {
+    // 被ban后不再请求api
+    if (config.showAvatar === 0) {
+      resolve(defaultUserInfo);
+      return;
+    }
     fetch(`${API_USER_INFO}?mid=${mid}`)
-      .then(res => res.json())
+      .then(res => {
+        // 如果检测到被ban后自动关闭显示头像功能
+        if (res.status === 412) {
+          console.warn('显示头像功能已关闭, 请稍后再试...');
+          config.showAvatar = 0;
+          return resolve(defaultUserInfo);
+        }
+        return res.json();
+      })
       .then(res => {
         // 保存avatar
         UserAvatarDao.save(mid, res.data.face);
@@ -69,12 +90,6 @@ export async function getUserInfo(mid: number): Promise<UserInfo> {
       })
       .catch(e => {
         console.log(e);
-        const defaultUserInfo: UserInfo = {
-          face: 'https://static.hdslb.com/images/member/noface.gif',
-          level: 0,
-          mid,
-          name: ''
-        };
         resolve(defaultUserInfo);
       });
   });

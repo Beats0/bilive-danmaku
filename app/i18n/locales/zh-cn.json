@@ -34,6 +34,7 @@
   "VoiceSettingVoiceSpeed": "播放语速",
   "DanmakuSettingTitle": "弹幕设置",
   "DanmakuSettingMaxMessageCount": "弹幕最大条数",
+  "DanmakuSettingMaxGiftCount": "礼物最大条数",
   "DanmakuSettingBlockMinGoldSeed": "显示最低金瓜子",
   "DanmakuSettingBlockMinSilverSeed": "显示最低银瓜子",
   "DanmakuSettingShowTransition": "弹幕过渡动画",
@@ -88,5 +89,6 @@
   "TranslateFailed": "翻译失败",
   "CustomStyleTitle": "自定义样式",
   "CustomStyledUserName": "自定义用户昵称样式",
-  "CustomStyledDanmakuContent": "自定义弹幕内容样式"
+  "CustomStyledDanmakuContent": "自定义弹幕内容样式",
+  "ShowGiftDanmakuList": "显示礼物弹幕列表"
 }

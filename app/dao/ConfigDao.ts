@@ -40,13 +40,16 @@ export const defaultConfig: ConfigStateType = {
   blockEffectItem3: 0,
   blockEffectItem4: 0,
   blockMinGoldSeed: 0,
-  blockMinSilverSeed: 10000,
+  blockMinSilverSeed: 0,
   blockDanmakuLists: [],
   blockUserLists: [],
   blockUserLv: 0,
   blockUserNotMember: 0,
   blockUserNotBindPhone: 0,
   showTransition: 1,
+  showGiftDanmakuList: 1,
+  maxDanmakuGiftCount: 30,
+  danmakuGiftListHeight: 200,
   region: 'drag',
   cursor: 'default'
 };
@@ -59,6 +62,8 @@ export default class ConfigDao {
     configData.roomid = resentLiveData.roomid;
     configData.shortid = resentLiveData.shortid;
     configData.version = pkg.version;
+    // 与最新版config合并
+    this.save({ ...defaultConfig, ...configData });
     return configData;
   }
 

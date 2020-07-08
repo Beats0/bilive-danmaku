@@ -194,6 +194,12 @@ type ConfigStateType = {
   blockUserNotBindPhone: 0 | 1;
   // 自动翻译弹幕
   showTransition: 0 | 1;
+  // 显示礼物弹幕列表
+  showGiftDanmakuList: 0 | 1;
+  // 礼物弹幕最大数量
+  maxDanmakuGiftCount: number;
+  // 礼物弹幕列表高度
+  danmakuGiftListHeight: number;
   region: 'drag' | 'no-drag';
   cursor: 'default' | 'move';
 };

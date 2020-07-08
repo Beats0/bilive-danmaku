@@ -34,6 +34,7 @@
   "VoiceSettingVoiceSpeed": "プレイ率",
   "DanmakuSettingTitle": "弾幕の設定",
   "DanmakuSettingMaxMessageCount": "弾幕の最大数",
+  "DanmakuSettingMaxGiftCount": "ギフトの最大数",
   "DanmakuSettingBlockMinGoldSeed": "最も低いヒマワリの種を表示",
   "DanmakuSettingBlockMinSilverSeed": "最も低い銀のヒマワリの種を表示する",
   "DanmakuSettingShowTransition": "弾幕遷移アニメーション",
@@ -88,5 +89,6 @@
   "TranslateFailed": "翻訳に失敗しました",
   "CustomStyleTitle": "ユーザー定義のスタイル",
   "CustomStyledUserName": "ユーザーのニックネームスタイルをカスタマイズ",
-  "CustomStyledDanmakuContent": "ユーザー定義の弾幕の内容スタイル"
+  "CustomStyledDanmakuContent": "ユーザー定義の弾幕の内容スタイル",
+  "ShowGiftDanmakuList": "ギフト弾幕リストを表示"
 }

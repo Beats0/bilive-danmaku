@@ -333,6 +333,13 @@ function SettingContent(props: {
                className="link-input t-center v-middle border-box level-input" />
       </div>
       <div className="danmaku-adjust-row">
+        <span className="danmaku-adjust-label v-middle dp-i-block">{t('DanmakuSettingMaxGiftCount')}</span>
+        <input type="text"
+               defaultValue={config.maxDanmakuGiftCount}
+               onBlur={(e) => handleUpdateConfig(ConfigKey.maxDanmakuGiftCount, Number(e.target.value))}
+               className="link-input t-center v-middle border-box level-input" />
+      </div>
+      <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('DanmakuSettingBlockMinGoldSeed')}</span>
         <input type="text"
                defaultValue={config.blockMinGoldSeed}
@@ -345,6 +352,10 @@ function SettingContent(props: {
                defaultValue={config.blockMinSilverSeed}
                onBlur={(e) => handleUpdateConfig(ConfigKey.blockMinSilverSeed, Number(e.target.value))}
                className="link-input t-center v-middle border-box level-input" />
+      </div>
+      <div className="danmaku-adjust-row">
+        <span className="danmaku-adjust-label v-middle dp-i-block">{t('ShowGiftDanmakuList')}</span>
+        <Switch status={config.showGiftDanmakuList} onChange={v => handleUpdateConfig(ConfigKey.showGiftDanmakuList, v)} />
       </div>
       <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('DanmakuSettingShowTransition')}</span>
@@ -615,7 +626,7 @@ function DanmakuBlock(props: {
               {
                 blockUserNotBindPhone && (
                   <div className="close-icon p-absolute">
-                    <span className="close-icon-bar dp-i-block p-absolute"/>
+                    <span className="close-icon-bar dp-i-block p-absolute" />
                   </div>
                 )
               }

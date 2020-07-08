@@ -126,10 +126,9 @@ a:hover {
 }
 
 .chat-history-list {
-  height: calc(100vh - 125px);
+  height: 100%;
   position: relative;
   margin-top: 40px;
-  margin-bottom: 30px;
   padding: 5px 5px 50px 8px;
   font-size: 12px;
   overflow: auto;
@@ -1550,11 +1549,10 @@ li.item {
 }
 
 .giftImg {
-  width: 28px;
-  height: 28px;
-  vertical-align: bottom;
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
 }
-
 
 /**********pay-note-panel*************/
 
@@ -2507,4 +2505,54 @@ li.item {
 input.custom-style {
   flex-grow: 1;
   text-align: left;
+}
+.danmakuWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh);
+}
+
+// gift list
+.danmakuGiftOuter {
+  margin-bottom: 30px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  .danmakuGiftSlider {
+    cursor: n-resize;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 1px 0;
+    color: rgba(0,0,0,.85);
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+    text-align: center;
+    border-top: 0;
+    &::before, &::after {
+      position: relative;
+      top: 50%;
+      width: 50%;
+      border-top: 1px solid #f0f0f0;
+      -webkit-transform: translateY(50%);
+      transform: translateY(50%);
+      content: '';
+    }
+    .slider-inner {
+      height: 4px;
+      width: 40px;
+      background: #eee;
+      border-radius: 4px;
+      &:hover {
+        background: #ffffff;
+      }
+    }
+  }
+  .danmakuGiftContainer {
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 0 8px 10px 8px;
+  }
 }

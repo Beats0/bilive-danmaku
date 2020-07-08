@@ -2467,25 +2467,38 @@ interface SUPER_CHAT_MESSAGE {
   data: SUPER_CHAT_MESSAGE_DATA;
 }
 
-interface SUPER_CHAT_MESSAGE_DATA {
-  id: string;
-  uid: number;
-  price: number;
-  rate: number;
-  message: string;
-  message_trans: string;
-  background_image: string;
+interface SUPER_CHAT_MESSAGE_BASE {
+  background_bottom_color: string;
   background_color: string;
   background_icon: string;
+  background_image: string;
   background_price_color: string;
-  background_bottom_color: string;
-  ts: number;
-  token: string;
-  medal_info: SUPER_CHAT_MESSAGE_DATA_MEDAL_INFO;
-  user_info: SUPER_CHAT_MESSAGE_DATA_USER_INFO;
-  time: number;
-  start_time: number;
   end_time: number;
+  font_color: string;
+  id: number;
+  message: string;
+  message_trans: string;
+  price: number;
+  rate: number;
+  start_time: number;
+  time: number;
+  token: string;
+  trans_mark: number;
+  ts: number;
+  uid: number;
+  user_info: SUPER_CHAT_MESSAGE_DATA_USER_INFO;
+  face: string;
+  face_frame: string;
+  guard_level: number;
+  is_main_vip: number;
+  is_svip: number;
+  is_vip: number;
+  uname: string;
+  user_level: number;
+}
+
+interface SUPER_CHAT_MESSAGE_DATA extends SUPER_CHAT_MESSAGE_BASE {
+  medal_info: SUPER_CHAT_MESSAGE_DATA_MEDAL_INFO;
   gift: SUPER_CHAT_MESSAGE_DATA_GIFT;
 }
 
