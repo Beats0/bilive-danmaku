@@ -49,6 +49,22 @@ $ yarn package-ci
 
 如果开启了火绒，关闭火绒
 
+- 打包后字体文件缺失
+
+先build
+
+```
+yarn build
+```
+
+将打包后的ttf字体文件复制到 `app\dist\dist` 中
+
+再重新打包
+
+```
+yarn electron-builder build --win --x64
+```
+
 - 打包后无法正常工作
 
 以生产模式模式运行并 debug

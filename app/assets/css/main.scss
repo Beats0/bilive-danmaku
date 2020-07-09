@@ -331,6 +331,7 @@ a:hover {
 }
 .user-name {
   color: #cfcfcf;
+  margin-right: 4px;
   font-family: 'Helvetica Neue',Helvetica,Arial,'Microsoft Yahei','Hiragino Sans GB','Heiti SC','WenQuanYi Micro Hei',sans-serif;
 }
 .user-name.guard {
@@ -1071,6 +1072,7 @@ span.danmaku-content {
 }
 .danmaku-adjust-label {
   width: 120px;
+  user-select: none;
 }
 .danmaku-adjust-label-about {
   width: 70px;
@@ -1505,6 +1507,7 @@ li.item {
 .danmakuActionMenu {
   display: flex;
   flex-direction: column;
+  user-select: none;
 }
 
 .danmakuActionMenuUser {

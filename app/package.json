@@ -1,7 +1,7 @@
 {
   "name": "bilive-danmaku",
   "productName": "bilive-danmaku",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "bilibili live danmaku client",
   "main": "./main.prod.js",
   "author": {

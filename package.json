@@ -1,7 +1,7 @@
 {
   "name": "bilive-danmaku",
   "productName": "bilive-danmaku",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "ElectronReactVersion": "1.1.0",
   "description": "bilibili live danmaku client",
   "scripts": {
