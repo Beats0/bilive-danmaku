@@ -116,7 +116,7 @@ function MsgDanmu(props: MsgDanmuProps) {
       {
         props.fanLv && config.showFanLabel === 1 && (
           <div className="fans-medal-item-ctnr dp-i-block p-relative v-middle">
-            <div className={ [props.fanLv && `fans-medal-item level-${ props.fanLv }`] }>
+            <div className={ [props.fanLv && `fans-medal-item level-${ props.fanLv > 20 ? 20 : props.fanLv}`] }>
               <span className="label">{ props.fanName }</span>
               <span className="level">{ props.fanLv }</span>
             </div>

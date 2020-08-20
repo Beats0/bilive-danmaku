@@ -259,17 +259,16 @@ a:hover {
 
 .fans-medal-item {
   display: inline-block;
-  height: 14px;
-  line-height: 14px;
+  height: 15px;
+  line-height: 15px;
   color: #fff;
-  border: 1px solid #61decb;
+  border: 0.5px solid #61decb;
   border-left: 0;
   white-space: nowrap;
   border-radius: 2px;
   font-family: Microsoft YaHei,Microsoft Sans Serif,Microsoft SanSerf,\\5FAE\8F6F\96C5\9ED1;
   font-size: 12px;
   position: relative;
-  cursor: default;
   text-shadow: none;
 }
 
@@ -308,6 +307,10 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.fans-medal-item .label {
+  padding: 0 5px;
 }
 
 .fans-medal-item .level {

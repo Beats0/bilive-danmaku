@@ -67,7 +67,7 @@ yarn electron-builder build --win --x64
 
 - 打包后无法正常工作
 
-以生产模式模式运行并 debug
+以生产模式运行并 debug
 
 ```sh
 yarn start

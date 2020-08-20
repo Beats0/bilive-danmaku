@@ -56,7 +56,7 @@ const API_LIVEROOM_INFO =
   'https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom';
 const API_GIFT_CONFIG = `https://api.live.bilibili.com/gift/v3/live/gift_config`;
 const API_RESENT_SUPER_CHAT = `https://api.live.bilibili.com/av/v1/SuperChat/enable`;
-const API_SERVER_PACKAGE = `https://beats0.github.io/bilive-danmaku/package.json`;
+const API_SERVER_PACKAGE = `https://cdn.jsdelivr.net/gh/Beats0/bilive-danmaku@master/package.json`;
 
 // 获取用户信息
 export async function getUserInfo(mid: number): Promise<UserInfo> {
@@ -102,13 +102,13 @@ export async function getGiftInfo(): Promise<Map<number, GiftRaw>> {
     fetch(API_GIFT_CONFIG)
       .then(res => res.json())
       .then((res: { msg: string; data: any[] }) => {
-        if (res.msg === 'success') {
+        if (res.code === 0) {
           const { data } = res;
           for (let i = 0; i < data.length; i++) {
             giftMap.set(data[i].id, data[i]);
           }
+          resolve(giftMap);
         }
-        resolve(giftMap);
       })
       .catch(error => {
         console.log(error);
