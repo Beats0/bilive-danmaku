@@ -82,8 +82,10 @@ text-shadow: 1px 1px 2px #e91e63, 0 0 0.2em #e91e63;
 
 [README_DEV](https://github.com/Beats0/bilive-danmaku/blob/master/README_DEV.md)
 
+### [更新日志](https://github.com/Beats0/bilive-danmaku/blob/master/CHANGELOG.md)
+
 ### LICENSE
 
-[MIT](https://github.com/Beats0/bilive-danmaku/master/LICENSE)
+[MIT](https://github.com/Beats0/bilive-danmaku/blob/master/LICENSE)
 
 [MIT © Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
