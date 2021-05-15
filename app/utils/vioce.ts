@@ -17,7 +17,7 @@ document.body && document.body.appendChild($audio);
 
 async function baiduTTS(fullText: string) {
   console.log('[baiduTTS translate]', fullText);
-  const url = `http://tts.baidu.com/text2audio?cuid=baiduid&lan=zh&ctp=1&pdt=311&tex=${fullText}`;
+  const url = `http://tts.baidu.com/text2audio?cuid=baike&lan=zh&ctp=1&pdt=301&tex=${fullText}`;
   const res = await fetch(url);
   const blob = await res.blob();
   const resData = {
@@ -44,22 +44,27 @@ export async function read(uname: string, text: string) {
   let res;
   let blob;
   try {
-    const googleTranslateRes = await translate(text, {
-      from: 'auto',
-      to: currentTranslateToCode()
-    });
-    console.log(googleTranslateRes.text);
-    const { iso } = googleTranslateRes.from.language;
-    let resData = {};
-    if (config.voiceTranslateTo === 'zhCn' && iso === 'zh-CN') {
-      resData = await baiduTTS(fullText);
-    } else {
-      resData = await googleTTS(`${googleTranslateRes.text}`);
-    }
+    // google 翻译挂了 = =
+    // const googleTranslateRes = await translate(text, {
+    //   from: 'auto',
+    //   to: currentTranslateToCode()
+    // });
+    // console.log(googleTranslateRes.text);
+    // const { iso } = googleTranslateRes.from.language;
+    // let resData = {};
+    // if (config.voiceTranslateTo === 'zhCn' && iso === 'zh-CN') {
+    //   resData = await baiduTTS(fullText);
+    // } else {
+    //   resData = await googleTTS(`${googleTranslateRes.text}`);
+    // }
+
+    // 直接用百度TTS
+    const resData = await baiduTTS(fullText);
+
     res = resData.res;
     blob = resData.blob;
 
-    if (res.status !== 200 || blob.type === 'application/json') {
+    if (res.status !== 200) {
       console.warn('合成语言失败');
       return;
     }

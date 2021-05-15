@@ -22,7 +22,7 @@
   "GlobalSettingShowLvLabel": "显示等级",
   "GlobalSettingShowVip": "显示姥爷",
   "TranslateSettingTitle": "翻译设置",
-  "AutoTranslate": "自动翻译",
+  "AutoTranslate": "自动翻译(已失效)",
   "TranslateFrom": "源语言",
   "TranslateFromAuto": "自动",
   "TranslateTo": "翻译目标语言",
