@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![logo](https://beats0.github.io/bilive-danmaku/resources/icons/96x96.png)
+![logo](https://beats0.github.io/bilive-danmaku/assets/icons/96x96.png)
 <br>
 bilibili 直播弹幕姬(非官方)，支持 win 和 mac
 <br>
@@ -51,7 +51,7 @@ SUPER_CHAT_MESSAGE  // SC消息
 - [ ] 历史留言榜
 - [ ] 置顶功能优化
 - [ ] 自定义字体
-- [ ] 弹幕过渡动画
+- [ ] 优化弹幕滚动动画
 
 ### 注意 Note!
 
