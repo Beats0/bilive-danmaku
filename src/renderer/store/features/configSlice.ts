@@ -19,6 +19,7 @@ export const configSlice = createSlice({
     },
     resetConfig(state) {
       state = ConfigDao.reset();
+      window.location.reload();
     },
   },
 });

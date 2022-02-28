@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { ipcRenderer } from "electron";
-import { useTranslation } from 'react-i18next';
-import Tooltip from 'rc-tooltip';
-import { ConfigKey } from '../../../reducers/types';
-import voice, { queryTask } from '../../../utils/vioce';
+import { useTranslation } from "react-i18next";
+import Tooltip from "rc-tooltip";
+import { ConfigKey } from "../../../reducers/types";
+import voice from "../../../utils/vioce";
 import {
   arrayDiff,
   hasNewVersion,
@@ -12,16 +12,17 @@ import {
   setCssVariable,
   toPercentNum,
   tranNumber,
-} from '../../../utils/common';
-import Switch from '../../Base/Switch';
-import Slider from '../../Base/Slider';
-import { parseData } from '../MsgModel';
-import LanguagePanel from './LanguagePanel';
-import CustomStyledPanel from './CustomStyledPanel';
+  systemFonts,
+} from "../../../utils/common";
+import Switch from "../../Base/Switch";
+import Slider from "../../Base/Slider";
+import { parseData } from "../MsgModel";
+import LanguagePanel from "./LanguagePanel";
+import CustomStyledPanel from "./CustomStyledPanel";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectConfig, updateConfig, resetConfig } from "../../../store/features/configSlice";
-
-// const win = remote.getCurrentWindow();
+import { resetConfig, selectConfig, updateConfig } from "../../../store/features/configSlice";
+import Dropdown from "rc-dropdown";
+import Menu, { Item as MenuItem } from "rc-menu";
 
 export enum ControlType {
   DANMAKUTEST = 'DANMAKUTEST',
@@ -47,7 +48,7 @@ interface OnMessageFunc {
 }
 
 export interface HandleUpdateConfigFunc {
-  (k: ConfigKey, v?: number | string): void;
+  (k: ConfigKey, v?: number | string | string[]): void;
 }
 
 function DanmakuControl(props: Props) {
@@ -60,26 +61,7 @@ function DanmakuControl(props: Props) {
     clearMessage,
     clearSCMessage,
   } = props;
-  const taskConfig = queryTask();
   const { t } = useTranslation();
-
-  const handleClickControl = (controlName: ControlType) => {
-    switch (controlName) {
-      case ControlType.EFFECTBLOCK:
-        break;
-      case ControlType.CLEAR:
-        clearMessage();
-        break;
-      case ControlType.BLOCK:
-        handleUpdateConfig(ConfigKey.blockScrollBar);
-        break;
-      case ControlType.UNLOCK:
-        break;
-      case ControlType.CONFIG:
-        break;
-    }
-    setCurrentName(controlName);
-  };
 
   const handleUpdateConfig: HandleUpdateConfigFunc = (
     k: ConfigKey,
@@ -120,6 +102,9 @@ function DanmakuControl(props: Props) {
             : `rgba(0,0,0, ${v})`
         );
         break;
+      case ConfigKey.fontFamily:
+        setCssVariable(ConfigKey.fontFamily, v);
+        break;
       case ConfigKey.avatarSize:
         setCssVariable(ConfigKey.avatarSize, `${v}px`);
         break;
@@ -140,6 +125,26 @@ function DanmakuControl(props: Props) {
     dispatch(updateConfig({ k, v }));
   };
 
+  const handleClickControl = (controlName: ControlType) => {
+    switch (controlName) {
+      case ControlType.EFFECTBLOCK:
+        break;
+      case ControlType.CLEAR:
+        clearMessage();
+        break;
+      case ControlType.BLOCK:
+        handleUpdateConfig(ConfigKey.blockScrollBar);
+        break;
+      case ControlType.UNLOCK:
+        break;
+      case ControlType.CONFIG:
+        break;
+      default:
+        break;
+    }
+    setCurrentName(controlName);
+  };
+
   const handleDispatchResetConfig = () => {
     dispatch(resetConfig());
   };
@@ -157,16 +162,6 @@ function DanmakuControl(props: Props) {
       <div className="popular">
         <span title={t('LiveRoomPopular')} className="icon-font icon-item icon-popular" />{tranNumber(popular)}
       </div>
-      {/*{*/}
-      {/*  config.showVoice === 1*/}
-      {/*    ? (*/}
-      {/*      <div className="voiceTip">*/}
-      {/*        <span title="当前语音任务剩余条数">{ taskConfig.taskLength }&nbsp;</span>*/}
-      {/*        <span title="最大语音任务条数">/ { taskConfig.taskMaxLength }</span>*/}
-      {/*      </div>*/}
-      {/*    )*/}
-      {/*    : <div className="voiceTip"/>*/}
-      {/*}*/}
       <div id="danmakuControl" className="icon-right-part superChat">
         {
           isDevMode && <Tooltip
@@ -186,7 +181,7 @@ function DanmakuControl(props: Props) {
           placement="top"
           onVisibleChange={(v) => setCurrentName(v ? ControlType.SETTING : '')}
           trigger="click"
-          overlay={<SettingContent {...props} config={config} handleUpdateConfig={handleUpdateConfig} resetConfig={handleDispatchResetConfig} />}
+          overlay={<SettingContent {...props} handleUpdateConfig={handleUpdateConfig} handleDispatchResetConfig={handleDispatchResetConfig} />}
         >
           <span title={t('DanmakuControlSetting')} className="icon-font icon-item icon-set-up" />
         </Tooltip>
@@ -220,7 +215,7 @@ function DanmakuControl(props: Props) {
           overlayClassName="danmakuBlockToolTip"
           onVisibleChange={(v) => setCurrentName(v ? ControlType.UNLOCK : '')}
           trigger="click"
-          overlay={<DanmakuBlock {...props} updateConfig={updateConfig} handleUpdateConfig={handleUpdateConfig} />}
+          overlay={<DanmakuBlock {...props} handleUpdateConfig={handleUpdateConfig} />}
         >
           <span title={t('DanmakuControlDanmakuBlock')} onClick={() => handleClickControl(ControlType.UNLOCK)} className="icon-item icon-font icon-block" />
         </Tooltip>
@@ -296,10 +291,44 @@ function DanmakuTest(props: { onMessage: OnMessageFunc }) {
   );
 }
 
-function SettingContent(props: {
+function SettingFontFamily(props: {
   handleUpdateConfig: HandleUpdateConfigFunc;
 }) {
   const { handleUpdateConfig } = props;
+  const config = useAppSelector(selectConfig);
+  const systemFontsLists = ['lolita', ...systemFonts];
+
+  const onSelect = ({ key }) => {
+    handleUpdateConfig(ConfigKey.fontFamily, key);
+  };
+
+  const fontFamilyMenu = (
+    <Menu onSelect={onSelect} className="fontFamilyMenuContainer">
+      {systemFontsLists.map((font) => (
+        <MenuItem key={font} style={{ fontFamily: font }}>{font}</MenuItem>
+      ))}
+    </Menu>
+  );
+
+  return (
+    <Dropdown trigger={ ["click"] }
+              overlay={ fontFamilyMenu }
+              animation="slide-up">
+      <span className="action-text cursor">
+        { config.fontFamily }
+        <span role="img" aria-label="down" className="action action-down">
+          <svg viewBox="64 64 896 896" focusable="false" className="" data-icon="down" width="1em" height="1em" fill="currentColor" aria-hidden="true" > <path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z" /> </svg>
+        </span>
+      </span>
+    </Dropdown>
+  )
+}
+
+function SettingContent(props: {
+  handleUpdateConfig: HandleUpdateConfigFunc;
+  handleDispatchResetConfig: () => void;
+}) {
+  const { handleUpdateConfig, handleDispatchResetConfig } = props;
   const { t } = useTranslation();
   const config = useAppSelector(selectConfig);
 
@@ -309,6 +338,10 @@ function SettingContent(props: {
       <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('LanguageTip')}</span>
         <LanguagePanel {...props} configKey={'languageCode'} />
+      </div>
+      <div className="danmaku-adjust-row">
+        <span className="danmaku-adjust-label v-middle dp-i-block">{t('fontFamily')}</span>
+        <SettingFontFamily handleUpdateConfig={handleUpdateConfig} />
       </div>
       <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('GlobalSettingShowAvatar')}</span>
@@ -411,7 +444,7 @@ function SettingContent(props: {
         <span className="danmaku-adjust-value dp-i-block">{config.fontMarginTop}px</span>
       </div>
       <div className="danmaku-adjust-row">
-        <span className="danmaku-adjust-label v-middle dp-i-block">{t('ResetConfig')} <span onClick={() => resetConfig()} className="icon-font icon-item icon-replace icon-config-reset" /></span>
+        <span className="danmaku-adjust-label v-middle dp-i-block">{t('ResetConfig')} <span onClick={() => handleDispatchResetConfig()} className="icon-font icon-item icon-replace icon-config-reset" /></span>
       </div>
       <CustomStyledPanel />
     </div>
@@ -430,7 +463,7 @@ function TranslateSetting(props: {
       <h1 className="title">{t('TranslateSettingTitle')}</h1>
       <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('AutoTranslate')}</span>
-        <Switch status={config.autoTranslate} onChange={v => handleUpdateConfig(ConfigKey.autoTranslate, v)} />
+        <Switch status={config.autoTranslate} onChange={v => handleUpdateConfig(ConfigKey.autoTranslate, v)} disabled />
       </div>
       <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('TranslateFrom')}</span>
@@ -521,10 +554,9 @@ function EffectBlock(props: {
 }
 
 function DanmakuBlock(props: {
-  updateConfig: typeof updateConfig;
   handleUpdateConfig: HandleUpdateConfigFunc;
 }) {
-  const { updateConfig, handleUpdateConfig } = props;
+  const { handleUpdateConfig } = props;
   const { t } = useTranslation();
   const config = useAppSelector(selectConfig);
   let { blockDanmakuLists, blockUserLists } = config;
@@ -544,7 +576,7 @@ function DanmakuBlock(props: {
     if (!blockKeyWord) return;
     blockDanmakuLists.push(blockKeyWord);
     blockDanmakuLists = Array.from(new Set(blockDanmakuLists));
-    updateConfig({ k: ConfigKey.blockDanmakuLists, v: blockDanmakuLists });
+    handleUpdateConfig(ConfigKey.blockDanmakuLists, blockDanmakuLists);
     setBlockKeyWord('');
   };
 
@@ -581,9 +613,9 @@ function DanmakuBlock(props: {
   const deleteBlockItem = () => {
     const blockListDiff = arrayDiff(blockList, selectedList);
     if (blockTab === 0) {
-      updateConfig({ k: ConfigKey.blockDanmakuLists, v: blockListDiff });
+      handleUpdateConfig(ConfigKey.blockDanmakuLists, blockListDiff);
     } else {
-      updateConfig({ k: ConfigKey.blockUserLists, v: blockListDiff });
+      handleUpdateConfig(ConfigKey.blockUserLists, blockListDiff);
     }
     setSelectedList([]);
   };

@@ -119,7 +119,7 @@ const createWindow = async () => {
 
   // 防止 bilibili referer 403
   const filter = {
-    urls: ['*://*.bilibili.com/*', '*://*.hdslb.com/*',],
+    urls: ['*://*.bilibili.com/*', '*://*.hdslb.com/*'],
   };
   session.defaultSession.webRequest.onBeforeSendHeaders(
     filter,

@@ -7,8 +7,6 @@
  * */
 
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/camelcase */
-
 import pako from 'pako';
 import wsUrl from '../common/ws-url';
 import msgStruct from '../common/msg-struct';

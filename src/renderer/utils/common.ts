@@ -1,5 +1,6 @@
-import { shell } from 'electron';
-import { lt } from 'semver';
+import { shell } from "electron";
+import { lt } from "semver";
+import { getFonts } from "font-list";
 
 function openLink(href: string) {
   shell.openExternal(href).catch(e => {
@@ -93,6 +94,25 @@ const hasNewVersion = (
   return lt(clientVersion, serverVersion);
 };
 
+export const systemFonts = [];
+
+function getSystemFonts(): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    getFonts()
+      .then((fonts: string[]) => {
+        fonts = [...new Set(fonts)];
+        resolve(fonts || []);
+      })
+      .catch((err) => {
+        resolve([]);
+      });
+  });
+}
+
+(async () => {
+  systemFonts = await getSystemFonts();
+})()
+
 export {
   openLink,
   userAvatarFilter,
@@ -104,5 +124,6 @@ export {
   sleep,
   unionSet,
   tranNumber,
-  hasNewVersion
+  hasNewVersion,
+  getSystemFonts,
 };

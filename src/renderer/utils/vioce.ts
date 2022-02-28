@@ -13,7 +13,7 @@ $source.setAttribute('type', 'audio/mp3');
 $source.setAttribute('src', '');
 $audio.appendChild($source);
 // 防止electron主进程还拿不到body导致渲染白版
-document.body && document.body.appendChild($audio);
+document?.body.appendChild($audio);
 
 async function baiduTTS(fullText: string) {
   console.log('[baiduTTS translate]', fullText);

@@ -57,8 +57,6 @@ export default class ConfigDao {
     const configStr = localStorage.getItem(prefixKey);
     if (!configStr) return defaultConfig;
     const configData: ConfigStateType = JSON.parse(configStr);
-    configData.roomid = resentLiveData.roomid;
-    configData.shortid = resentLiveData.shortid;
     configData.version = pkg.version;
     // 与最新版config合并
     this.save({ ...defaultConfig, ...configData });

@@ -4,8 +4,8 @@ import Dropdown from 'rc-dropdown';
 import { ConfigKey } from '../../../reducers/types';
 import { HandleUpdateConfigFunc } from './DanmakuControl';
 import lang from '../../../i18n/locales/lang.json';
-import { useAppSelector } from "../../../store/hooks";
-import { selectConfig } from "../../../store/features/configSlice";
+import { useAppSelector } from '../../../store/hooks';
+import { selectConfig } from '../../../store/features/configSlice';
 
 interface Props {
   configKey: 'languageCode' | 'translateTo' | 'voiceTranslateTo';
@@ -30,6 +30,7 @@ export default function LanguagePanel(props: Props) {
         handleUpdateConfig(ConfigKey.voiceTranslateTo, key);
         break;
       default:
+        break;
     }
   }
 
