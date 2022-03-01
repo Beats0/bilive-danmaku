@@ -33,6 +33,12 @@ body {
   //font-family: Arial,Microsoft YaHei,Microsoft Sans Serif,Microsoft SanSerf,\\5FAE\8F6F\96C5\9ED1!important;
   font-family: var(--primary-fontFamily);
   overflow-y: scroll;
+  &:hover, &:focus {
+    #danmakuControlOuter {
+      opacity: 1;
+      transition: opacity .3s;
+    }
+  }
 }
 
 body::-webkit-scrollbar {
@@ -862,6 +868,7 @@ span.danmaku-content {
 
 #danmakuControlOuter {
   display: flex;
+  opacity: 0;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -870,6 +877,8 @@ span.danmaku-content {
   left: 0;
   right: 0;
   padding: 0 5px;
+  transition: opacity .3s;
+  transition-delay: .5s;
 }
 
 #danmakuControlOuter .popular {
@@ -1634,6 +1643,7 @@ li.item {
 
 .card-item .price {
   position: absolute;
+  padding-left: 3px;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-14px,-50%) translateZ(0);
@@ -2565,6 +2575,8 @@ input.custom-style {
 }
 
 .fontFamilyMenuContainer {
+  width: 180px;
   height: 200px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }

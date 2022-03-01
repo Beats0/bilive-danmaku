@@ -189,6 +189,7 @@ const Danmaku: FC = () => {
     const cssVariables = [
       { k: ConfigKey.avatarSize, v: `${config.avatarSize}px` },
       { k: ConfigKey.fontSize, v: `${config.fontSize}px` },
+      { k: ConfigKey.fontFamily, v: `${config.fontFamily}` },
       { k: ConfigKey.fontLineHeight, v: `${config.fontLineHeight}px` },
       { k: ConfigKey.fontMarginTop, v: `${config.fontMarginTop}px` },
       {

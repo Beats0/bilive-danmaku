@@ -1,6 +1,12 @@
 import { shell } from "electron";
 import { lt } from "semver";
 import { getFonts } from "font-list";
+// import path from "path";
+//
+// let url = path.resolve(__dirname, '../../../extraResources/fontlist')
+// if (process.env.NODE_ENV === 'development') {
+//   url = path.join(__dirname, '../qqScreenshot/PrintScr.exe')
+// }
 
 function openLink(href: string) {
   shell.openExternal(href).catch(e => {

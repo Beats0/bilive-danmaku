@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, ipcMain, shell, session } from 'electron';
+import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -51,9 +51,9 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
-  if (isDevelopment) {
-    await installExtensions();
-  }
+  // if (isDevelopment) {
+  //   await installExtensions();
+  // }
 
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -71,6 +71,7 @@ const createWindow = async () => {
     // maxWidth: 600,
     frame: false,
     transparent: true,
+    alwaysOnTop: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -101,7 +102,14 @@ const createWindow = async () => {
     mainWindow?.webContents.toggleDevTools();
   });
   ipcMain.on('setAlwaysOnTop', async (_event, flag: boolean) => {
-    mainWindow?.setAlwaysOnTop(flag);
+    if (flag) {
+      mainWindow?.setVisibleOnAllWorkspaces(true, {
+        visibleOnFullScreen: true,
+      });
+      mainWindow?.setAlwaysOnTop(true, 'screen-saver', 1);
+    } else {
+      mainWindow?.setAlwaysOnTop(false);
+    }
   });
   ipcMain.on('closeApp', async () => {
     if (process.platform !== 'darwin') {

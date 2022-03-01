@@ -4,7 +4,7 @@
 
 ![logo](https://beats0.github.io/bilive-danmaku/assets/icons/96x96.png)
 <br>
-bilibili 直播弹幕姬(非官方)，支持 win 和 mac
+一个开源的 bilibili 直播弹幕姬，支持 win 和 mac
 <br>
 
 </div>
@@ -25,7 +25,7 @@ bilibili 直播弹幕姬(非官方)，支持 win 和 mac
 
 ### 功能
 
-面板和官方 web 端几乎一模一样，主要拓展了订阅列表，~~弹幕翻译，语音朗读~~，多语言配置等功能
+面板和官方 web 端几乎一模一样，主要拓展了订阅列表，~~弹幕翻译~~，语音朗读，多语言配置等功能
 
 支持的消息类型
 
@@ -61,7 +61,7 @@ SUPER_CHAT_MESSAGE  // SC消息
 
 尽管已经做了限定，但还是有小几率会因大量访问 api 导致被 ban ip，大约 10 分钟后自动解封。换言之，只要用户数据保存得越多，被 ban 的几率就越小。
 
-~~2. 翻译和朗读(已失效)~~
+2. ~~翻译~~和朗读(翻译已失效)
 
 ~~大量使用 google translate api，超出官方调用频率会导致请求超时，翻译或朗读失败。~~
 
