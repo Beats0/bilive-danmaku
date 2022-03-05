@@ -6,7 +6,7 @@ import MsgUserAvatar from './MsgUserAvatar';
 import { ConfigKey } from '../../../reducers/types';
 import { currentTranslateToCode, translate } from '../../../utils/translation';
 import { openLink } from '../../../utils/common';
-import { read } from '../../../utils/vioce';
+import voice from '../../../utils/vioce';
 import StyledDao, { StyledDaoNS } from '../../../dao/StyledDao';
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { selectConfig, updateConfig } from "../../../store/features/configSlice";
@@ -82,12 +82,16 @@ function MsgDanmu(props: DanmakuMsg) {
     setShowToolTip(false);
   };
 
+  const handleReadDanmaku = (uname: string, text: string) => {
+    voice.resetPush(uname, text);
+  };
+
   const danmakuActionMenu = (uid: number, uname: string, text: string) => {
     return (
       <div className="danmakuActionMenu">
         <span className="danmakuActionMenuUser pointer" onClick={() => openLink(`https://space.bilibili.com/${uid}`)}>{uname}</span>
         <span className="danmakuActionMenuItem pointer" onClick={handleTranslate}>{t('DanmakuTranslate')}</span>
-        <span className="danmakuActionMenuItem pointer" onClick={() => read(uname, text)}>{t('DanmakuRead')}</span>
+        <span className="danmakuActionMenuItem pointer" onClick={() => handleReadDanmaku(uname, text)}>{t('DanmakuRead')}</span>
         <span className="danmakuActionMenuItem pointer" onClick={() => handleBlockUser(uid)}>{t('DanmakuBlockUser')}</span>
         <span className="danmakuActionMenuItem pointer" onClick={() => handleBlockDanmaku(text)}>{t('DanmakuBlockSimilar')}</span>
       </div>

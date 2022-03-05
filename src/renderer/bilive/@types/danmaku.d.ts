@@ -2540,6 +2540,52 @@ interface POPULAR {
   popular: number;
 }
 
+/**
+ * 欢迎进入
+ * { "cmd": "INTERACT_WORD", "data": { "contribution": { "grade": 0 }, "dmscore": 12, "fans_medal": { "anchor_roomid": 47377, "guard_level": 0, "icon_id": 0, "is_lighted": 0, "medal_color": 9272486, "medal_color_border": 12632256, "medal_color_end": 12632256, "medal_color_start": 12632256, "medal_level": 10, "medal_name": "鸟蛋", "score": 12320, "special": "", "target_id": 282994 }, "identities": [ 1 ], "is_spread": 0, "msg_type": 1, "roomid": 47867, "score": 1646469470302, "spread_desc": "", "spread_info": "", "tail_icon": 0, "timestamp": 1646469470, "trigger_time": 1646469469213909800, "uid": 837690, "uname": "橙子别酸了", "uname_color": "" } }
+ * */
+interface INTERACT_WORD {
+  cmd: CmdType.INTERACT_WORD;
+  data: INTERACT_WORD_DATA;
+}
+
+interface INTERACT_WORD_DATA {
+  contribution: {
+    grade: number;
+  };
+  dmscore: number;
+  fans_medal: FANS_MEDAL;
+  identities: number[];
+  is_spread: number;
+  msg_type: number;
+  roomid: number;
+  score: number;
+  spread_desc: string;
+  spread_info: string;
+  tail_icon: number;
+  timestamp: number;
+  trigger_time: number;
+  uid: number;
+  uname: string;
+  uname_color: string;
+}
+
+interface FANS_MEDAL {
+  anchor_roomid: number;
+  guard_level: number;
+  icon_id: number;
+  is_lighted: number;
+  medal_color: number;
+  medal_color_border: number;
+  medal_color_end: number;
+  medal_color_start: number;
+  medal_level: number;
+  medal_name: string;
+  score: number;
+  special: string;
+  target_id: number;
+}
+
 type DanmakuData =
   | LIVE
   | POPULAR

@@ -126,8 +126,13 @@ const voice = {
       handleTaskQueue();
     }
   },
+  resetPush(uname: string, text: string) {
+    this.reset();
+    this.push(uname, text);
+  },
   reset() {
     taskQueue = [];
+    isWorking = false;
   },
   updateVolume(volume: number) {
     $audio.volume = volume;
