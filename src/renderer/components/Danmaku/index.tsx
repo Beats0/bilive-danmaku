@@ -244,7 +244,7 @@ const Danmaku: FC = () => {
           />
           <span
             title={t('HeaderCloseTitle')}
-            onClick={() => ipcRenderer.send('closeApp', 'ping')}
+            onClick={() => ipcRenderer.send('closeApp')}
             className="icon-item icon-font icon-error error liveIcon pointer"
           />
         </div>

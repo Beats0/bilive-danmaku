@@ -9,6 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import cp from 'child_process';
 import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -59,8 +60,15 @@ const createWindow = async () => {
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
 
+  const EXTRARESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'extraResources')
+    : path.join(__dirname, '../../extraResources');
+
   const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
+  };
+  const getExtraResourcesPath = (...paths: string[]): string => {
+    return path.join(EXTRARESOURCES_PATH, ...paths);
   };
 
   mainWindow = new BrowserWindow({
@@ -71,7 +79,6 @@ const createWindow = async () => {
     // maxWidth: 600,
     frame: false,
     transparent: true,
-    alwaysOnTop: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -114,8 +121,20 @@ const createWindow = async () => {
   ipcMain.on('closeApp', async () => {
     if (process.platform !== 'darwin') {
       app.quit();
+    } else {
+      app.exit();
     }
   });
+  ipcMain.on('getSystemFonts', async () => {
+    const systemFontsScriptPath = getExtraResourcesPath('fontlist/getSystemFonts.js')
+    let fonts = [];
+    const forked = cp.fork(systemFontsScriptPath);
+    forked.on('message', function (message) {
+      fonts = message
+      mainWindow?.webContents.send('getSystemFontsCb', fonts);
+    });
+  });
+
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 

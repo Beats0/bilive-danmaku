@@ -1,12 +1,5 @@
-import { shell } from "electron";
+import { ipcRenderer, shell } from "electron";
 import { lt } from "semver";
-import { getFonts } from "font-list";
-// import path from "path";
-//
-// let url = path.resolve(__dirname, '../../../extraResources/fontlist')
-// if (process.env.NODE_ENV === 'development') {
-//   url = path.join(__dirname, '../qqScreenshot/PrintScr.exe')
-// }
 
 function openLink(href: string) {
   shell.openExternal(href).catch(e => {
@@ -102,22 +95,12 @@ const hasNewVersion = (
 
 export const systemFonts = [];
 
-function getSystemFonts(): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    getFonts()
-      .then((fonts: string[]) => {
-        fonts = [...new Set(fonts)];
-        resolve(fonts || []);
-      })
-      .catch((err) => {
-        resolve([]);
-      });
-  });
-}
-
-(async () => {
-  systemFonts = await getSystemFonts();
-})()
+// 获取系统字体列表
+ipcRenderer.send('getSystemFonts');
+ipcRenderer.on('getSystemFontsCb', (e, fonts = []) => {
+  // console.log('fonts', fonts);
+  systemFonts = fonts;
+});
 
 export {
   openLink,
@@ -131,5 +114,4 @@ export {
   unionSet,
   tranNumber,
   hasNewVersion,
-  getSystemFonts,
 };
