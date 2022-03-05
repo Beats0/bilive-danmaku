@@ -66,7 +66,7 @@ function MsgDanmu(props: DanmakuMsg) {
 
   // 屏蔽用户
   const handleBlockUser = (uid: number) => {
-    let { blockUserLists } = config;
+    let blockUserLists = JSON.parse(JSON.stringify(config.blockUserLists));
     blockUserLists.push(uid);
     blockUserLists = [...new Set(blockUserLists)];
     dispatch(updateConfig({ k: ConfigKey.blockUserLists, v: blockUserLists }));
@@ -75,7 +75,7 @@ function MsgDanmu(props: DanmakuMsg) {
 
   // 屏蔽对应弹幕文字
   const handleBlockDanmaku = (text: string) => {
-    let { blockDanmakuLists } = config;
+    let blockDanmakuLists = JSON.parse(JSON.stringify(config.blockDanmakuLists));
     blockDanmakuLists.push(text);
     blockDanmakuLists = [...new Set(blockDanmakuLists)];
     dispatch(updateConfig({ k: ConfigKey.blockDanmakuLists, v: blockDanmakuLists }));

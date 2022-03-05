@@ -19,9 +19,7 @@
 
 [下载 Release](https://github.com/Beats0/bilive-danmaku/releases)
 
-输入房间号: 在锁定情况下，输入 RoomID 即可
-
-拖动: 在非锁定情况下，按住并拖动顶部即可
+输入房间号 RoomID 后，回车提交即可连接
 
 ### 功能
 

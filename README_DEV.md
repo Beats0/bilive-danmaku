@@ -20,20 +20,12 @@ $ yarn start
 
 打包 package
 
-默认打包将输出到 release 文件夹中
-
 ```sh
 # 打包
 $ yarn package
 ```
 
-## 已知 BUG
-
-- mac dev 模式无法使用透明背景, 生产模式又可以了= =，不影响功能
-
-参考
-
-[mac os 无法使用透明背景](https://github.com/electron/electron/issues/20357)
+默认打包将输出到 release 文件夹中
 
 ## 快速生成icns图标
 
