@@ -116,6 +116,10 @@ export default class Socket {
     console.log(`新的socket：[${this.roomid}] 正在初始化...`);
     this._docker.binaryType = 'arraybuffer';
     this._docker.onopen = event => {
+      const msg = {
+        cmd: 'CONNECT_SUCCESS'
+      }
+      this._call([msg]);
       const join = this._joinRoom(this.roomid, this.uid);
       this._docker.send(join.buffer);
       this._sendBeat();

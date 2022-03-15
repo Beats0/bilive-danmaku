@@ -9,6 +9,7 @@ import MsgGuardBuySystem from './MsgGuardBuySystem';
 import { CmdType } from '../MsgModel';
 import MsgConnecting from './MsgConnecting';
 import MsgDisconnected from './MsgDisconnected';
+import MsgConnectSuccess from './MsgConnectSuccess';
 import MsgSuperChatCard from './MsgSuperChatCard';
 
 function FadeInUp({ children }) {
@@ -50,6 +51,9 @@ export default function MsgEntity(props: MsgEntityProps) {
       break;
     case CmdType.DISCONNECTED:
       Msg = <MsgDisconnected />;
+      break;
+    case CmdType.CONNECT_SUCCESS:
+      Msg = <MsgConnectSuccess />;
       break;
     case CmdType.SUPER_CHAT_MESSAGE:
       Msg = <MsgSuperChatCard msg={props.data} style={{ marginTop: 10 }} />;

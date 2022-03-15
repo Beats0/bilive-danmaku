@@ -99,7 +99,7 @@ function MsgDanmu(props: DanmakuMsg) {
   }
 
   return (
-    <div className={["danmakuItem", props.guardLevel ? `danmakuItem danmaku-item guard-level-${props.guardLevel} guard-danmaku` : ''].join(' ')}>
+    <div className={["danmakuItem", props.guardLevel ? `danmakuItem danmaku-item ${config.blockEffectItem5 === 0 ? `guard-level-${props.guardLevel}` : '' } guard-danmaku` : ''].join(' ')}>
       {
         config.showAvatar === 1 && MsgUserAvatar(props.userID, props.face)
       }

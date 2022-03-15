@@ -9,6 +9,7 @@ import { sleep } from '../../utils/common';
 export enum CmdType {
   CONNECTING = 'CONNECTING',
   DISCONNECTED = 'DISCONNECTED',
+  CONNECT_SUCCESS = 'CONNECT_SUCCESS',
   LIVE = 'LIVE',
   POPULAR = 'POPULAR',
   DANMU_MSG = 'DANMU_MSG',

@@ -54,6 +54,7 @@
   "BlockEffectItem2": "ブロックエントリー情報",
   "BlockEffectItem3": "太字のメッセージをブロック",
   "BlockEffectItem4": "バブリングギフトのシールド",
+  "BlockEffectItem5": "シールドキャプテンの弾幕効果",
   "GlobalBlockModeTitle": "グローバルブロック",
   "GlobalBlockModeHasBeen": "ブロックされました",
   "GlobalBlockModeOn": "開いた",
@@ -77,6 +78,7 @@
   "Author": "著者",
   "SocketDanmakuConnecting": "接続しています...",
   "SocketDisconnected": "古いソケットは閉じられています...",
+  "SocketConnectSuccess": "接続に成功しました",
   "DanmakuTranslate": "翻訳",
   "DanmakuRead": "読み上げます",
   "DanmakuBlockUser": "送信者をブロック",
@@ -91,5 +93,6 @@
   "CustomStyleTitle": "ユーザー定義のスタイル",
   "CustomStyledUserName": "ユーザーのニックネームスタイルをカスタマイズ",
   "CustomStyledDanmakuContent": "ユーザー定義の弾幕の内容スタイル",
-  "ShowGiftDanmakuList": "ギフト弾幕リストを表示"
+  "ShowGiftDanmakuList": "ギフト弾幕リストを表示",
+  "RankMessageList": "ゲストブック"
 }

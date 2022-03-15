@@ -20,6 +20,7 @@ enum CmdType {
   WELCOME_GUARD = 'WELCOME_GUARD',
   GUARD_BUY = 'GUARD_BUY',
   SUPER_CHAT_MESSAGE = 'SUPER_CHAT_MESSAGE',
+  CONNECT_SUCCESS = 'CONNECT_SUCCESS',
   UNKNOWN = 'UNKNOWN'
 }
 
@@ -2586,6 +2587,11 @@ interface FANS_MEDAL {
   target_id: number;
 }
 
+//  连接成功
+interface CONNECT_SUCCESS {
+  cmd: CmdType.CONNECT_SUCCESS;
+}
+
 type DanmakuData =
   | LIVE
   | POPULAR
@@ -2598,4 +2604,5 @@ type DanmakuData =
   | WELCOME
   | WELCOME_GUARD
   | GUARD_BUY
+  | CONNECT_SUCCESS
   | SUPER_CHAT_MESSAGE;

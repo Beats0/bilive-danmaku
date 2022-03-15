@@ -54,6 +54,7 @@
   "BlockEffectItem2": "屏蔽进场信息",
   "BlockEffectItem3": "屏蔽醒目留言",
   "BlockEffectItem4": "屏蔽冒泡礼物",
+  "BlockEffectItem5": "屏蔽舰长弹幕特效",
   "GlobalBlockModeTitle": "全局屏蔽",
   "GlobalBlockModeHasBeen": "屏蔽已",
   "GlobalBlockModeOn": "开启",
@@ -77,6 +78,7 @@
   "Author": "作者",
   "SocketDanmakuConnecting": "连接中...",
   "SocketDisconnected": "旧的socket已经关闭...",
+  "SocketConnectSuccess": "连接成功",
   "DanmakuTranslate": "翻译",
   "DanmakuRead": "朗读",
   "DanmakuBlockUser": "屏蔽发送者",
@@ -91,5 +93,6 @@
   "CustomStyleTitle": "自定义样式",
   "CustomStyledUserName": "自定义用户昵称样式",
   "CustomStyledDanmakuContent": "自定义弹幕内容样式",
-  "ShowGiftDanmakuList": "显示礼物弹幕列表"
+  "ShowGiftDanmakuList": "显示礼物弹幕列表",
+  "RankMessageList": "留言榜"
 }

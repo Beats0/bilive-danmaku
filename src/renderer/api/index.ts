@@ -49,11 +49,35 @@ export interface ResentSuperChatResponse {
   };
 }
 
+export interface RankMessageListsItem {
+  certification_mark: number;
+  face: string;
+  face_frame: string;
+  guard_level: number;
+  is_self: number;
+  message: string;
+  price: number;
+  ranked_icon: string;
+  send_time: number;
+  uid: number;
+  uname: string;
+}
+
+export interface RankMessageListsResponse {
+  code: number;
+  data: {
+    list?: RankMessageListsItem[];
+  },
+  message: string;
+  msg: string;
+}
+
 const API_USER_INFO = 'https://api.bilibili.com/x/space/acc/info';
 const API_LIVEROOM_INFO =
   'https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom';
 const API_GIFT_CONFIG = `https://api.live.bilibili.com/gift/v3/live/gift_config`;
 const API_RESENT_SUPER_CHAT = `https://api.live.bilibili.com/av/v1/SuperChat/enable`;
+const API_RANK_MESSAGE_LIST = `https://api.live.bilibili.com/av/v1/SuperChat/getRankMessageList`;
 const API_SERVER_PACKAGE = `https://mynovel.life/bilive-danmaku/package.json`;
 
 // 获取用户信息
@@ -163,6 +187,27 @@ export async function getLiveRoomInfo(roomid: number): Promise<LiveRoom> {
           isLive: false
         };
         resolve(liveRoomData);
+      });
+  });
+}
+
+// 获取留言榜
+export async function getRankMessageList(
+  roomid: number
+): Promise<RankMessageListsItem[]> {
+  return new Promise<RankMessageListsItem[]>(async (resolve, reject) => {
+    const ruid = (await getLiveRoomInfo(roomid)).uid;
+    fetch(`${API_RANK_MESSAGE_LIST}?room_id=${roomid}&ruid=${ruid}`)
+      .then((res) => res.json())
+      .then((data: RankMessageListsResponse) => {
+        let list: RankMessageListsItem[] = [];
+        if (data.code === 0 && data.data.list) {
+          list = data.data.list;
+        }
+        resolve(list);
+      })
+      .catch((e) => {
+        resolve([]);
       });
   });
 }

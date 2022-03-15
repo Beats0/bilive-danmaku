@@ -8,7 +8,6 @@ import React, {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { increment, asyncIncrement } from '../../store/features/counterSlice';
 import DanmakuList, { DanmakuListRef } from './DanmakuList/DanmakuList';
 import DanmakuGiftList, {
   DanmakuGiftListRef,
@@ -24,6 +23,7 @@ import { getLiveRoomInfo, getResentSuperChat, LiveRoom } from '../../api';
 import { ConfigKey } from '../../reducers/types';
 import { setCssVariable } from '../../utils/common';
 import LiveRoomLists from './LiveRoomLists';
+import RankMessageLists from './RankMessageLists';
 import DanmakuControl from './DanmakuControl/DanmakuControl';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { selectConfig, updateConfig, fetchVersionInfo } from "../../store/features/configSlice";
@@ -234,6 +234,7 @@ const Danmaku: FC = () => {
         <div className="liveInfoBar row" />
         <div className="liveIconContainer">
           <LiveRoomLists onChangeRoomID={handleSubmit} />
+          <RankMessageLists />
           <span
             title={t('HeaderLockTitle')}
             onClick={handleLock}

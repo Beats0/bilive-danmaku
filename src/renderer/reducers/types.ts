@@ -35,6 +35,7 @@ export enum ConfigKey {
   blockEffectItem2 = 'blockEffectItem2',
   blockEffectItem3 = 'blockEffectItem3',
   blockEffectItem4 = 'blockEffectItem4',
+  blockEffectItem5 = 'blockEffectItem5',
   blockMinGoldSeed = 'blockMinGoldSeed',
   blockMinSilverSeed = 'blockMinSilverSeed',
   blockDanmakuLists = 'blockDanmakuLists',

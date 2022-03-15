@@ -62,17 +62,13 @@ SUPER_CHAT_MESSAGE  // SC消息
 
 3. 自定义样式(仅支持昵称样式和弹幕样式)
 
-release 版也可开启 Dev Tools，用来检查线上版本错误和日志，点击 Dev Tools，编写对应的编辑 CSS 样式，只复制 css 声明语句，例如上图的 css 为
+点击 Dev Tools，编写对应的编辑 CSS 样式，只复制 css 声明语句，例如上图的 css 为
 
 ```css
 text-shadow: 1px 1px 2px #e91e63, 0 0 0.2em #e91e63;
 ```
 
-然后填入到 `设置` > `自定义样式` 中，`Ctrl+R` 重载即可。
-
-### 已知 BUG
-
-- mac 在全屏模式下无法置于顶层
+填入到 `设置` > `自定义样式` 中，`Ctrl+R` 重载即可。
 
 ### 开发
 

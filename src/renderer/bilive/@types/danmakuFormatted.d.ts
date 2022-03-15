@@ -178,6 +178,8 @@ type ConfigStateType = {
   blockEffectItem3: 0 | 1;
   // 屏蔽冒泡礼物[0,1]
   blockEffectItem4: 0 | 1;
+  // 屏蔽舰长弹幕特效
+  blockEffectItem5: 0 | 1;
   // 显示最低金瓜子
   blockMinGoldSeed: number;
   // 显示最低银瓜子
