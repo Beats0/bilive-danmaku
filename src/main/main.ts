@@ -13,6 +13,7 @@ import cp from 'child_process';
 import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { windowStateKeeper } from './stateKeeper';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -70,13 +71,16 @@ const createWindow = async () => {
   const getExtraResourcesPath = (...paths: string[]): string => {
     return path.join(EXTRARESOURCES_PATH, ...paths);
   };
+  // 保存窗口位置大小信息
+  const mainWindowStateKeeper = await windowStateKeeper('main');
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 390,
-    height: 800,
+    x: mainWindowStateKeeper.x,
+    y: mainWindowStateKeeper.y,
+    width: mainWindowStateKeeper.width,
+    height: mainWindowStateKeeper.height,
     minWidth: 300,
-    // maxWidth: 600,
     frame: false,
     transparent: true,
     icon: getAssetPath('icon.png'),
@@ -90,6 +94,9 @@ const createWindow = async () => {
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
+  // mainWindowStateKeeper track 加载窗口位置大小信息
+  await mainWindowStateKeeper.track(mainWindow);
+
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
@@ -100,7 +107,6 @@ const createWindow = async () => {
       mainWindow.show();
     }
   });
-
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
@@ -156,23 +162,6 @@ const createWindow = async () => {
       cb(data);
     }
   );
-
-  // cors
-  // mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-  //   (details, callback) => {
-  //     callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
-  //   }
-  // );
-  // mainWindow.webContents.session.webRequest.onHeadersReceived(
-  //   (details, callback) => {
-  //     callback({
-  //       responseHeaders: {
-  //         'Access-Control-Allow-Origin': ['*'],
-  //         ...details.responseHeaders,
-  //       },
-  //     });
-  //   }
-  // );
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
