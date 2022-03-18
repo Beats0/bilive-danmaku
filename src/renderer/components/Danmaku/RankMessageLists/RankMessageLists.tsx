@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import Tooltip from "rc-tooltip";
-import { animated, useSpring } from "react-spring";
-import { useTranslation } from "react-i18next";
-import { getRankMessageList, RankMessageListsItem } from "../../api";
-import { useAppSelector } from "../../store/hooks";
-import { selectConfig } from "../../store/features/configSlice";
-import { dateFormat, openLink } from "../../utils/common";
+import { useEffect, useState } from 'react';
+import Tooltip from 'rc-tooltip';
+import { animated, useSpring } from 'react-spring';
+import { useTranslation } from 'react-i18next';
+import { getRankMessageList, RankMessageListsItem } from '../../../api';
+import { useAppSelector } from '../../../store/hooks';
+import { selectConfig } from '../../../store/features/configSlice';
+import { dateFormat, openLink } from '../../../utils/common';
 
 interface ListsProps {
   visible: boolean;
@@ -55,9 +55,7 @@ function Lists(props: ListsProps) {
       <div id="liveRoomContainer" style={{ overflow: 'hidden' }}>
         <span className="text-center">{t('RankMessageList')}</span>
         <div className="link-progress-tv">
-          <div className="loading-text">
-            Loading...
-          </div>
+          <div className="loading-text">Loading...</div>
         </div>
       </div>
     );
@@ -85,7 +83,7 @@ function Lists(props: ListsProps) {
                   }
                   <div className="user-avatar cursor" onClick={() => openLink(`https://space.bilibili.com/${i.uid}`)}>
                     <span className="avatar" style={{ backgroundImage: `url(${i.face}@60w_60h.webp)` }} />
-                    <span className="pendant" style={{ backgroundImage: `url(${i.face_frame}@80w_80h.webp)` }} />
+                    {i.face_frame && <span className="pendant" style={{ backgroundImage: `url(${i.face_frame}@80w_80h.webp)` }} />}
                   </div>
                   <div className="user-info">
                     <p title={i.uname} className="user-name cursor" onClick={() => openLink(`https://space.bilibili.com/${i.uid}`)}>{i.uname}</p>

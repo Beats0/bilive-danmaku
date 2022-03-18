@@ -24,8 +24,8 @@ import MsgEntity from './MsgEntity/MsgEntity';
 import { getLiveRoomInfo, getResentSuperChat, LiveRoom } from '../../api';
 import { ConfigKey } from '../../reducers/types';
 import { setCssVariable } from '../../utils/common';
-import LiveRoomLists from './LiveRoomLists';
-import RankMessageLists from './RankMessageLists';
+import LiveRoomLists from './LiveRoomLists/LiveRoomLists';
+import RankMessageLists from './RankMessageLists/RankMessageLists';
 import DanmakuControl from './DanmakuControl/DanmakuControl';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {

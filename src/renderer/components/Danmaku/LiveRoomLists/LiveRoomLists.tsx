@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Tooltip from 'rc-tooltip';
 import { animated, useSpring } from 'react-spring';
-import LiveRoomDao from '../../dao/LiveRoomDao';
-import { getLiveRoomInfo, LiveRoom } from '../../api';
-import { sortBy } from '../../utils/common';
-import { useTranslation } from "react-i18next";
-import { useAppSelector } from "../../store/hooks";
-import { selectConfig } from "../../store/features/configSlice";
+import { useTranslation } from 'react-i18next';
+import LiveRoomDao from '../../../dao/LiveRoomDao';
+import { getLiveRoomInfo, LiveRoom } from '../../../api';
+import { sortBy } from '../../../utils/common';
+import { useAppSelector } from '../../../store/hooks';
+import { selectConfig } from '../../../store/features/configSlice';
 
 interface LiveRoomListsProps {
   onChangeRoomID: (e: null, shortId: number) => void;
@@ -20,12 +20,12 @@ function FadeInRight({ children }) {
   const props = useSpring({
     from: {
       transform: 'translate3d(100%, 0, 0)',
-      opacity: 0
+      opacity: 0,
     },
     to: {
       transform: 'translate3d(0, 0, 0)',
-      opacity: 1
-    }
+      opacity: 1,
+    },
   });
   return <animated.div style={props}>{children}</animated.div>;
 }
@@ -52,14 +52,14 @@ function Lists(props: ListsProps) {
 
   function handleDeleteRoom(shortid: number) {
     LiveRoomDao.delete(shortid);
-    setLiveRoomLists(lists => lists.filter(i => i.shortid !== shortid));
+    setLiveRoomLists((lists) => lists.filter((i) => i.shortid !== shortid));
   }
 
   async function fetchLiveRoomData() {
     for (let i = 0; i < roomListsCache.length; i++) {
       const roomData = await getLiveRoomInfo(roomListsCache[i].roomid);
       liveRoomLists.push(roomData);
-      setLiveRoomLists(lists => [...lists, roomData]);
+      setLiveRoomLists((lists) => [...lists, roomData]);
     }
     liveRoomLists = liveRoomLists.sort(sortBy('isLive'));
     setLiveRoomLists([...liveRoomLists]);
@@ -80,9 +80,7 @@ function Lists(props: ListsProps) {
         <div className="link-progress-tv">
           <div className="loading-text">
             Loading(
-            {liveRoomLists.length}
-/
-{roomListsCache.length}
+            {liveRoomLists.length}/{roomListsCache.length}
             )...
           </div>
         </div>
