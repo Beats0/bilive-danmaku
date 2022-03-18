@@ -22,7 +22,9 @@ export enum CmdType {
   WELCOME_GUARD = 'WELCOME_GUARD',
   GUARD_BUY = 'GUARD_BUY',
   SUPER_CHAT_MESSAGE = 'SUPER_CHAT_MESSAGE',
-  UNKNOWN = 'UNKNOWN'
+  WARNING = 'WARNING',
+  CUT_OFF = 'CUT_OFF',
+  UNKNOWN = 'UNKNOWN',
 }
 
 function assertUnknownCmdType(cmd: any): UnknownMsg {
@@ -156,6 +158,18 @@ export async function parseData(
     // case CmdType.COMBO_END:
     //   // TODO:
     //   break;
+    case CmdType.WARNING:
+      const warningMsg: WarningMsg = {
+        cmd: CmdType.WARNING,
+        msg: data.msg,
+      };
+      return warningMsg;
+    case CmdType.CUT_OFF:
+      const cutOffMsg: CutOffMsg = {
+        cmd: CmdType.CUT_OFF,
+        msg: data.msg,
+      };
+      return cutOffMsg;
     default:
       return assertUnknownCmdType(data.cmd);
   }

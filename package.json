@@ -236,6 +236,7 @@
     "qs": "^6.10.3",
     "rc-dropdown": "^3.3.2",
     "rc-menu": "^9.3.2",
+    "rc-notification": "^4.5.7",
     "rc-tooltip": "^5.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

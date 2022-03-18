@@ -265,7 +265,9 @@ function DanmakuTest(props: { onMessage: OnMessageFunc }) {
     {id: 'GUARD_BUY3', 'cmd': 'GUARD_BUY', 'data': { 'uid': 55504332, 'username': '雪之下雪乃の八幡', 'guard_level': 3, 'num': 1, 'price': 198000, 'role_name': 10003, 'gift_name': '舰长', 'start_time': 1588949036, 'end_time': 1588949036 } },
     {id: 'GUARD_BUY2', 'cmd': 'GUARD_BUY', 'data': { 'uid': 55504332, 'username': '雪之下雪乃の八幡', 'guard_level': 2, 'num': 1, 'price': 198000, 'role_name': 10003, 'gift_name': '提督', 'start_time': 1588949036, 'end_time': 1588949036 } },
     {id: 'GUARD_BUY1', 'cmd': 'GUARD_BUY', 'data': { 'uid': 55504332, 'username': '雪之下雪乃の八幡', 'guard_level': 1, 'num': 1, 'price': 198000, 'role_name': 10003, 'gift_name': '总督', 'start_time': 1588949036, 'end_time': 1588949036 } },
-    {id: 'GUARD_LOTTERY_START', 'cmd': 'GUARD_LOTTERY_START', 'data': { 'id': 2461426, 'link': 'https://live.bilibili.com/14327465', 'lottery': { 'asset_animation_pic': 'https://i0.hdslb.com/bfs/vc/ff2a28492970850ce73df0cc144f1766b222d471.gif', 'asset_icon': 'https://i0.hdslb.com/bfs/vc/43f488e7c4dca5ba6fbdcb88f40052d56bf777d8.png', 'id': 2461426, 'keyword': 'guard', 'mobile_animation_asset': '', 'mobile_display_mode': 2, 'mobile_static_asset': '', 'privilege_type': 3, 'sender': { 'face': 'http://i1.hdslb.com/bfs/face/7b273d356f7823067c7deaf32a097ddbe7019c7e.jpg', 'uid': 67929023, 'uname': '国产达闻西' }, 'status': 1, 'thank_text': '恭喜<%国产达闻西%>上任舰长', 'time': 1200, 'time_wait': 0, 'weight': 0 }, 'payflow_id': '2005072308160482190233750', 'privilege_type': 3, 'roomid': 14327465, 'type': 'guard' } }
+    {id: 'GUARD_LOTTERY_START', 'cmd': 'GUARD_LOTTERY_START', 'data': { 'id': 2461426, 'link': 'https://live.bilibili.com/14327465', 'lottery': { 'asset_animation_pic': 'https://i0.hdslb.com/bfs/vc/ff2a28492970850ce73df0cc144f1766b222d471.gif', 'asset_icon': 'https://i0.hdslb.com/bfs/vc/43f488e7c4dca5ba6fbdcb88f40052d56bf777d8.png', 'id': 2461426, 'keyword': 'guard', 'mobile_animation_asset': '', 'mobile_display_mode': 2, 'mobile_static_asset': '', 'privilege_type': 3, 'sender': { 'face': 'http://i1.hdslb.com/bfs/face/7b273d356f7823067c7deaf32a097ddbe7019c7e.jpg', 'uid': 67929023, 'uname': '国产达闻西' }, 'status': 1, 'thank_text': '恭喜<%国产达闻西%>上任舰长', 'time': 1200, 'time_wait': 0, 'weight': 0 }, 'payflow_id': '2005072308160482190233750', 'privilege_type': 3, 'roomid': 14327465, 'type': 'guard' } },
+    {id: 'WARNING', "cmd":"WARNING","msg":"因版权原因，请立即更换"},
+    {id: 'CUT_OFF', "cmd":"CUT_OFF","msg":"违反直播规范"},
   ];
 
   const getMsgItem = async (id: string) => {
@@ -293,6 +295,8 @@ function DanmakuTest(props: { onMessage: OnMessageFunc }) {
       <span className="danmakuActionMenuItem pointer" onClick={async () => onMessage(await getMsgItem('GUARD_BUY3'))}>购买舰长测试</span>
       <span className="danmakuActionMenuItem pointer" onClick={async () => onMessage(await getMsgItem('GUARD_BUY2'))}>购买提督测试</span>
       <span className="danmakuActionMenuItem pointer" onClick={async () => onMessage(await getMsgItem('GUARD_BUY1'))}>购买总督测试</span>
+      <span className="danmakuActionMenuItem pointer" onClick={async () => onMessage(await getMsgItem('WARNING'))}>警告测试</span>
+      <span className="danmakuActionMenuItem pointer" onClick={async () => onMessage(await getMsgItem('CUT_OFF'))}>切断测试</span>
     </div>
   );
 }

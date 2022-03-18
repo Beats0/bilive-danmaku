@@ -8,6 +8,8 @@ import React, {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import Notification from 'rc-notification';
+import { NotificationInstance as RCNotificationInstance } from 'rc-notification/lib/Notification';
 import DanmakuList, { DanmakuListRef } from './DanmakuList/DanmakuList';
 import DanmakuGiftList, {
   DanmakuGiftListRef,
@@ -25,15 +27,34 @@ import { setCssVariable } from '../../utils/common';
 import LiveRoomLists from './LiveRoomLists';
 import RankMessageLists from './RankMessageLists';
 import DanmakuControl from './DanmakuControl/DanmakuControl';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { selectConfig, updateConfig, fetchVersionInfo } from "../../store/features/configSlice";
-import { selectDanmaku, createSocket, fetchGiftData } from "../../store/features/danmakuSlice";
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  fetchVersionInfo,
+  selectConfig,
+  updateConfig,
+} from '../../store/features/configSlice';
+import {
+  createSocket,
+  fetchGiftData,
+  selectDanmaku,
+} from '../../store/features/danmakuSlice';
+
+let notificationInstance: RCNotificationInstance | null = null;
+Notification.newInstance(
+  {
+    style: { top: 60, left: 0 },
+    maxCount: 5,
+  },
+  (n) => {
+    notificationInstance = n;
+  }
+);
 
 const Danmaku: FC = () => {
   const dispatch = useAppDispatch();
   const config = useAppSelector(selectConfig);
   const danmaku = useAppSelector(selectDanmaku);
-  const { socket } = danmaku
+  const { socket } = danmaku;
   // 以shortid房间短号显示
   const [roomID, setRoomID] = useState(config.shortid);
   const [popular, setPopular] = useState(0);
@@ -63,6 +84,10 @@ const Danmaku: FC = () => {
         currentConfig.current.blockEffectItem3 === 1
       )
         return;
+      if (['CUT_OFF', 'WARNING'].includes(msg.cmd)) {
+        onNotificationMessage(msg);
+        return;
+      }
       if (msg.cmd === CmdType.DANMU_MSG) {
         if (currentConfig.current.showVoice) {
           voice.push(msg.username, msg.content);
@@ -141,9 +166,24 @@ const Danmaku: FC = () => {
     giftRef?.current?.onMessage && giftRef.current.onMessage(msg);
   }, []);
 
+  // 警告、切断消息提示
+  const onNotificationMessage = (msg: NoticeData) => {
+    const noticeOption = {
+      className: 'warning',
+      content: (
+        <span>
+          <span className="icon-font icon-item warning icon-report" />
+          {msg.msg}
+        </span>
+      ),
+      duration: 10,
+    };
+    notificationInstance.notice(noticeOption);
+  };
+
   const handleDispatchUpDateConfig = (state) => {
-    dispatch(updateConfig(state))
-  }
+    dispatch(updateConfig(state));
+  };
 
   const handleSubmit = async (
     e?: FormEvent | null,
@@ -174,7 +214,10 @@ const Danmaku: FC = () => {
 
   const handleLock = () => {
     setLockMode(!lockMode);
-    handleDispatchUpDateConfig({ k: ConfigKey.setAlwaysOnTop, v: lockMode ? 1 : 0 });
+    handleDispatchUpDateConfig({
+      k: ConfigKey.setAlwaysOnTop,
+      v: lockMode ? 1 : 0,
+    });
     ipcRenderer.send('setAlwaysOnTop', !lockMode);
   };
 

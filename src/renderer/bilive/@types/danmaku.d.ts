@@ -8,6 +8,8 @@
 
 enum CmdType {
   CONNECTING = 'CONNECTING',
+  CONNECT_SUCCESS = 'CONNECT_SUCCESS',
+  DISCONNECTED = 'DISCONNECTED',
   LIVE = 'LIVE',
   POPULAR = 'POPULAR',
   DANMU_MSG = 'DANMU_MSG',
@@ -20,7 +22,6 @@ enum CmdType {
   WELCOME_GUARD = 'WELCOME_GUARD',
   GUARD_BUY = 'GUARD_BUY',
   SUPER_CHAT_MESSAGE = 'SUPER_CHAT_MESSAGE',
-  CONNECT_SUCCESS = 'CONNECT_SUCCESS',
   UNKNOWN = 'UNKNOWN'
 }
 
@@ -1582,7 +1583,7 @@ interface ROOM_ADMINS extends danmuJson {
   uids: number[];
 }
 /**
- * 房间封禁消息
+ * xxx被禁言消息
  * {"cmd":"ROOM_BLOCK_MSG","uid":"351676892","uname":"渣蹄子永远喜欢璃老婆","data":{"uid":"351676892","uname":"渣蹄子永远喜欢璃老婆","operator":1},"roomid":6727453,"_roomid":6727453}
  *
  * @interface ROOM_BLOCK_MSG
@@ -2587,9 +2588,19 @@ interface FANS_MEDAL {
   target_id: number;
 }
 
+//  连接中
+interface CONNECTING {
+  cmd: CmdType.CONNECTING;
+}
+
 //  连接成功
 interface CONNECT_SUCCESS {
   cmd: CmdType.CONNECT_SUCCESS;
+}
+
+//  连接断开
+interface DISCONNECTED {
+  cmd: CmdType.DISCONNECTED;
 }
 
 type DanmakuData =
@@ -2605,4 +2616,9 @@ type DanmakuData =
   | WELCOME_GUARD
   | GUARD_BUY
   | CONNECT_SUCCESS
-  | SUPER_CHAT_MESSAGE;
+  | SUPER_CHAT_MESSAGE
+  | WARNING
+  | CUT_OFF;
+
+// 警告、切断消息
+type NoticeData = WARNING | CUT_OFF;

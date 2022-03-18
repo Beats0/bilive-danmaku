@@ -80,6 +80,16 @@ interface MsgWelcome {
   isVipY: boolean;
 }
 
+interface WarningMsg {
+  cmd: string;
+  msg: string;
+}
+
+interface CutOffMsg {
+  cmd: string;
+  msg: string;
+}
+
 type GiftBubbleMsg = Partial<DanmakuGift & GiftSend>;
 
 interface UnknownMsg {
@@ -95,6 +105,8 @@ type DanmakuDataFormatted =
   | GuardBuyMsg
   | MsgWelcomeGuard
   | MsgWelcome
+  | WarningMsg
+  | CutOffMsg
   | UnknownMsg;
 
 type GiftRaw = {

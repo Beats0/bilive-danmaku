@@ -931,6 +931,9 @@ span.danmaku-content {
 .danmaku-content:hover {
   color: #ff94b1;
 }
+.icon-item.warning {
+  color: #f4bd00;
+}
 .icon-item.error:hover {
   color: #E91E63;
 }
@@ -985,6 +988,9 @@ span.danmaku-content {
 }
 .icon-font.icon-no-modified:before {
   content: "\E045";
+}
+.icon-font.icon-report:before {
+  content: "\E058"
 }
 .link-range-ctnr {
   vertical-align: middle;

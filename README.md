@@ -40,12 +40,13 @@ WELCOME             // 欢迎进入直播间
 WELCOME_GUARD       // 欢迎舰长进入直播间
 GUARD_BUY           // 上舰消息
 SUPER_CHAT_MESSAGE  // SC消息
+WARNING             // 直播警告消息
+CUT_OFF             // 直播强制切断消息
 ```
 
 ### TODO
 
 - [ ] 热更新
-- [ ] 历史留言榜
 
 
 ### 注意 Note!
