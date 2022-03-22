@@ -118,11 +118,11 @@ function dateFormat(date: Date, fmt: string) {
   return fmt;
 }
 
-export const systemFonts = [];
+export const systemFonts: string[] = [];
 
 // 获取系统字体列表
 ipcRenderer.send('getSystemFonts');
-ipcRenderer.on('getSystemFontsCb', (e, fonts = []) => {
+ipcRenderer.on('getSystemFontsCb', (e, fonts: string[] = []) => {
   // console.log('fonts', fonts);
   systemFonts = fonts;
 });

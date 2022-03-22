@@ -133,10 +133,10 @@ const createWindow = async () => {
   });
   ipcMain.on('getSystemFonts', async () => {
     const systemFontsScriptPath = getExtraResourcesPath('fontlist/getSystemFonts.js')
-    let fonts = [];
+    let fonts: string[] = [];
     const forked = cp.fork(systemFontsScriptPath);
-    forked.on('message', function (message) {
-      fonts = message
+    forked.on('message', function (message: string[]) {
+      fonts = message;
       mainWindow?.webContents.send('getSystemFontsCb', fonts);
     });
   });
