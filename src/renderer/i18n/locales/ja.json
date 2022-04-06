@@ -5,7 +5,7 @@
   "fontFamily": "フォント",
   "HeaderSubscribeTitle": "サブスクリプション",
   "HeaderLockTitle": "ロッキング",
-  "HeaderCloseTitle": "シャットダウン",
+  "HeaderCloseTitle": "上のウィンドウ",
   "LiveRoomPopular": "人気",
   "LiveRoomListsDelete": "削除する",
   "LiveRoomListsLoading": "遅いほど...",
@@ -94,5 +94,6 @@
   "CustomStyledUserName": "ユーザーのニックネームスタイルをカスタマイズ",
   "CustomStyledDanmakuContent": "ユーザー定義の弾幕の内容スタイル",
   "ShowGiftDanmakuList": "ギフト弾幕リストを表示",
-  "RankMessageList": "ゲストブック"
+  "RankMessageList": "ゲストブック",
+  "IgnoreMouse": "マウスの浸透"
 }

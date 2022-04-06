@@ -114,7 +114,7 @@ const createWindow = async () => {
   ipcMain.on('toggleDevTools', () => {
     mainWindow?.webContents.toggleDevTools();
   });
-  ipcMain.on('setAlwaysOnTop', async (_event, flag: boolean) => {
+  ipcMain.on('setAlwaysOnTop', (_event, flag: boolean) => {
     if (flag) {
       mainWindow?.setVisibleOnAllWorkspaces(true, {
         visibleOnFullScreen: true,
@@ -122,6 +122,13 @@ const createWindow = async () => {
       mainWindow?.setAlwaysOnTop(true, 'screen-saver', 1);
     } else {
       mainWindow?.setAlwaysOnTop(false);
+    }
+  });
+  ipcMain.on('setIgnoreMouse', (_event, flag: boolean) => {
+    if (flag) {
+      mainWindow?.setIgnoreMouseEvents(true, { forward: true });
+    } else {
+      mainWindow?.setIgnoreMouseEvents(false, { forward: false });
     }
   });
   ipcMain.on('closeApp', async () => {

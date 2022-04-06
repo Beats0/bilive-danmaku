@@ -55,10 +55,12 @@ const Danmaku: FC = () => {
   const config = useAppSelector(selectConfig);
   const danmaku = useAppSelector(selectDanmaku);
   const { socket } = danmaku;
+
   // 以shortid房间短号显示
   const [roomID, setRoomID] = useState(config.shortid);
   const [popular, setPopular] = useState(0);
-  const [lockMode, setLockMode] = useState(false);
+  const [lockMode, setLockMode] = useState<boolean>(!!config.setAlwaysOnTop);
+  const [ignoreMouseMode, setIgnoreMouseMode] = useState<boolean>(!!config.ignoreMouse);
   const danmakuRef = useRef<DanmakuListRef>(null);
   const danmakuGiftList = useRef<DanmakuGiftListRef>(null);
   const scRef = useRef<SuperChatPanelRef>(null);
@@ -216,9 +218,39 @@ const Danmaku: FC = () => {
     setLockMode(!lockMode);
     handleDispatchUpDateConfig({
       k: ConfigKey.setAlwaysOnTop,
-      v: lockMode ? 1 : 0,
+      v: !lockMode ? 1 : 0,
     });
     ipcRenderer.send('setAlwaysOnTop', !lockMode);
+  };
+
+  const handleClickSetIgnoreMouse = () => {
+    setIgnoreMouseMode(!ignoreMouseMode);
+    handleDispatchUpDateConfig({
+      k: ConfigKey.ignoreMouse,
+      v: !ignoreMouseMode ? 1 : 0,
+    });
+    // 窗口前置
+    if (!ignoreMouseMode) {
+      setLockMode(true);
+      handleDispatchUpDateConfig({
+        k: ConfigKey.setAlwaysOnTop,
+        v: 1,
+      });
+      ipcRenderer.send('setAlwaysOnTop', true);
+    }
+    ipcRenderer.send('setIgnoreMouse', !ignoreMouseMode);
+  };
+
+  const mouseEnter = () => {
+    if (ignoreMouseMode) {
+      ipcRenderer.send('setIgnoreMouse', false);
+    }
+  };
+
+  const mouseLeave = () => {
+    if (ignoreMouseMode) {
+      ipcRenderer.send('setIgnoreMouse', true);
+    }
   };
 
   const onConnecting = () => {
@@ -227,6 +259,15 @@ const Danmaku: FC = () => {
     };
     onMessage([danmakuData]);
   };
+
+  function initConfigSetting() {
+    if (config.setAlwaysOnTop) {
+      ipcRenderer.send('setAlwaysOnTop', true);
+    }
+    if (config.ignoreMouse) {
+      ipcRenderer.send('setIgnoreMouse', true);
+    }
+  }
 
   function initCssVariable() {
     const cssVariables = [
@@ -253,6 +294,7 @@ const Danmaku: FC = () => {
       socket.init();
       socket.addMethods([onMessage]);
       onConnecting();
+      initConfigSetting();
       initCssVariable();
       dispatch(fetchGiftData());
       fetchResentSuperChat(roomID);
@@ -278,6 +320,16 @@ const Danmaku: FC = () => {
         <div className="liveIconContainer">
           <LiveRoomLists onChangeRoomID={handleSubmit} />
           <RankMessageLists />
+          <span
+            title={t('IgnoreMouse')}
+            onClick={handleClickSetIgnoreMouse}
+            onMouseEnter={mouseEnter}
+            onMouseLeave={mouseLeave}
+            className={`icon-item icon-font liveIcon pointer ${
+              ignoreMouseMode ? 'icon-lock-1 active' : 'icon-unlock-1'
+            }`}
+            style={{ fontSize: 19 }}
+          />
           <span
             title={t('HeaderLockTitle')}
             onClick={handleLock}

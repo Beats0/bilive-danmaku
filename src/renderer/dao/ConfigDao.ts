@@ -12,6 +12,7 @@ export const defaultConfig: ConfigStateType = {
   setAlwaysOnTop: 1,
   roomid: resentLiveData.roomid,
   shortid: resentLiveData.shortid,
+  ignoreMouse: 0,
   showAvatar: 0,
   avatarSize: 24,
   showFanLabel: 0,
@@ -57,10 +58,13 @@ export default class ConfigDao {
   static get(): ConfigStateType {
     const configStr = localStorage.getItem(prefixKey);
     if (!configStr) return defaultConfig;
-    const configData: ConfigStateType = JSON.parse(configStr);
+    const configData: ConfigStateType = {
+      ...defaultConfig,
+      ...JSON.parse(configStr),
+    };
     configData.version = pkg.version;
     // 与最新版config合并
-    this.save({ ...defaultConfig, ...configData });
+    this.save(configData);
     return configData;
   }
 

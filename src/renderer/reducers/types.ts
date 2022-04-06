@@ -6,6 +6,7 @@ export enum ConfigKey {
   latestVersion = 'latestVersion',
   languageCode = 'languageCode',
   setAlwaysOnTop = 'setAlwaysOnTop',
+  ignoreMouse = 'ignoreMouse',
   roomid = 'roomid',
   shortid = 'shortid',
   showAvatar = 'showAvatar',

@@ -264,10 +264,10 @@ type Task = {
 const taskQueue: Task[] = [];
 let isWorking = false;
 
-// 设置为 1s 内不得请求超过5个api
+// 设置最大请求数5个，每次请求下一个间隔时间为200ms
 export const apiTaskConfig = {
   taskMaxLength: 5,
-  sleepMs: 200
+  sleepMs: 200,
 };
 
 async function handleTaskQueue() {

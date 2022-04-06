@@ -132,6 +132,8 @@ type ConfigStateType = {
   languageCode: string;
   // 窗口置于顶层
   setAlwaysOnTop: 0 | 1;
+  // 鼠标穿透
+  ignoreMouse: 0 | 1;
   // 房间号
   roomid: number;
   // 房间短号

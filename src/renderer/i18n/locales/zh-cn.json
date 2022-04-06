@@ -4,7 +4,7 @@
   "Language": "中文",
   "fontFamily": "字体",
   "HeaderSubscribeTitle": "订阅",
-  "HeaderLockTitle": "锁定",
+  "HeaderLockTitle": "窗口置顶",
   "HeaderCloseTitle": "关闭",
   "LiveRoomPopular": "人气值",
   "LiveRoomListsDelete": "删除",
@@ -94,5 +94,6 @@
   "CustomStyledUserName": "自定义用户昵称样式",
   "CustomStyledDanmakuContent": "自定义弹幕内容样式",
   "ShowGiftDanmakuList": "显示礼物弹幕列表",
-  "RankMessageList": "留言榜"
+  "RankMessageList": "留言榜",
+  "IgnoreMouse": "鼠标穿透"
 }

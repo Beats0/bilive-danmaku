@@ -10,23 +10,19 @@ interface UserAvatar {
 
 export default class UserAvatarDao {
   static has(uid: number): boolean {
-    return localStorage.getItem(String(uid)) !== null;
+    return localStorage.getItem(`uid_${uid}`) !== null;
   }
 
   static get(uid: number): UserAvatar {
-    const dataStr = localStorage.getItem(String(uid));
+    const dataStr = localStorage.getItem(`uid_${uid}`);
     if (!dataStr) {
       return {
         uid,
         avatar: defaultAvatar,
-        expires: Date.now()
+        expires: Date.now(),
       };
     }
     const parseData: UserAvatar = JSON.parse(dataStr);
-    // 检验expires, 到期自动删除
-    if (Date.now() >= parseData.expires) {
-      this.delete(uid);
-    }
     return parseData;
   }
 
@@ -36,14 +32,26 @@ export default class UserAvatarDao {
       avatar,
       expires: Date.now() + expires
     };
-    localStorage.setItem(String(uid), JSON.stringify(avatarData));
+    localStorage.setItem(`uid_${uid}`, JSON.stringify(avatarData));
   }
 
   static delete(uid: number) {
-    localStorage.removeItem(String(uid));
+    localStorage.removeItem(`uid_${uid}`);
   }
 
-  static clear() {
-    localStorage.clear();
+  // 检验expires, 到期自动删除
+  static clearExpiresData() {
+    const keyArr = Object.keys(localStorage);
+    for (let i = 0; i < keyArr.length; i++) {
+      if (keyArr[i].indexOf(`uid_`) !== -1) {
+        const uid = Number(keyArr[i].replace('uid_', ''));
+        const parseData: UserAvatar = this.get(uid);
+        if (Date.now() >= parseData.expires) {
+          this.delete(uid);
+        }
+      }
+    }
   }
 }
+
+UserAvatarDao.clearExpiresData();
