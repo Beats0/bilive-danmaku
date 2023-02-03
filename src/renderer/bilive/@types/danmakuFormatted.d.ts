@@ -80,6 +80,19 @@ interface MsgWelcome {
   isVipY: boolean;
 }
 
+interface MsgInterActWordMsg {
+  cmd: string;
+  msgType: number;
+  username: string;
+  userID: number;
+}
+
+interface MsgRoomBlockMsg {
+  cmd: string;
+  username: string;
+  userID: number;
+}
+
 interface WarningMsg {
   cmd: string;
   msg: string;
@@ -105,6 +118,8 @@ type DanmakuDataFormatted =
   | GuardBuyMsg
   | MsgWelcomeGuard
   | MsgWelcome
+  | MsgInterActWordMsg
+  | MsgRoomBlockMsg
   | WarningMsg
   | CutOffMsg
   | UnknownMsg;
@@ -186,7 +201,7 @@ type ConfigStateType = {
   blockEffectItem0: 0 | 1;
   // 屏蔽抽奖弹幕[0,1]
   blockEffectItem1: 0 | 1;
-  // 屏蔽进场信息[0,1]
+  // 屏蔽进场信息[0,1](包括进入房间，关注了直播间)
   blockEffectItem2: 0 | 1;
   // 屏蔽醒目留言[0,1]
   blockEffectItem3: 0 | 1;
@@ -194,6 +209,8 @@ type ConfigStateType = {
   blockEffectItem4: 0 | 1;
   // 屏蔽舰长弹幕特效
   blockEffectItem5: 0 | 1;
+  // 屏蔽表情动画
+  blockEffectItem6: 0 | 1;
   // 显示最低金瓜子
   blockMinGoldSeed: number;
   // 显示最低银瓜子

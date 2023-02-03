@@ -655,6 +655,11 @@ a:hover {
   color: orange
 }
 
+.username.blocked {
+  color: orange;
+  margin: 0 5px;
+}
+
 .close-vip-hint {
   color: #23ade5
 }
@@ -2596,6 +2601,7 @@ input.custom-style {
 
 .fontFamilyMenuContainer {
   width: 180px;
+  max-width: 180px;
   height: 200px;
   overflow-x: hidden;
   overflow-y: scroll;

@@ -36,8 +36,11 @@ SPECIAL_GIFT        // TODO
 COMBO_SEND          // 礼物连击消息
 COMBO_END           // TODO 礼物连击结束消息
 NOTICE_MSG          // 广播消息
-WELCOME             // 欢迎进入直播间
-WELCOME_GUARD       // 欢迎舰长进入直播间
+WELCOME             // 欢迎进入直播间（不会触发）
+WELCOME_GUARD       // 欢迎舰长进入直播间（不会触发）
+ENTRY_EFFECT        // 舰长、高能榜、老爷进入直播间
+INTERACT_WORD       // 用户进入直播间，用户关注直播间
+ROOM_BLOCK_MSG      // 用户被禁言
 GUARD_BUY           // 上舰消息
 SUPER_CHAT_MESSAGE  // SC消息
 WARNING             // 直播警告消息

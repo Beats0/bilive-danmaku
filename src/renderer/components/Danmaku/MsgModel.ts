@@ -18,6 +18,9 @@ export enum CmdType {
   COMBO_SEND = 'COMBO_SEND',
   COMBO_END = 'COMBO_END',
   NOTICE_MSG = 'NOTICE_MSG',
+  INTERACT_WORD = 'INTERACT_WORD',
+  ENTRY_EFFECT = 'ENTRY_EFFECT',
+  ROOM_BLOCK_MSG = 'ROOM_BLOCK_MSG',
   WELCOME = 'WELCOME',
   WELCOME_GUARD = 'WELCOME_GUARD',
   GUARD_BUY = 'GUARD_BUY',
@@ -116,10 +119,16 @@ export async function parseData(
       const welcomeguardMsg: MsgWelcomeGuard = {
         cmd: CmdType.WELCOME_GUARD,
         username: data.data.username,
-        userID: data.data.uid,
-        guardLevel: data.data.guard_level
       };
       return welcomeguardMsg;
+    case CmdType.INTERACT_WORD:
+      const interActWordMsg: MsgInterActWordMsg = {
+        cmd: CmdType.INTERACT_WORD,
+        msgType: data.data.msg_type,
+        username: data.data.uname,
+        userID: data.data.uid,
+      };
+      return interActWordMsg;
     case CmdType.GUARD_BUY:
       const guardBuyMsg: GuardBuyMsg = {
         cmd: CmdType.GUARD_BUY,
@@ -158,6 +167,13 @@ export async function parseData(
     // case CmdType.COMBO_END:
     //   // TODO:
     //   break;
+    case CmdType.ROOM_BLOCK_MSG:
+      const roomBlockMsg: MsgRoomBlockMsg = {
+        cmd: CmdType.ROOM_BLOCK_MSG,
+        username: data.data.uname,
+        userID: data.data.uid,
+      };
+      return roomBlockMsg;
     case CmdType.WARNING:
       const warningMsg: WarningMsg = {
         cmd: CmdType.WARNING,

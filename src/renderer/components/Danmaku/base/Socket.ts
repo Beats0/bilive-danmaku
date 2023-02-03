@@ -195,6 +195,7 @@ export default class Socket {
       for (let i = 0; i < body.length; i++) {
         const d = body[i];
         // 弹幕过滤
+        // console.log('d.cmd', d.cmd, d)
         if (d.cmd === CmdType.DANMU_MSG) {
           if (!danmakuFilter(d.info)) {
             const content = d.info['1'] || '';

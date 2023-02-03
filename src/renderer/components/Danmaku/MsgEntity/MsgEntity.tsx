@@ -1,16 +1,18 @@
 import { animated, useSpring } from 'react-spring';
+import { CmdType } from '../MsgModel';
 import MsgWelcome from './MsgWelcome';
 import MsgDanmu from './MsgDanmu';
 import MsgLive from './MsgLive';
 import MsgSendGift from './MsgSendGift';
 import MsgWelcomeGuard from './MsgWelcomeGuard';
+import MsgInterActWord from './MsgInterActWord';
 import MsgGuardBuy from './MsgGuardBuy';
 import MsgGuardBuySystem from './MsgGuardBuySystem';
-import { CmdType } from '../MsgModel';
 import MsgConnecting from './MsgConnecting';
 import MsgDisconnected from './MsgDisconnected';
 import MsgConnectSuccess from './MsgConnectSuccess';
 import MsgSuperChatCard from './MsgSuperChatCard';
+import MsgRoomBlock from './MsgRoomBlock';
 
 function FadeInUp({ children }) {
   const props = useSpring({
@@ -67,8 +69,16 @@ export default function MsgEntity(props: MsgEntityProps) {
     case CmdType.WELCOME_GUARD:
       Msg = <MsgWelcomeGuard {...props} />;
       break;
+    case CmdType.INTERACT_WORD:
+      if (showGift) {
+        Msg = <MsgInterActWord {...props} />;
+      }
+      break;
     case CmdType.GUARD_BUY:
       Msg = [<MsgGuardBuy {...props} />, <MsgGuardBuySystem {...props} />];
+      break;
+    case CmdType.ROOM_BLOCK_MSG:
+      Msg = <MsgRoomBlock {...props} />;
       break;
     default:
       return null;

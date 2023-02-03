@@ -71,30 +71,28 @@ const Danmaku: FC = () => {
 
   // onMessage必须使用useRef.current,否则会造成更新不会实时同步
   function onMessage(res: DanmakuDataFormatted[]) {
-    // console.log('res====>', res)
     const renderDanmakuLists: React.ReactElement[] = [];
     const renderDanmakuGiftLists: React.ReactElement[] = [];
     if (currentConfig.current.blockScrollBar) return;
     for (let i = 0; i < res.length; i++) {
       const msg = res[i];
+      // 人气
       if (msg.cmd === CmdType.POPULAR) {
         setPopular(msg.popular);
         return;
       }
-      if (
-        msg.cmd === CmdType.NOTICE_MSG &&
-        currentConfig.current.blockEffectItem3 === 1
-      )
-        return;
+      // 广播消息
+      if (msg.cmd === CmdType.NOTICE_MSG && currentConfig.current.blockEffectItem3 === 1) return;
+      // 经过消息
       if (['CUT_OFF', 'WARNING'].includes(msg.cmd)) {
         onNotificationMessage(msg);
         return;
       }
-      if (msg.cmd === CmdType.DANMU_MSG) {
-        if (currentConfig.current.showVoice) {
-          voice.push(msg.username, msg.content);
-        }
+      // 是否开启弹幕朗读
+      if (msg.cmd === CmdType.DANMU_MSG && currentConfig.current.showVoice) {
+        voice.push(msg.username, msg.content);
       }
+      // 礼物消息
       if (currentConfig.current.blockEffectItem4 === 0) {
         if (msg.cmd === CmdType.SEND_GIFT || msg.cmd === CmdType.COMBO_SEND) {
           const giftElement = (
@@ -111,6 +109,18 @@ const Danmaku: FC = () => {
           }
         }
       }
+      // 进入房间消息 添加到底部
+      if (currentConfig.current.blockEffectItem2 === 0 && msg.cmd === CmdType.INTERACT_WORD) {
+        const actionElement = (
+          <MsgEntity
+            {...msg}
+            showGift
+            showTransition={currentConfig.current.showTransition === 1}
+            key={String(Math.random())}
+          />
+        );
+        renderDanmakuGiftLists.push(actionElement);
+      }
 
       // TODO: COMBO_END
       // if (msg.cmd === CmdType.COMBO_END) {
@@ -118,6 +128,7 @@ const Danmaku: FC = () => {
       //   return;
       // }
 
+      // sc消息
       if (
         msg.cmd === CmdType.SUPER_CHAT_MESSAGE &&
         currentConfig.current.blockEffectItem3 === 0

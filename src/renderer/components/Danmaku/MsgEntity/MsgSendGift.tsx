@@ -1,6 +1,7 @@
 import { useAppSelector } from '../../../store/hooks';
 import { selectDanmaku } from '../../../store/features/danmakuSlice';
 import { selectConfig } from '../../../store/features/configSlice';
+import { openLink } from '../../../utils/common';
 
 function MsgSendGift(props: DanmakuGift) {
   const { ...msg } = props;
@@ -17,7 +18,7 @@ function MsgSendGift(props: DanmakuGift) {
   if (giftItem) {
     return (
       <div className="danmakuItem">
-        <span className="gift-item user-name">{msg.username}</span>&nbsp;
+        <span className="gift-item user-name pointer" onClick={() => openLink(`https://space.bilibili.com/${msg.userID}`)}>{msg.username}</span>&nbsp;
         {msg.giftAction} {msg.giftName}{' '}
         <img src={giftItem.webp} className="giftImg" /> x {msg.giftCount}
       </div>
