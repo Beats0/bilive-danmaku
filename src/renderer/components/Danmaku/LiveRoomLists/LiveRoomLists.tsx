@@ -4,7 +4,7 @@ import { animated, useSpring } from 'react-spring';
 import { useTranslation } from 'react-i18next';
 import LiveRoomDao from '../../../dao/LiveRoomDao';
 import { getLiveRoomInfo, LiveRoom } from '../../../api';
-import { sortBy } from '../../../utils/common';
+import { openLink, sortBy } from "../../../utils/common";
 import { useAppSelector } from '../../../store/hooks';
 import { selectConfig } from '../../../store/features/configSlice';
 
@@ -48,6 +48,11 @@ function Lists(props: ListsProps) {
 
   function handleChangeRoom(shortid: number) {
     onChangeRoomID(null, shortid);
+  }
+
+  function handleOpenRoom(shortid: number) {
+    const url = `https://live.bilibili.com/${shortid}`;
+    openLink(url);
   }
 
   function handleDeleteRoom(shortid: number) {
@@ -94,8 +99,8 @@ function Lists(props: ListsProps) {
           return (
             <div className="user-row" key={String(i.roomid)}>
               <div
-                className="user-avatar-container"
-                onClick={() => handleChangeRoom(i.shortid)}
+                className="user-avatar-container pointer"
+                onClick={() => handleOpenRoom(i.shortid)}
               >
                 <div
                   className="live-user-avatar"
@@ -104,7 +109,7 @@ function Lists(props: ListsProps) {
                 {i.isLive && <span className="live-status-on" />}
               </div>
               <div
-                className="user-info-cntr"
+                className="user-info-cntr pointer"
                 onClick={() => handleChangeRoom(i.shortid)}
               >
                 <p

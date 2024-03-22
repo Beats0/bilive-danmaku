@@ -67,7 +67,30 @@ export interface RankMessageListsResponse {
   code: number;
   data: {
     list?: RankMessageListsItem[];
-  },
+  };
+  message: string;
+  msg: string;
+}
+
+export interface HostItem {
+  // "host": "zj-cn-live-comet.chat.bilibili.com",
+  // "port": 2243,
+  // "wss_port": 2245,
+  // "ws_port": 2244
+  host: string;
+  port: number;
+  wss_port: number;
+  ws_port: number;
+}
+
+export interface DanmuInfoData {
+  token: string;
+  host_list: HostItem[];
+}
+
+export interface DanmuInfoResponse {
+  code: number;
+  data: DanmuInfoData;
   message: string;
   msg: string;
 }
@@ -78,6 +101,8 @@ const API_LIVEROOM_INFO =
 const API_GIFT_CONFIG = `https://api.live.bilibili.com/gift/v3/live/gift_config`;
 const API_RESENT_SUPER_CHAT = `https://api.live.bilibili.com/av/v1/SuperChat/enable`;
 const API_RANK_MESSAGE_LIST = `https://api.live.bilibili.com/av/v1/SuperChat/getRankMessageList`;
+const API_DANMU_INFO = `https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo`;
+const API_FINGER_SPI = `https://api.bilibili.com/x/frontend/finger/spi/`;
 const API_SERVER_PACKAGE = `https://cdn.jsdelivr.net/gh/beats0/bilive-danmaku/package.json`;
 
 // 获取用户信息
@@ -240,6 +265,43 @@ export async function getResentSuperChat(
         resolve([]);
       });
   });
+}
+
+// 获取danmuInfo
+export async function getDanmuInfoData(roomid: number): Promise<DanmuInfoData> {
+  return new Promise<DanmuInfoData>((resolve, reject) => {
+    fetch(`${API_DANMU_INFO}?id=${roomid}&type=0`)
+      .then((res) => res.json())
+      .then((data: DanmuInfoResponse) => {
+        if (!data.data) throw new Error(data.message);
+
+        const danmuInfoData: DanmuInfoData = data.data;
+        resolve(danmuInfoData);
+      })
+      .catch((error) => {
+        console.log('error', error);
+        reject(error);
+      });
+  });
+}
+
+// 获取buvid3
+export async function getBuvid3(): Promise<string> {
+  const response = await fetch(API_FINGER_SPI, {
+    method: 'GET',
+    headers: {
+      Host: `api.bilibili.com`,
+      Origin: 'https://www.bilibili.com',
+      Referer: `https://www.bilibili.com/`,
+    },
+    redirect: 'follow',
+  });
+  const data = await response.json();
+  if (data.code === 0) {
+    const buvid3 = data.data.b_3;
+    return buvid3;
+  }
+  return '';
 }
 
 // 获取服务器端version

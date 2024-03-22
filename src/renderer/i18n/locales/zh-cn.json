@@ -55,6 +55,7 @@
   "BlockEffectItem3": "屏蔽醒目留言",
   "BlockEffectItem4": "屏蔽冒泡礼物",
   "BlockEffectItem5": "屏蔽舰长弹幕特效",
+  "BlockEffectItem6": "屏蔽表情动画",
   "GlobalBlockModeTitle": "全局屏蔽",
   "GlobalBlockModeHasBeen": "屏蔽已",
   "GlobalBlockModeOn": "开启",
@@ -98,5 +99,9 @@
   "CustomStyledDanmakuContent": "自定义弹幕内容样式",
   "ShowGiftDanmakuList": "显示礼物弹幕列表",
   "RankMessageList": "留言榜",
-  "IgnoreMouse": "鼠标穿透"
+  "IgnoreMouse": "鼠标穿透",
+  "Parameter": "参数配置",
+  "ParameterDescription": "参数说明",
+  "ParameterDescriptionText": "由于bilibili隐私限制, 未登录情况下无法查看他人昵称。为了更好的体验可在浏览器登录bilibili后，控制台执行以下代码获取自己的uid和buvid, 复制粘贴到以下输入框点击刷新即可。",
+  "Refresh": "刷新"
 }

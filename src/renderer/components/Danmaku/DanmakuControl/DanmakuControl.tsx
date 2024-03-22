@@ -19,12 +19,14 @@ import Slider from "../../Base/Slider";
 import { parseData } from "../MsgModel";
 import LanguagePanel from "./LanguagePanel";
 import CustomStyledPanel from "./CustomStyledPanel";
+import UserConfigPanel from "./UserInfoConfigPanel"
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { resetConfig, selectConfig, updateConfig } from "../../../store/features/configSlice";
 import Dropdown from "rc-dropdown";
 import Menu, { Item as MenuItem } from "rc-menu";
 
 export enum ControlType {
+  USERINFOCONFIG = 'USERINFOCONFIG',
   DANMAKUTEST = 'DANMAKUTEST',
   SETTING = 'SETTING',
   TRANSLATESETTING = 'TRANSLATESETTING',
@@ -33,13 +35,14 @@ export enum ControlType {
   BLOCK = 'BLOCK',
   UNLOCK = 'UNLOCK',
   CONFIG = 'CONFIG',
-  ABOUT = 'ABOUT'
+  ABOUT = 'ABOUT',
 }
 
 type Props = {
   popular: number;
   clearSCMessage: () => void;
   clearMessage: () => void;
+  refresh: () => void;
   onMessage: OnMessageFunc;
 };
 
@@ -60,6 +63,7 @@ function DanmakuControl(props: Props) {
     popular,
     clearMessage,
     clearSCMessage,
+    refresh,
   } = props;
   const { t } = useTranslation();
 
@@ -170,6 +174,16 @@ function DanmakuControl(props: Props) {
           overlay={ <DanmakuTest { ...props } /> }
         >
           <span title="弹幕测试" className="icon-font icon-item icon-comment" />
+        </Tooltip>
+        <Tooltip
+          visible={ currentName === ControlType.USERINFOCONFIG }
+          animation="zoom"
+          placement="top"
+          onVisibleChange={ (v) => setCurrentName(v ? ControlType.USERINFOCONFIG : "") }
+          trigger="click"
+          overlay={ <UserConfigPanel { ...props } refresh={refresh} /> }
+        >
+          <span title="用户配置" className="icon-font icon-item icon-user" />
         </Tooltip>
         <Tooltip
           visible={currentName === ControlType.SETTING}
@@ -562,6 +576,11 @@ function EffectBlock(props: {
           <span className={`cb-icon svg-icon v-middle p-absolute checkbox-${config.blockEffectItem5 ? 'selected' : 'default'}`} />
           <input id="block-effect-item-4" type="checkbox" className="pointer v-middle" />
           <label className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem5')}</label>
+        </li>
+        <li onClick={() => handleUpdateConfig(ConfigKey.blockEffectItem6)} className="item">
+          <span className={`cb-icon svg-icon v-middle p-absolute checkbox-${config.blockEffectItem6 ? 'selected' : 'default'}`} />
+          <input id="block-effect-item-4" type="checkbox" className="pointer v-middle" />
+          <label className="pointer dp-i-block v-middle block-effect-item">{t('BlockEffectItem6')}</label>
         </li>
       </ul>
     </div>

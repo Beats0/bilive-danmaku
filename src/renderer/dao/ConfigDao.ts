@@ -41,6 +41,7 @@ export const defaultConfig: ConfigStateType = {
   blockEffectItem3: 0,
   blockEffectItem4: 0,
   blockEffectItem5: 0,
+  blockEffectItem6: 0,
   blockMinGoldSeed: 0,
   blockMinSilverSeed: 0,
   blockDanmakuLists: [],

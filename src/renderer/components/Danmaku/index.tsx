@@ -378,6 +378,7 @@ const Danmaku: FC = () => {
         onMessage={onMessage}
         clearMessage={handleClearMessage}
         clearSCMessage={clearSCMessage}
+        refresh={handleSubmit}
       />
     </div>
   );

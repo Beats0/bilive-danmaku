@@ -60,16 +60,16 @@ export async function parseData(
         liveUp: data.info['3']['2'],
         liveRoomID: data.info['3']['3'],
         userLevel: data.info['4']['0'] || 0,
-        repeat: 0
+        repeat: 0,
       };
       if (config.showAvatar) {
         // 先查询Dao,如果有就直接添加
         if (UserAvatarDao.has(userID)) {
           danmakuMsg.face = UserAvatarDao.get(userID).avatar;
-        } else {
+        } else if(userID > 1)  {
           // 如果没有添加UserInfoApiTask，
           UserInfoApiTask.push(userID);
-          // 频繁请求api会导致被ban，据说间隔时间为170
+          // 频繁请求api会导致被ban
           if (
             UserInfoApiTask.getTaskQueueLength() <= apiTaskConfig.taskMaxLength
           ) {

@@ -1,19 +1,13 @@
-/**
- * @author LeeeeeeM https://github.com/LeeeeeeM/bilibili-web-socket
- * @author Beats0 https://github.com/Beats0
- * 参考了LeeeeeeM的设计模式和弹幕解释器，写到一半了结果官方socket采用了zlib压缩导致以前的解释器解析失败 = =
- * 翻了翻B站的js代码，一步一步断点逆向，调试了两天，终于搞到了解释器convertToObject
- * convertToObject是被压缩后的代码格式，鬼知道以后会不会又被改，直接用就行
- * */
-
 /* eslint-disable no-underscore-dangle */
-import pako from 'pako';
+import { BrotliDecode } from '../../../utils/brotli'
 import wsUrl from '../common/ws-url';
 import msgStruct from '../common/msg-struct';
 import { generatePacket } from '../../../utils/packet';
 // import { bytes2str } from '../../../utils/convert';
 import { CmdType, parseData } from '../MsgModel';
 import config from '../../../config';
+import { getBuvid3, getDanmuInfoData } from "../../../api";
+import UserInfoDao, { UserInfoDaoNS } from "../../../dao/UesrInfoDao";
 
 export interface SocketInstanceType {
   roomid: number;
@@ -33,9 +27,10 @@ const l = {
   '-3': 'data error',
   '-4': 'insufficient memory',
   '-5': 'buffer error',
-  '-6': 'incompatible version'
+  '-6': 'incompatible version',
 };
-const defaultUid = 598848;
+
+const defaultUid = 0;
 
 export default class Socket {
   private readonly roomid: number;
@@ -48,53 +43,44 @@ export default class Socket {
 
   private i: {
     a: {
-      WS_BODY_PROTOCOL_VERSION_NORMAL: number;
-      WS_OP_CONNECT_SUCCESS: number;
-      WS_AUTH_OK: number;
-      WS_BODY_PROTOCOL_VERSION_DEFLATE: number;
-      WS_VERSION_OFFSET: number;
-      WS_PACKAGE_HEADER_TOTAL_LENGTH: number;
-      WS_HEADER_DEFAULT_SEQUENCE: number;
-      WS_OPERATION_OFFSET: number;
-      WS_SEQUENCE_OFFSET: number;
-      WS_HEADER_DEFAULT_VERSION: number;
-      WS_OP_HEARTBEAT: number;
-      WS_AUTH_TOKEN_ERROR: number;
-      WS_OP_HEARTBEAT_REPLY: number;
-      WS_OP_MESSAGE: number;
-      WS_OP_USER_AUTHENTICATION: number;
-      WS_HEADER_OFFSET: number;
-      WS_HEADER_DEFAULT_OPERATION: number;
-      WS_PACKAGE_OFFSET: number;
+      [key: string]: number;
     };
     getDecoder: TextDecoder;
   };
 
-  constructor(roomid: number, uid = defaultUid) {
+  constructor(roomid: number, uid?: number) {
+    if (!uid) {
+      const UserInfoUidStr = UserInfoDao.get(UserInfoDaoNS.UserInfoUid);
+      if (UserInfoUidStr) {
+        uid = Number(UserInfoUidStr) || 0;
+      } else {
+        uid = defaultUid;
+      }
+    }
     this.roomid = roomid;
     this.uid = uid;
     this._docker = new WebSocket(wsUrl);
     this._methods = [];
     this.i = {
       a: {
-        WS_AUTH_OK: 0,
-        WS_AUTH_TOKEN_ERROR: -101,
-        WS_BODY_PROTOCOL_VERSION_DEFLATE: 2,
-        WS_BODY_PROTOCOL_VERSION_NORMAL: 0,
-        WS_HEADER_DEFAULT_OPERATION: 1,
-        WS_HEADER_DEFAULT_SEQUENCE: 1,
-        WS_HEADER_DEFAULT_VERSION: 1,
-        WS_HEADER_OFFSET: 4,
-        WS_OPERATION_OFFSET: 8,
-        WS_OP_CONNECT_SUCCESS: 8,
         WS_OP_HEARTBEAT: 2,
         WS_OP_HEARTBEAT_REPLY: 3,
         WS_OP_MESSAGE: 5,
         WS_OP_USER_AUTHENTICATION: 7,
+        WS_OP_CONNECT_SUCCESS: 8,
         WS_PACKAGE_HEADER_TOTAL_LENGTH: 16,
         WS_PACKAGE_OFFSET: 0,
+        WS_HEADER_OFFSET: 4,
+        WS_VERSION_OFFSET: 6,
+        WS_OPERATION_OFFSET: 8,
         WS_SEQUENCE_OFFSET: 12,
-        WS_VERSION_OFFSET: 6
+        WS_BODY_PROTOCOL_VERSION_NORMAL: 0,
+        WS_BODY_PROTOCOL_VERSION_BROTLI: 3,
+        WS_HEADER_DEFAULT_VERSION: 1,
+        WS_HEADER_DEFAULT_OPERATION: 1,
+        WS_HEADER_DEFAULT_SEQUENCE: 1,
+        WS_AUTH_OK: 0,
+        WS_AUTH_TOKEN_ERROR: -101,
       },
       getDecoder() {
         return window.TextDecoder
@@ -115,12 +101,12 @@ export default class Socket {
   public async init() {
     console.log(`新的socket：[${this.roomid}] 正在初始化...`);
     this._docker.binaryType = 'arraybuffer';
-    this._docker.onopen = event => {
+    this._docker.onopen = async event => {
       const msg = {
         cmd: 'CONNECT_SUCCESS'
       }
       this._call([msg]);
-      const join = this._joinRoom(this.roomid, this.uid);
+      const join = await this._joinRoom(this.roomid, this.uid);
       this._docker.send(join.buffer);
       this._sendBeat();
     };
@@ -135,49 +121,6 @@ export default class Socket {
       console.log(`旧的socket已经关闭...`);
     };
   }
-
-  /**
-   * 官方版
-   public onMessage(e) {
-    const t = this;
-    const { i } = t;
-    try {
-      const n = this.convertToObject(e.data);
-      if (n instanceof Array)
-        n.forEach(function(e) {
-          t.onMessage(e);
-        });
-      else if (n instanceof Object)
-        switch (n.op) {
-          case i.a.WS_OP_HEARTBEAT_REPLY:
-            // this.onHeartBeatReply(n.body);
-            break;
-          case i.a.WS_OP_MESSAGE:
-            // this.onMessageReply(n.body);
-            break;
-          case i.a.WS_OP_CONNECT_SUCCESS:
-            if (0 !== n.body.length && n.body[0])
-                switch (n.body[0].code) {
-                case i.a.WS_AUTH_OK:
-                    this.heartBeat();
-                    break;
-                case i.a.WS_AUTH_TOKEN_ERROR:
-                    this.options.retry = !1,
-                    "function" == typeof this.options.onReceiveAuthRes && this.options.onReceiveAuthRes(n.body);
-                    break;
-                default:
-                    this.onClose()
-                }
-            else
-                this.heartBeat()
-            break;
-        }
-    } catch (e) {
-      console.error('WebSocket Error: ', e);
-    }
-    return this;
-  }
-  */
 
   private async _dockeronMessage(event) {
     // this.onMessage(event);
@@ -227,54 +170,39 @@ export default class Socket {
     this._call(resultArr);
   }
 
-  private o(e) {
-    const n = new pako.Inflate();
-    if ((n.push(e, !0), n.err)) throw n.msg || l[n.err];
-    return n.result;
-  }
-
   private convertToObject(e) {
-    const { i } = this;
+    const r = this.i;
     const t = new DataView(e);
     const n = {
       body: []
     };
-    if (
-      ((n.packetLen = t.getInt32(i.a.WS_PACKAGE_OFFSET)),
-      msgStruct.forEach(function(e) {
-        e.bytes === 4
-          ? (n[e.key] = t.getInt32(e.offset))
-          : e.bytes === 2 && (n[e.key] = t.getInt16(e.offset));
-      }),
-      n.packetLen < e.byteLength &&
-        this.convertToObject(e.slice(0, n.packetLen)),
-      this.decoder || (this.decoder = i.getDecoder()),
-      !n.op ||
-        (i.a.WS_OP_MESSAGE !== n.op && n.op !== i.a.WS_OP_CONNECT_SUCCESS))
-    )
-      n.op &&
-        i.a.WS_OP_HEARTBEAT_REPLY === n.op &&
-        (n.body = {
-          count: t.getInt32(i.a.WS_PACKAGE_HEADER_TOTAL_LENGTH)
-        });
+    if (n.packetLen = t.getInt32(r.a.WS_PACKAGE_OFFSET),
+      msgStruct.forEach((function(e) {
+          4 === e.bytes ? n[e.key] = t.getInt32(e.offset) : 2 === e.bytes && (n[e.key] = t.getInt16(e.offset))
+        }
+      )),
+    n.packetLen < e.byteLength && this.convertToObject(e.slice(0, n.packetLen)),
+    this.decoder || (this.decoder = r.getDecoder()),
+    !n.op || r.a.WS_OP_MESSAGE !== n.op && n.op !== r.a.WS_OP_CONNECT_SUCCESS)
+      n.op && r.a.WS_OP_HEARTBEAT_REPLY === n.op && (n.body = {
+        count: t.getInt32(r.a.WS_PACKAGE_HEADER_TOTAL_LENGTH)
+      });
     else
-      for (
-        let r = i.a.WS_PACKAGE_OFFSET, s = n.packetLen, u = '', l = '';
-        r < e.byteLength;
-        r += s
-      ) {
-        (s = t.getInt32(r)), (u = t.getInt16(r + i.a.WS_HEADER_OFFSET));
+      for (var i = r.a.WS_PACKAGE_OFFSET, o = n.packetLen, s = "", l = ""; i < e.byteLength; i += o) {
+        o = t.getInt32(i),
+          s = t.getInt16(i + r.a.WS_HEADER_OFFSET);
         try {
-          if (n.ver === i.a.WS_BODY_PROTOCOL_VERSION_DEFLATE) {
-            const c = e.slice(r + u, r + s);
-            const d = this.o(new Uint8Array(c));
-            l = this.convertToObject(d.buffer).body;
-          } else {
-            const f = this.decoder.decode(e.slice(r + u, r + s));
-            l = f.length !== 0 ? JSON.parse(f) : null;
+          if (n.ver === r.a.WS_BODY_PROTOCOL_VERSION_NORMAL) {
+            var c = this.decoder.decode(e.slice(i + s, i + o));
+            l = 0 !== c.length ? JSON.parse(c) : null
+          } else if (n.ver === r.a.WS_BODY_PROTOCOL_VERSION_BROTLI) {
+            var u = e.slice(i + s, i + o)
+              , d = BrotliDecode(new Uint8Array(u));
+            l = this.convertToObject(d.buffer).body
           }
-          l && n.body.push(l);
+          l && n.body.push(l)
         } catch (t) {
+          // this.options.onLogger("decode body error:", new Uint8Array(e), n, t)
           console.error('decode body error:', new Uint8Array(e), n, t);
         }
       }
@@ -303,12 +231,40 @@ export default class Socket {
   }
 
   // 发送加入房间包
-  private _joinRoom(roomid, uid) {
-    const packet = JSON.stringify({
-      uid,
-      roomid
-    });
-    return generatePacket(7, packet);
+  private async _joinRoom(roomid:number, uid:number) {
+    let packet;
+    // auth
+    if (uid) {
+      // TODO:
+      const buvid = UserInfoDao.get(UserInfoDaoNS.UserInfoBuvid);
+      const danmuInfoData = await getDanmuInfoData(roomid);
+      packet = {
+        uid,
+        roomid,
+        protover: 3,
+        platform: 'web',
+        type: 2,
+        buvid,
+        key: danmuInfoData.token,
+      };
+    } else {
+      // uid = 0
+      const buvid = await getBuvid3();
+      const danmuInfoData = await getDanmuInfoData(roomid);
+      packet = {
+        uid,
+        roomid,
+        protover: 3,
+        platform: 'web',
+        type: 2,
+        buvid,
+        key: danmuInfoData.token,
+      };
+    }
+    if (!packet.buvid || !packet.key) {
+      window.alert("buvid 或 key 获取失败, 请检查或清空");
+    }
+    return generatePacket(this.i.a.WS_OP_USER_AUTHENTICATION, JSON.stringify(packet));
   }
 
   // 发送心跳包，表明连接激活

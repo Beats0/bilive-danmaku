@@ -49,6 +49,17 @@ CUT_OFF             // 直播强制切断消息
 
 ### 注意 Note!
 
+0. 登录自己(TODO)
+
+由于bilibili隐私限制, 未登录情况下无法查看他人昵称。为了更好的体验可在浏览器登录bilibili后，控制台执行以下代码获取自己的uid和buvid, 复制粘贴到以下输入框点击刷新即可。
+
+```js
+var uid = (/DedeUserID=(.+?)(;|\s|$)/.exec(document.cookie) || [])[1] || ""
+console.log(uid)
+var buvid = (/buvid3=(.+?)(;|\s|$)/.exec(document.cookie) || [])[1] || ""
+console.log(buvid)
+```
+
 1. 关于显示头像功能
 
 已经做了限定访问用户 api，频率最大为 5 个/s，每次获取头像成功后自动保存用户数据，7 天后过期。

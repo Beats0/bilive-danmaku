@@ -997,6 +997,9 @@ span.danmaku-content {
 .icon-font.icon-report:before {
   content: "\E058"
 }
+.icon-font.icon-user:before {
+  content: "\E070";
+}
 
 .link-range-ctnr {
   vertical-align: middle;
@@ -1087,6 +1090,10 @@ span.danmaku-content {
 .danmaku-adjust-row2.version {
   position: relative;
 }
+.danmaku-adjust-row3 {
+  margin-top: 8px;
+  width: 250px;
+}
 .versionDot {
   position: absolute;
   width: 5px;
@@ -1097,6 +1104,10 @@ span.danmaku-content {
 }
 .danmaku-adjust-label {
   width: 120px;
+  user-select: none;
+}
+.danmaku-adjust-label-small {
+  width: 50px;
   user-select: none;
 }
 .danmaku-adjust-label-about {
@@ -2418,7 +2429,6 @@ li.item {
     display: flex;
     padding-top: 10px;
     color: #000;
-    cursor: pointer;
     transition: color .4s cubic-bezier(.22,.58,.12,.98);
     &:hover {
       color: #ff4a87;
@@ -2496,7 +2506,7 @@ li.item {
 .user-info-cntr {
   vertical-align: top;
   display: inline-block;
-  padding-left: 8px;
+  margin-left: 8px;
   overflow-x: hidden;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
