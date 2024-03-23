@@ -21,7 +21,7 @@ node_modules
 release/app/dist
 release/build
 .erb/dll
-
+src
 .idea
 npm-debug.log.*
 package-lock.json

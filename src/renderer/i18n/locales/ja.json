@@ -101,6 +101,7 @@
   "IgnoreMouse": "マウスの浸透",
   "Parameter": "パラメータ",
   "ParameterDescription": "パラメータの説明",
-  "ParameterDescriptionText": "bilibiliプライバシーの制限のため、ログインしていない場合は他人のニックネームを見ることができません。ブラウザでbilibiliにログインした後、コンソールは次のコードを実行して自分のuidとbuvidを取得し、次の入力ボックスにコピーして貼り付けて更新をクリックすればいい。",
+  "ParameterDescriptionText": "bilibiliプライバシーの制限のため、ログインしていない場合は他人のニックネームを見ることができません。ブラウザでbilibiliにログインした後、コンソールクッキーでSESSDATAの値を選択し、次の入力ボックスにコピーして貼り付けてクリックしてリフレッシュすればよい。",
+  "SessionError": "uid取得に失敗しました。セッションが正しいか期限切れであるかを確認してください",
   "Refresh": "リフレッシュ"
 }

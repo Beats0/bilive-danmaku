@@ -1,6 +1,6 @@
 export enum UserInfoDaoNS {
   UserInfoUid = 'UserInfoUid',
-  UserInfoBuvid = 'UserInfoBuvid',
+  UserInfoSession = 'UserInfoSession',
 }
 
 export default class UserInfoDao {
@@ -18,6 +18,6 @@ export default class UserInfoDao {
 
   static clear() {
     localStorage.removeItem(UserInfoDaoNS.UserInfoUid);
-    localStorage.removeItem(UserInfoDaoNS.UserInfoBuvid);
+    localStorage.removeItem(UserInfoDaoNS.UserInfoSession);
   }
 }

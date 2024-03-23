@@ -13,9 +13,9 @@ export interface LiveRoomData {
 }
 
 const defaultLiveRoomData: LiveRoomData = {
-  roomid: 292397,
-  shortid: 292397,
-  uid: 425286,
+  roomid: 213,
+  shortid: 47867,
+  uid: 0,
   lastTime: Date.now()
 };
 

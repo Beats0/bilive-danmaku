@@ -1,13 +1,13 @@
 /* eslint-disable no-underscore-dangle */
-import { BrotliDecode } from '../../../utils/brotli'
+import { BrotliDecode } from '../../../utils/brotli';
 import wsUrl from '../common/ws-url';
 import msgStruct from '../common/msg-struct';
 import { generatePacket } from '../../../utils/packet';
 // import { bytes2str } from '../../../utils/convert';
 import { CmdType, parseData } from '../MsgModel';
 import config from '../../../config';
-import { getBuvid3, getDanmuInfoData } from "../../../api";
-import UserInfoDao, { UserInfoDaoNS } from "../../../dao/UesrInfoDao";
+import { getBuvid3, getDanmuInfoData } from '../../../api';
+import UserInfoDao, { UserInfoDaoNS } from '../../../dao/UesrInfoDao';
 
 export interface SocketInstanceType {
   roomid: number;
@@ -33,9 +33,9 @@ const l = {
 const defaultUid = 0;
 
 export default class Socket {
-  private readonly roomid: number;
+  private roomid: number;
 
-  private readonly uid: number;
+  private uid: number;
 
   private _docker: WebSocket;
 
@@ -48,17 +48,9 @@ export default class Socket {
     getDecoder: TextDecoder;
   };
 
-  constructor(roomid: number, uid?: number) {
-    if (!uid) {
-      const UserInfoUidStr = UserInfoDao.get(UserInfoDaoNS.UserInfoUid);
-      if (UserInfoUidStr) {
-        uid = Number(UserInfoUidStr) || 0;
-      } else {
-        uid = defaultUid;
-      }
-    }
+  constructor(roomid: number) {
     this.roomid = roomid;
-    this.uid = uid;
+    this.uid = defaultUid;
     this._docker = new WebSocket(wsUrl);
     this._methods = [];
     this.i = {
@@ -92,30 +84,39 @@ export default class Socket {
                     String.fromCharCode.apply(String, new Uint8Array(e))
                   )
                 );
-              }
+              },
             };
-      }
+      },
     };
   }
 
   public async init() {
+    let uid: number;
+    const userInfoUidStr = UserInfoDao.get(UserInfoDaoNS.UserInfoUid);
+    const userInfoSessionStr = UserInfoDao.get(UserInfoDaoNS.UserInfoSession);
+    if (userInfoUidStr && userInfoSessionStr) {
+      uid = Number(userInfoUidStr) || 0;
+    } else {
+      uid = defaultUid;
+    }
+    this.uid = uid;
     console.log(`新的socket：[${this.roomid}] 正在初始化...`);
     this._docker.binaryType = 'arraybuffer';
-    this._docker.onopen = async event => {
+    this._docker.onopen = async (event) => {
       const msg = {
-        cmd: 'CONNECT_SUCCESS'
-      }
+        cmd: 'CONNECT_SUCCESS',
+      };
       this._call([msg]);
       const join = await this._joinRoom(this.roomid, this.uid);
       this._docker.send(join.buffer);
       this._sendBeat();
     };
-    this._docker.onmessage = event => {
+    this._docker.onmessage = (event) => {
       this._dockeronMessage(event);
     };
-    this._docker.onclose = event => {
+    this._docker.onclose = (event) => {
       const msg = {
-        cmd: CmdType.DISCONNECTED
+        cmd: CmdType.DISCONNECTED,
       };
       this._call([msg]);
       console.log(`旧的socket已经关闭...`);
@@ -174,33 +175,43 @@ export default class Socket {
     const r = this.i;
     const t = new DataView(e);
     const n = {
-      body: []
+      body: [],
     };
-    if (n.packetLen = t.getInt32(r.a.WS_PACKAGE_OFFSET),
-      msgStruct.forEach((function(e) {
-          4 === e.bytes ? n[e.key] = t.getInt32(e.offset) : 2 === e.bytes && (n[e.key] = t.getInt16(e.offset))
-        }
-      )),
-    n.packetLen < e.byteLength && this.convertToObject(e.slice(0, n.packetLen)),
-    this.decoder || (this.decoder = r.getDecoder()),
-    !n.op || r.a.WS_OP_MESSAGE !== n.op && n.op !== r.a.WS_OP_CONNECT_SUCCESS)
-      n.op && r.a.WS_OP_HEARTBEAT_REPLY === n.op && (n.body = {
-        count: t.getInt32(r.a.WS_PACKAGE_HEADER_TOTAL_LENGTH)
-      });
+    if (
+      ((n.packetLen = t.getInt32(r.a.WS_PACKAGE_OFFSET)),
+      msgStruct.forEach(function (e) {
+        e.bytes === 4
+          ? (n[e.key] = t.getInt32(e.offset))
+          : e.bytes === 2 && (n[e.key] = t.getInt16(e.offset));
+      }),
+      n.packetLen < e.byteLength &&
+        this.convertToObject(e.slice(0, n.packetLen)),
+      this.decoder || (this.decoder = r.getDecoder()),
+      !n.op ||
+        (r.a.WS_OP_MESSAGE !== n.op && n.op !== r.a.WS_OP_CONNECT_SUCCESS))
+    )
+      n.op &&
+        r.a.WS_OP_HEARTBEAT_REPLY === n.op &&
+        (n.body = {
+          count: t.getInt32(r.a.WS_PACKAGE_HEADER_TOTAL_LENGTH),
+        });
     else
-      for (var i = r.a.WS_PACKAGE_OFFSET, o = n.packetLen, s = "", l = ""; i < e.byteLength; i += o) {
-        o = t.getInt32(i),
-          s = t.getInt16(i + r.a.WS_HEADER_OFFSET);
+      for (
+        let i = r.a.WS_PACKAGE_OFFSET, o = n.packetLen, s = '', l = '';
+        i < e.byteLength;
+        i += o
+      ) {
+        (o = t.getInt32(i)), (s = t.getInt16(i + r.a.WS_HEADER_OFFSET));
         try {
           if (n.ver === r.a.WS_BODY_PROTOCOL_VERSION_NORMAL) {
-            var c = this.decoder.decode(e.slice(i + s, i + o));
-            l = 0 !== c.length ? JSON.parse(c) : null
+            const c = this.decoder.decode(e.slice(i + s, i + o));
+            l = c.length !== 0 ? JSON.parse(c) : null;
           } else if (n.ver === r.a.WS_BODY_PROTOCOL_VERSION_BROTLI) {
-            var u = e.slice(i + s, i + o)
-              , d = BrotliDecode(new Uint8Array(u));
-            l = this.convertToObject(d.buffer).body
+            const u = e.slice(i + s, i + o);
+            const d = BrotliDecode(new Uint8Array(u));
+            l = this.convertToObject(d.buffer).body;
           }
-          l && n.body.push(l)
+          l && n.body.push(l);
         } catch (t) {
           // this.options.onLogger("decode body error:", new Uint8Array(e), n, t)
           console.error('decode body error:', new Uint8Array(e), n, t);
@@ -231,40 +242,22 @@ export default class Socket {
   }
 
   // 发送加入房间包
-  private async _joinRoom(roomid:number, uid:number) {
-    let packet;
-    // auth
-    if (uid) {
-      // TODO:
-      const buvid = UserInfoDao.get(UserInfoDaoNS.UserInfoBuvid);
-      const danmuInfoData = await getDanmuInfoData(roomid);
-      packet = {
-        uid,
-        roomid,
-        protover: 3,
-        platform: 'web',
-        type: 2,
-        buvid,
-        key: danmuInfoData.token,
-      };
-    } else {
-      // uid = 0
-      const buvid = await getBuvid3();
-      const danmuInfoData = await getDanmuInfoData(roomid);
-      packet = {
-        uid,
-        roomid,
-        protover: 3,
-        platform: 'web',
-        type: 2,
-        buvid,
-        key: danmuInfoData.token,
-      };
-    }
-    if (!packet.buvid || !packet.key) {
-      window.alert("buvid 或 key 获取失败, 请检查或清空");
-    }
-    return generatePacket(this.i.a.WS_OP_USER_AUTHENTICATION, JSON.stringify(packet));
+  private async _joinRoom(roomid: number, uid: number) {
+    const buvid = await getBuvid3();
+    const danmuInfoData = await getDanmuInfoData(roomid);
+    const packet = {
+      uid,
+      roomid,
+      protover: 3,
+      platform: 'web',
+      type: 2,
+      buvid,
+      key: danmuInfoData ? danmuInfoData.token : '',
+    };
+    return generatePacket(
+      this.i.a.WS_OP_USER_AUTHENTICATION,
+      JSON.stringify(packet)
+    );
   }
 
   // 发送心跳包，表明连接激活
@@ -283,7 +276,7 @@ function danmakuFilter(info: DANMU_MSG_Info): boolean {
   const userLv = info['4']['0'] || 0;
   // 弹幕关键字，屏蔽uid名单过滤
   if (
-    config.blockDanmakuLists.some(b => info['1'].indexOf(b) !== -1) ||
+    config.blockDanmakuLists.some((b) => info['1'].indexOf(b) !== -1) ||
     config.blockUserLists.includes(info['2']['0'])
   )
     return true;

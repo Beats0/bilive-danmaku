@@ -1,8 +1,16 @@
+import nodeFetch from 'node-fetch';
 import UserAvatarDao from '../dao/UserAvatarDao';
 import { CmdType } from '../components/Danmaku/MsgModel';
 import LiveRoomDao, { LiveRoomData } from '../dao/LiveRoomDao';
 import pkg from '../../../package.json';
 import config from '../config';
+import UserInfoDao, { UserInfoDaoNS } from '../dao/UesrInfoDao';
+import i18n from '../i18n';
+
+export interface SessionInfo {
+  uid: number;
+  session: string;
+}
 
 export interface UserInfo {
   face: string;
@@ -104,6 +112,33 @@ const API_RANK_MESSAGE_LIST = `https://api.live.bilibili.com/av/v1/SuperChat/get
 const API_DANMU_INFO = `https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo`;
 const API_FINGER_SPI = `https://api.bilibili.com/x/frontend/finger/spi/`;
 const API_SERVER_PACKAGE = `https://cdn.jsdelivr.net/gh/beats0/bilive-danmaku/package.json`;
+const API_SESSION_INFO = `https://api.bilibili.com/x/web-interface/nav`;
+
+// 获取我的信息
+export async function getSessionInfoData(
+  session: string
+): Promise<SessionInfo> {
+  const userSessionFormat = `SESSDATA=${session};`;
+  const response = await nodeFetch(API_SESSION_INFO, {
+    method: 'GET',
+    headers: {
+      Cookie: userSessionFormat,
+    },
+  });
+  const sessionInfo: SessionInfo = {
+    uid: 0,
+    session,
+  };
+  try {
+    const data = await response.json();
+    if (data.code === 0) {
+      sessionInfo.uid = data.data.mid;
+    }
+  } catch (e) {
+    console.log('[error]', e);
+  }
+  return sessionInfo;
+}
 
 // 获取用户信息
 export async function getUserInfo(mid: number): Promise<UserInfo> {
@@ -268,33 +303,52 @@ export async function getResentSuperChat(
 }
 
 // 获取danmuInfo
-export async function getDanmuInfoData(roomid: number): Promise<DanmuInfoData> {
+export async function getDanmuInfoData(roomid: number): Promise<DanmuInfoData | null> {
   return new Promise<DanmuInfoData>((resolve, reject) => {
-    fetch(`${API_DANMU_INFO}?id=${roomid}&type=0`)
+    const userInfoSessionStr = UserInfoDao.get(UserInfoDaoNS.UserInfoSession);
+    const headers = {
+      Cookie: userInfoSessionStr
+        ? `SESSDATA=${userInfoSessionStr};`
+        : userInfoSessionStr,
+    };
+    nodeFetch(`${API_DANMU_INFO}?id=${roomid}&type=0`, {
+      method: 'GET',
+      headers,
+    })
       .then((res) => res.json())
       .then((data: DanmuInfoResponse) => {
-        if (!data.data) throw new Error(data.message);
-
+        if (headers.Cookie) {
+          if (!data.data) {
+            window.alert(i18n.t('SessionError'));
+          }
+        }
+        if (!data.data) {
+          console.log('[error]', data);
+          resolve(null);
+          return;
+        }
         const danmuInfoData: DanmuInfoData = data.data;
         resolve(danmuInfoData);
       })
       .catch((error) => {
         console.log('error', error);
-        reject(error);
+        window.alert(i18n.t('SessionError'));
+        resolve(null);
       });
   });
 }
 
 // 获取buvid3
 export async function getBuvid3(): Promise<string> {
-  const response = await fetch(API_FINGER_SPI, {
+  const userInfoSessionStr = UserInfoDao.get(UserInfoDaoNS.UserInfoSession);
+  const headers = {
+    Cookie: userInfoSessionStr
+      ? `SESSDATA=${userInfoSessionStr};`
+      : userInfoSessionStr,
+  };
+  const response = await nodeFetch(API_FINGER_SPI, {
     method: 'GET',
-    headers: {
-      Host: `api.bilibili.com`,
-      Origin: 'https://www.bilibili.com',
-      Referer: `https://www.bilibili.com/`,
-    },
-    redirect: 'follow',
+    headers,
   });
   const data = await response.json();
   if (data.code === 0) {
