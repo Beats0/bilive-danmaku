@@ -76,9 +76,9 @@ const Danmaku: FC = () => {
     if (currentConfig.current.blockScrollBar) return;
     for (let i = 0; i < res.length; i++) {
       const msg = res[i];
-      // 人气
-      if (msg.cmd === CmdType.POPULAR) {
-        setPopular(msg.popular);
+      // 观看过
+      if (msg.cmd === CmdType.WATCHED_CHANGE) {
+        setPopular(msg.data.num);
         return;
       }
       // 广播消息

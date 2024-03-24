@@ -114,6 +114,7 @@ type DanmakuDataFormatted =
   | Connecting
   | DanmakuMsg
   | POPULAR
+  | WATCHED_CHANGE
   | GiftBubbleMsg
   | GuardBuyMsg
   | MsgWelcomeGuard

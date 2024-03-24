@@ -162,7 +162,7 @@ function DanmakuControl(props: Props) {
   return (
     <div id="danmakuControlOuter">
       <div className="popular">
-        <span title={t('LiveRoomPopular')} className="icon-font icon-item icon-popular" />{tranNumber(popular)}
+        <span title={t('LiveRoomWatched')} className="icon-font icon-item icon-popular" />{tranNumber(popular)}
       </div>
       <div id="danmakuControl" className="icon-right-part superChat">
         <Tooltip

@@ -8,6 +8,7 @@ import { CmdType, parseData } from '../MsgModel';
 import config from '../../../config';
 import { getBuvid3, getDanmuInfoData } from '../../../api';
 import UserInfoDao, { UserInfoDaoNS } from '../../../dao/UesrInfoDao';
+import UserAvatarDao from "../../../dao/UserAvatarDao";
 
 export interface SocketInstanceType {
   roomid: number;
@@ -131,15 +132,16 @@ export default class Socket {
     const resultArr = [];
     const contentArr: string[] = [];
     const repeat = {};
-    if (n.op === 3) {
-      const msg = { cmd: CmdType.POPULAR, popular: n.body.count || 1 };
-      resultArr.push(msg);
-    } else if (n.op === 5) {
+    if (n.op === 5) {
       const body = n.body ? n.body[0] : [];
       for (let i = 0; i < body.length; i++) {
         const d = body[i];
+        // INTERACT_WORD保存头像
+        if (d.cmd === CmdType.INTERACT_WORD) {
+          const uinfo:INTERACT_WORD_DATA_USERINFO = d.data.uinfo
+          UserAvatarDao.save(uinfo.uid, uinfo.base.face);
+        }
         // 弹幕过滤
-        // console.log('d.cmd', d.cmd, d)
         if (d.cmd === CmdType.DANMU_MSG) {
           if (!danmakuFilter(d.info)) {
             const content = d.info['1'] || '';

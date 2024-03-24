@@ -166,6 +166,7 @@ function isSupported(desiredLang: string): boolean {
 }
 
 export function translate(text: string, opts?: Options): Promise<Result> {
+  // TODO: api see: https://fanyi.scholarcn.com
   opts = opts || {};
   let e: Error;
   [opts.from, opts.to].forEach(function(lang) {

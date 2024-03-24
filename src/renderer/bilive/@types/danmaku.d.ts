@@ -10,6 +10,8 @@ enum CmdType {
   CONNECTING = 'CONNECTING',
   CONNECT_SUCCESS = 'CONNECT_SUCCESS',
   DISCONNECTED = 'DISCONNECTED',
+  INTERACT_WORD = 'INTERACT_WORD',
+  WATCHED_CHANGE = 'WATCHED_CHANGE',
   LIVE = 'LIVE',
   POPULAR = 'POPULAR',
   DANMU_MSG = 'DANMU_MSG',
@@ -2542,6 +2544,22 @@ interface POPULAR {
   popular: number;
 }
 
+interface WATCHED_CHANGE_DATA {
+  num: number;
+  text_small: string;
+  text_large: string;
+}
+
+/**
+ * 观看过人数
+ * {"cmd": "WATCHED_CHANGE", data: { "num": 17903, "text_small": "1.7万", "text_large": "1.7万人看过" }}
+ * @interface POPULAR
+ * */
+interface WATCHED_CHANGE {
+  cmd: CmdType.WATCHED_CHANGE;
+  data: WATCHED_CHANGE_DATA;
+}
+
 /**
  * 欢迎进入
  * { "cmd": "INTERACT_WORD", "data": { "contribution": { "grade": 0 }, "dmscore": 12, "fans_medal": { "anchor_roomid": 47377, "guard_level": 0, "icon_id": 0, "is_lighted": 0, "medal_color": 9272486, "medal_color_border": 12632256, "medal_color_end": 12632256, "medal_color_start": 12632256, "medal_level": 10, "medal_name": "鸟蛋", "score": 12320, "special": "", "target_id": 282994 }, "identities": [ 1 ], "is_spread": 0, "msg_type": 1, "roomid": 47867, "score": 1646469470302, "spread_desc": "", "spread_info": "", "tail_icon": 0, "timestamp": 1646469470, "trigger_time": 1646469469213909800, "uid": 837690, "uname": "橙子别酸了", "uname_color": "" } }
@@ -2549,6 +2567,13 @@ interface POPULAR {
 interface INTERACT_WORD {
   cmd: CmdType.INTERACT_WORD;
   data: INTERACT_WORD_DATA;
+}
+
+interface INTERACT_WORD_DATA_USERINFO {
+  base: {
+    face: string;
+  },
+  uid: number;
 }
 
 interface INTERACT_WORD_DATA {
@@ -2568,6 +2593,7 @@ interface INTERACT_WORD_DATA {
   timestamp: number;
   trigger_time: number;
   uid: number;
+  uinfo: INTERACT_WORD_DATA_USERINFO;
   uname: string;
   uname_color: string;
 }
@@ -2606,6 +2632,7 @@ interface DISCONNECTED {
 type DanmakuData =
   | LIVE
   | POPULAR
+  | WATCHED_CHANGE
   | DANMU_MSG
   | SEND_GIFT
   | SPECIAL_GIFT

@@ -19,6 +19,7 @@ export enum CmdType {
   COMBO_END = 'COMBO_END',
   NOTICE_MSG = 'NOTICE_MSG',
   INTERACT_WORD = 'INTERACT_WORD',
+  WATCHED_CHANGE = 'WATCHED_CHANGE',
   ENTRY_EFFECT = 'ENTRY_EFFECT',
   ROOM_BLOCK_MSG = 'ROOM_BLOCK_MSG',
   WELCOME = 'WELCOME',
@@ -62,22 +63,27 @@ export async function parseData(
         userLevel: data.info['4']['0'] || 0,
         repeat: 0,
       };
-      if (config.showAvatar) {
-        // 先查询Dao,如果有就直接添加
-        if (UserAvatarDao.has(userID)) {
-          danmakuMsg.face = UserAvatarDao.get(userID).avatar;
-        } else if(userID > 1)  {
-          // 如果没有添加UserInfoApiTask，
-          UserInfoApiTask.push(userID);
-          // 频繁请求api会导致被ban
-          if (
-            UserInfoApiTask.getTaskQueueLength() <= apiTaskConfig.taskMaxLength
-          ) {
-            await sleep(apiTaskConfig.sleepMs);
-          }
-          danmakuMsg.face = UserAvatarDao.get(userID).avatar;
-        }
+      // 从消息中获取
+      if (data.info["0"]["15"]["user"]) {
+        const face = data.info["0"]["15"]["user"].base.face
+        UserAvatarDao.save(userID, face);
+        danmakuMsg.face = face;
+      } else if (UserAvatarDao.has(userID)) {
+        // 从Dao中获取,如果有就直接添加
+        danmakuMsg.face = UserAvatarDao.get(userID).avatar;
       }
+      // 不用这个了
+      // else if (config.showAvatar && userID > 1) {
+      //   // 从api获取
+      //   UserInfoApiTask.push(userID);
+      //   // 频繁请求api会导致被ban
+      //   if (
+      //     UserInfoApiTask.getTaskQueueLength() <= apiTaskConfig.taskMaxLength
+      //   ) {
+      //     await sleep(apiTaskConfig.sleepMs);
+      //   }
+      //   danmakuMsg.face = UserAvatarDao.get(userID).avatar;
+      // }
       return danmakuMsg;
     case CmdType.SEND_GIFT:
       const danmakuGiftMsg: GiftBubbleMsg = {
@@ -164,6 +170,12 @@ export async function parseData(
         popular: data.popular
       };
       return popularMsg;
+    case CmdType.WATCHED_CHANGE:
+      const watchedChangeMsg: WATCHED_CHANGE = {
+        cmd: CmdType.WATCHED_CHANGE,
+        data: data.data
+      };
+      return watchedChangeMsg;
     // case CmdType.COMBO_END:
     //   // TODO:
     //   break;
