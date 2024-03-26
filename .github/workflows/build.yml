@@ -6,26 +6,26 @@ jobs:
   buildwin:
     runs-on: windows-latest
     steps:
-    - name: Checkout git repo
-      uses: actions/checkout@v2
+      - name: Checkout git repo
+        uses: actions/checkout@v2
 
-    - name: Install Node and NPM
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-        cache: npm
+      - name: Install Node and NPM
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
 
-    - name: Install and build
-      run: |
-        npm install
-        npm run postinstall
-        npm run build
+      - name: Install and build
+        run: |
+          npm install
+          npm run postinstall
+          npm run package
 
-    - name: Upload File
-      uses: actions/upload-artifact@v2
-      with:
-        name: windows
-        path: release/build/*exe
+      - name: Upload File
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows
+          path: release/build/*exe
 
   buildmac:
     runs-on: macos-latest
@@ -43,7 +43,7 @@ jobs:
         run: |
           npm install
           npm run postinstall
-          npm run build
+          npm run package
 
       - name: Upload File
         uses: actions/upload-artifact@v2
