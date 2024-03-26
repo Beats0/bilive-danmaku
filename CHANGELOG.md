@@ -1,3 +1,10 @@
+## v1.0.9
+
+- electron 版本更新
+- websocket 认证
+- 优化头像存储功能
+- 添加用户 session 配置
+
 ## v1.0.8
 
 - 添加鼠标穿透功能
@@ -12,47 +19,47 @@
 
 ## v1.0.6
 
-- electron 版本更新，使用reduxjs/toolkit状态管理，功能优化
+- electron 版本更新，使用 reduxjs/toolkit 状态管理，功能优化
 - 移除礼物弹幕过渡动画
 - 添加自定义字体功能
 - 优化置顶功能
 - 优化顶部栏拖动功能
 - 优化点击弹幕朗读队列
-- 替换版本号api
+- 替换版本号 api
 
 ## v1.0.5
 
 - 弹幕翻译已被废弃
-- 修复百度语音TTS返回失败bug
+- 修复百度语音 TTS 返回失败 bug
 
 ## v1.0.4
 
 - 优化新版粉丝勋章样式
-- 替换版本号api，防止获取版本号失败
-- 修复礼物弹幕图片不显示bug
+- 替换版本号 api，防止获取版本号失败
+- 修复礼物弹幕图片不显示 bug
 
 ## v1.0.3
 
 - 弹幕列表与礼物列表分开
 - 礼物列表拖动定位
-- 优化获取用户头像api访问受限
-- 修复windows下字体文件缺失bug
+- 优化获取用户头像 api 访问受限
+- 修复 windows 下字体文件缺失 bug
 
 ## v1.0.2
 
-- 优化config类型
-- 添加ref类型
-- 移除less，使用scss
-- 优化socket parseData
+- 优化 config 类型
+- 添加 ref 类型
+- 移除 less，使用 scss
+- 优化 socket parseData
 - 添加单元测试
-- 修复maxMessageCount不更新问题
-- 修复mac无法复制粘贴
+- 修复 maxMessageCount 不更新问题
+- 修复 mac 无法复制粘贴
 
 ## v1.0.1
 
 - 优化版本号检查
 - win 和 mac 顶部窗口菜单栏保持一致
-- 修复客户端版本号错误bug
+- 修复客户端版本号错误 bug
 - 文档优化
 
 ## v1.0.1-beta.0
