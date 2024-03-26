@@ -215,6 +215,7 @@ const Danmaku: FC = () => {
     // 创建新的socket
     dispatch(createSocket(roomData.roomid));
     setRoomID(roomData.shortid);
+    setPopular(0)
     // 更新config
     handleDispatchUpDateConfig({ k: ConfigKey.shortid, v: roomData.shortid });
     handleDispatchUpDateConfig({ k: ConfigKey.roomid, v: roomData.roomid });

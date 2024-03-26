@@ -64,7 +64,7 @@ export async function parseData(
         repeat: 0,
       };
       // 从消息中获取
-      if (data.info["0"]["15"]["user"]) {
+      if (data.info["0"]["15"] && data.info["0"]["15"]["user"]) {
         const face = data.info["0"]["15"]["user"].base.face
         UserAvatarDao.save(userID, face);
         danmakuMsg.face = face;

@@ -100,6 +100,7 @@
   "ShowGiftDanmakuList": "ギフト弾幕リストを表示",
   "RankMessageList": "ゲストブック",
   "IgnoreMouse": "マウスの浸透",
+  "UserConfig": "ユーザー構成",
   "Parameter": "パラメータ",
   "ParameterDescription": "パラメータの説明",
   "ParameterDescriptionText": "bilibiliプライバシーの制限のため、ログインしていない場合は他人のニックネームを見ることができません。ブラウザでbilibiliにログインした後、コンソールクッキーでSESSDATAの値を選択し、次の入力ボックスにコピーして貼り付けてクリックしてリフレッシュすればよい。",

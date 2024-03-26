@@ -157,6 +157,7 @@ function DanmakuControl(props: Props) {
     ipcRenderer.send('toggleDevTools');
   };
 
+  const isDev = process.env.NODE_ENV === 'development'
   const newVersion = hasNewVersion(config.version, config.latestVersion);
 
   return (
@@ -165,16 +166,18 @@ function DanmakuControl(props: Props) {
         <span title={t('LiveRoomWatched')} className="icon-font icon-item icon-popular" />{tranNumber(popular)}
       </div>
       <div id="danmakuControl" className="icon-right-part superChat">
-        <Tooltip
-          visible={ currentName === ControlType.DANMAKUTEST }
-          animation="zoom"
-          placement="top"
-          onVisibleChange={ (v) => setCurrentName(v ? ControlType.DANMAKUTEST : "") }
-          trigger="click"
-          overlay={ <DanmakuTest { ...props } /> }
-        >
-          <span title="弹幕测试" className="icon-font icon-item icon-comment" />
-        </Tooltip>
+        {
+          isDev ?
+            <Tooltip visible={ currentName === ControlType.DANMAKUTEST }
+                     animation="zoom"
+                     placement="top"
+                     onVisibleChange={ (v) => setCurrentName(v ? ControlType.DANMAKUTEST : "") }
+                     trigger="click"
+                     overlay={ <DanmakuTest { ...props } /> }>
+              <span title="弹幕测试" className="icon-font icon-item icon-comment" />
+            </Tooltip>
+            : null
+        }
         <Tooltip
           visible={ currentName === ControlType.USERINFOCONFIG }
           animation="zoom"
@@ -183,7 +186,7 @@ function DanmakuControl(props: Props) {
           trigger="click"
           overlay={ <UserConfigPanel { ...props } refresh={refresh} /> }
         >
-          <span title="用户配置" className="icon-font icon-item icon-user" />
+          <span title="{t('UserConfig')}" className="icon-font icon-item icon-user" />
         </Tooltip>
         <Tooltip
           visible={currentName === ControlType.SETTING}

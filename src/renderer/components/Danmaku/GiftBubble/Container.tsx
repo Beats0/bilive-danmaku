@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import GiftBubbleItem from "./GiftBubbleItem";
-import { userAvatarFilter } from "../../../utils/common";
+import { openLink, userAvatarFilter } from "../../../utils/common";
 import { ComboData } from "./Provider";
 import { useAppSelector } from "../../../store/hooks";
 import { selectDanmaku } from "../../../store/features/danmakuSlice";
@@ -37,6 +37,11 @@ function Multiply(batchComboId: string, num: number) {
   );
 }
 
+function handleOpenUser(uid: number) {
+  const url = `https://space.bilibili.com/${ uid }`;
+  openLink(url);
+}
+
 const GiftContainer = (props: GiftContainerProps) => {
   const danmaku = useAppSelector(selectDanmaku);
   const { giftMap } = danmaku;
@@ -69,7 +74,8 @@ const GiftContainer = (props: GiftContainerProps) => {
                   <div className="super-gift-item animation">
                     <div className="user-avatar-box dp-i-block bg-cover v-middle">
                       <div
-                        className="user-avatar dp-i-block"
+                        className="user-avatar dp-i-block pointer"
+                        onClick={() => handleOpenUser(msg.userID)}
                         style={ { backgroundImage: `url(${ face })` } }
                       />
                     </div>

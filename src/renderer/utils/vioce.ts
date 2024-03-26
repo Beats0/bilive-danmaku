@@ -39,11 +39,18 @@ async function googleTTS(fullText: string) {
   return resData;
 }
 
+// TODO: edgeTTS see: https://github.com/koodo-reader/koodo-reader/blob/fcc8a6f014f20b1bf5c1b2b2dacc0761905646d5/edge-tts.js
+async function edgeTTS() {
+
+}
+
 export async function read(uname: string, text: string) {
   const fullText = `${uname} 说 ${text}`;
   let res;
   let blob;
   try {
+    let resData;
+    // googleTTS
     // google 翻译挂了 = =
     // const googleTranslateRes = await translate(text, {
     //   from: 'auto',
@@ -59,7 +66,10 @@ export async function read(uname: string, text: string) {
     // }
 
     // 直接用百度TTS
-    const resData = await baiduTTS(fullText);
+    resData = await baiduTTS(fullText);
+
+    // edgeTTS
+    // resData = await edgeTTS(fullText);
 
     res = resData.res;
     blob = resData.blob;

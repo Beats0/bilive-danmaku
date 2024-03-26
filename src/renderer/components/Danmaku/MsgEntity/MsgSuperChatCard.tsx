@@ -3,10 +3,16 @@ import { currentTranslateToCode, translate } from '../../../utils/translation';
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../../../store/hooks";
 import { selectConfig } from "../../../store/features/configSlice";
+import { openLink } from "../../../utils/common";
 
 interface SuperChatCardProps {
   msg: SUPER_CHAT_MESSAGE_DATA;
   style?: CSSProperties;
+}
+
+function handleOpenUser(uid: number) {
+  const url = `https://space.bilibili.com/${ uid }`;
+  openLink(url);
 }
 
 function MsgSuperChatCard(props: SuperChatCardProps) {
@@ -45,7 +51,8 @@ function MsgSuperChatCard(props: SuperChatCardProps) {
             backgroundColor: msg.background_color
           }}
         >
-          <div className="card-item-middle-top-left">
+          <div className="card-item-middle-top-left pointer"
+               onClick={() => handleOpenUser(msg.uid)}>
             <div
               className="icon-face"
               style={{
