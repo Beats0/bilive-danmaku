@@ -1,9 +1,6 @@
+import fs from "fs";
+import { ipcRenderer } from 'electron'
 import config from '../config';
-import {
-  currentTranslateToCode,
-  getTranslateTTSUrl,
-  translate
-} from './translation';
 
 const $audio = document.createElement('audio');
 const $source = document.createElement('source');
@@ -15,70 +12,98 @@ $audio.appendChild($source);
 // 防止electron主进程还拿不到body导致渲染白版
 document?.body.appendChild($audio);
 
-async function baiduTTS(fullText: string) {
-  console.log('[baiduTTS translate]', fullText);
-  const url = `http://tts.baidu.com/text2audio?cuid=baike&lan=zh&ctp=1&pdt=301&tex=${fullText}`;
-  const res = await fetch(url);
-  const blob = await res.blob();
-  const resData = {
-    res,
-    blob
-  };
-  return resData;
+async function edgeTTS(text: string, voice: string): Promise<Blob | null> {
+  return new Promise<Blob>(async (resolve, reject) => {
+    try {
+      const audioPath = await ipcRenderer.invoke("tts", text, voice);
+      if (audioPath) {
+        const buffer = fs.readFileSync(audioPath);
+        const blob = new Blob([buffer], {
+          type: "audio/webm",
+          endings: "transparent"
+        });
+        resolve(blob);
+      }
+    } catch (err) {
+      console.log("合成失败: " + err);
+      resolve(null);
+    }
+  });
 }
 
-async function googleTTS(fullText: string) {
-  console.log('[googleTTS translate]', fullText);
-  const url = await getTranslateTTSUrl(fullText);
-  const res = await fetch(url);
-  const blob = await res.blob();
-  const resData = {
-    res,
-    blob
-  };
-  return resData;
-}
+async function speechTTS(text: string): Promise<Blob> {
+  // 创建语音合成对象
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'zh-CN';
+  utterance.rate = 1.0;
+  utterance.pitch = 1.0;
 
-// TODO: edgeTTS see: https://github.com/koodo-reader/koodo-reader/blob/fcc8a6f014f20b1bf5c1b2b2dacc0761905646d5/edge-tts.js
-async function edgeTTS() {
+  return new Promise<Blob>((resolve, reject) => {
+    // 默认MIME类型
+    const mimeType: string = 'audio/webm';
+    // 创建音频上下文
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaStreamDestination();
+    // 创建MediaRecorder来录制音频
+    let recorder: MediaRecorder;
+    try {
+      recorder = new MediaRecorder(source.stream, { mimeType });
+    } catch (e) {
+      console.error('不支持指定的MIME类型:', mimeType);
+      reject(new Error(`不支持的MIME类型: ${mimeType}`));
+      return;
+    }
+    // 存储音频数据的数组
+    const audioChunks: Blob[] = [];
+    // 当有可用数据时添加到数组
+    recorder.ondataavailable = (event: BlobEvent) => {
+      if (event.data.size > 0) {
+        audioChunks.push(event.data);
+      }
+    };
+    // 录制完成时创建Blob
+    recorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      resolve(audioBlob);
+      // 清理资源
+      audioContext.close();
+    };
+    // 开始录制
+    recorder.start();
 
+    // 设置语音合成事件
+    const synth = window.speechSynthesis;
+    utterance.onend = () => {
+      // 语音合成结束后停止录制
+      if (recorder.state !== 'inactive') {
+        recorder.stop();
+      }
+    };
+
+    utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
+      reject(new Error(`语音合成错误: ${event.error}`));
+      if (recorder.state !== 'inactive') {
+        recorder.stop();
+      }
+      audioContext.close();
+    };
+    // 开始语音合成
+    synth.speak(utterance);
+  });
 }
 
 export async function read(uname: string, text: string) {
   const fullText = `${uname} 说 ${text}`;
-  let res;
-  let blob;
   try {
-    let resData;
-    // googleTTS
-    // google 翻译挂了 = =
-    // const googleTranslateRes = await translate(text, {
-    //   from: 'auto',
-    //   to: currentTranslateToCode()
-    // });
-    // console.log(googleTranslateRes.text);
-    // const { iso } = googleTranslateRes.from.language;
-    // let resData = {};
-    // if (config.voiceTranslateTo === 'zhCn' && iso === 'zh-CN') {
-    //   resData = await baiduTTS(fullText);
-    // } else {
-    //   resData = await googleTTS(`${googleTranslateRes.text}`);
-    // }
-
-    // 直接用百度TTS
-    resData = await baiduTTS(fullText);
-
-    // edgeTTS
-    // resData = await edgeTTS(fullText);
-
-    res = resData.res;
-    blob = resData.blob;
-
-    if (res.status !== 200) {
-      console.warn('合成语言失败');
-      return;
+    let blob: Blob | null;
+    if (config.ttsEngine === "edgeTTS") {
+      blob = await edgeTTS(fullText, config.edgeTTSVoice);
+    } else if (config.ttsEngine === "speechTTS") {
+      blob = await speechTTS(fullText);
     }
-    $source.setAttribute('src', URL.createObjectURL(blob));
+    if (!blob || blob.size === 0) return;
+
+    $source.setAttribute("src", URL.createObjectURL(blob));
     $audio.load();
 
     try {

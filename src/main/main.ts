@@ -9,7 +9,8 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import cp from 'child_process';
+import fs from 'fs'
+import cp, { execFile } from 'child_process';
 import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -145,6 +146,24 @@ const createWindow = async () => {
     forked.on('message', function (message: string[]) {
       fonts = message;
       mainWindow?.webContents.send('getSystemFontsCb', fonts);
+    });
+  });
+  ipcMain.handle('tts', async (event, text, voice) => {
+    const ttsPath = getExtraResourcesPath('tts')
+    return new Promise((resolve, reject) => {
+      // see: edge-tts  https://github.com/rany2/edge-tts
+      const pythonCmd = 'edge-tts';
+      const audioPath = `${ttsPath}/tts.mp3`
+      const args = [
+        '--text', text,
+        '--voice', voice,
+        '--write-media', audioPath,
+      ];
+      execFile(pythonCmd, args, (error, stdout, stderr) => {
+        if (error) return resolve(null);
+        if (stderr) console.error(stderr);
+        resolve(audioPath);
+      });
     });
   });
 

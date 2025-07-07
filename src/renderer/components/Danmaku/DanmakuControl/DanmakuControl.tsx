@@ -18,6 +18,7 @@ import Switch from "../../Base/Switch";
 import Slider from "../../Base/Slider";
 import { parseData } from "../MsgModel";
 import LanguagePanel from "./LanguagePanel";
+import TtsPanel from "./TtsPanel";
 import CustomStyledPanel from "./CustomStyledPanel";
 import UserConfigPanel from "./UserInfoConfigPanel"
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -73,6 +74,8 @@ function DanmakuControl(props: Props) {
   ) => {
     switch (k) {
       case ConfigKey.showVoice:
+      case ConfigKey.ttsEngine:
+      case ConfigKey.edgeTTSVoice:
         if (v === 0) {
           voice.reset();
         }
@@ -506,13 +509,21 @@ function TranslateSetting(props: {
         <Switch status={config.showVoice} onChange={v => handleUpdateConfig(ConfigKey.showVoice, v)} />
       </div>
       <div className="danmaku-adjust-row">
+        <span className="danmaku-adjust-label v-middle dp-i-block">{t('TtsEngine')}</span>
+        <TtsPanel {...props} configKey={'ttsEngine'} />
+      </div>
+      <div className="danmaku-adjust-row">
+        <span className="danmaku-adjust-label v-middle dp-i-block">{t('EdgeTTSVoice')}</span>
+        <TtsPanel {...props} configKey={'edgeTTSVoice'} />
+      </div>
+      <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('TranslateFrom')}</span>
         <span>{t('TranslateFromAuto')}</span>
       </div>
-      <div className="danmaku-adjust-row">
-        <span className="danmaku-adjust-label v-middle dp-i-block">{t('VoiceTranslateTo')}</span>
-        <LanguagePanel {...props} configKey={'voiceTranslateTo'} />
-      </div>
+      {/*<div className="danmaku-adjust-row">*/}
+      {/*  <span className="danmaku-adjust-label v-middle dp-i-block">{t('VoiceTranslateTo')}</span>*/}
+      {/*  <LanguagePanel {...props} configKey={'voiceTranslateTo'} />*/}
+      {/*</div>*/}
       <div className="danmaku-adjust-row">
         <span className="danmaku-adjust-label v-middle dp-i-block">{t('VoiceSettingTaskMaxLength')}</span>
         <input type="text"

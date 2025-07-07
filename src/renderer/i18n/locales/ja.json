@@ -105,5 +105,7 @@
   "ParameterDescription": "パラメータの説明",
   "ParameterDescriptionText": "bilibiliプライバシーの制限のため、ログインしていない場合は他人のニックネームを見ることができません。ブラウザでbilibiliにログインした後、コンソールクッキーでSESSDATAの値を選択し、次の入力ボックスにコピーして貼り付けてクリックしてリフレッシュすればよい。",
   "SessionError": "uid取得に失敗しました。セッションが正しいか期限切れであるかを確認してください",
-  "Refresh": "リフレッシュ"
+  "Refresh": "リフレッシュ",
+  "TtsEngine": "TTSエンジン",
+  "EdgeTTSVoice": "マイクロソフト音源"
 }

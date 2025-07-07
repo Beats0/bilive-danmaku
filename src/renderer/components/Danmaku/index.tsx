@@ -198,6 +198,19 @@ const Danmaku: FC = () => {
     dispatch(updateConfig(state));
   };
 
+  const handleSetRoom = (roomId: number, shortId: number) => {
+    voice.reset();
+    dispatch(createSocket(roomId));
+    setRoomID(shortId);
+    setPopular(0);
+  };
+
+  const handleSetRoomId = (roomId: number) => {
+    voice.reset();
+    setRoomID(roomId);
+    setPopular(0);
+  }
+
   const handleSubmit = async (
     e?: FormEvent | null,
     selectedShortId?: number
@@ -213,9 +226,7 @@ const Danmaku: FC = () => {
     }
 
     // 创建新的socket
-    dispatch(createSocket(roomData.roomid));
-    setRoomID(roomData.shortid);
-    setPopular(0)
+    handleSetRoom(roomData.roomid, roomData.shortid)
     // 更新config
     handleDispatchUpDateConfig({ k: ConfigKey.shortid, v: roomData.shortid });
     handleDispatchUpDateConfig({ k: ConfigKey.roomid, v: roomData.roomid });
@@ -321,7 +332,7 @@ const Danmaku: FC = () => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            onChange={(e) => setRoomID(Number(e.target.value))}
+            onChange={(e) => handleSetRoomId(Number(e.target.value))}
             value={roomID}
             className="link-input config-input v-middle border-box level-input"
             style={{ width: 80 }}

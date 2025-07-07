@@ -234,6 +234,11 @@ type ConfigStateType = {
   maxDanmakuGiftCount: number;
   // 礼物弹幕列表高度
   danmakuGiftListHeight: number;
+  // tts引擎
+  ttsEngine: string;
+  // edge tts 音源
+  edgeTTSVoice: string;
+
 };
 
 type ConfigStateSliceType = {

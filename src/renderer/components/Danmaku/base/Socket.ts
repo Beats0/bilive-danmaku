@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 import { BrotliDecode } from '../../../utils/brotli';
-import wsUrl from '../common/ws-url';
 import msgStruct from '../common/msg-struct';
 import { generatePacket } from '../../../utils/packet';
 // import { bytes2str } from '../../../utils/convert';
@@ -52,7 +51,6 @@ export default class Socket {
   constructor(roomid: number) {
     this.roomid = roomid;
     this.uid = defaultUid;
-    this._docker = new WebSocket(wsUrl);
     this._methods = [];
     this.i = {
       a: {
@@ -102,6 +100,16 @@ export default class Socket {
     }
     this.uid = uid;
     console.log(`新的socket：[${this.roomid}] 正在初始化...`);
+    const danmuInfoData = await getDanmuInfoData(this.roomid);
+    if (!danmuInfoData) {
+      console.log("获取数据失败");
+      return;
+    }
+    const { host_list } = danmuInfoData
+    const hostItem = host_list[0]
+    // wss://zj-cn-live-comet.chat.bilibili.com:2245/sub
+    const wsUrl = `wss://${hostItem.host}:${hostItem.wss_port}/sub`
+    this._docker = new WebSocket(wsUrl);
     this._docker.binaryType = 'arraybuffer';
     this._docker.onopen = async (event) => {
       const msg = {
@@ -232,7 +240,9 @@ export default class Socket {
       clearInterval(this._timer);
       this._timer = null;
     }
-    this._docker.close();
+    if (this._docker) {
+      this._docker.close();
+    }
   }
 
   private _call(...args) {

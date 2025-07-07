@@ -1,4 +1,5 @@
 import nodeFetch from 'node-fetch';
+import md5 from 'md5'
 import UserAvatarDao from '../dao/UserAvatarDao';
 import { CmdType } from '../components/Danmaku/MsgModel';
 import LiveRoomDao, { LiveRoomData } from '../dao/LiveRoomDao';
@@ -104,8 +105,7 @@ export interface DanmuInfoResponse {
 }
 
 const API_USER_INFO = 'https://api.bilibili.com/x/space/acc/info';
-const API_LIVEROOM_INFO =
-  'https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom';
+const API_LIVEROOM_INFO = 'https://live.bilibili.com';
 const API_GIFT_CONFIG = `https://api.live.bilibili.com/gift/v3/live/gift_config`;
 const API_RESENT_SUPER_CHAT = `https://api.live.bilibili.com/av/v1/SuperChat/enable`;
 const API_RANK_MESSAGE_LIST = `https://api.live.bilibili.com/av/v1/SuperChat/getRankMessageList`;
@@ -202,20 +202,26 @@ export async function getGiftInfo(): Promise<Map<number, GiftRaw>> {
 // 获取直播间信息
 export async function getLiveRoomInfo(roomid: number): Promise<LiveRoom> {
   return new Promise<LiveRoom>((resolve, reject) => {
-    fetch(`${API_LIVEROOM_INFO}?room_id=${roomid}`)
-      .then(res => res.json())
-      .then((data: LiveRoomInfoResponse) => {
-        // 直播间加密等情况是没有数据的
-        if (!data.data) throw new Error(data.message);
-
-        const { face, uname } = data.data.anchor_info.base_info;
-        const {
-          uid,
-          room_id,
-          short_id,
-          title,
-          live_status
-        } = data.data.room_info;
+    fetch(`${ API_LIVEROOM_INFO }/${ roomid }`)
+      .then(res => res.text())
+      .then((html: String) => {
+        const startStr = "window.__NEPTUNE_IS_MY_WAIFU__=";
+        const startIndex = html.indexOf(startStr);
+        if (startIndex === -1) {
+          throw new Error("not found");
+        }
+        const jsonStartIndex = startIndex + startStr.length;
+        const scriptEndIndex = html.indexOf("</script>", jsonStartIndex);
+        const jsonEndIndex = html.lastIndexOf("}", scriptEndIndex) + 1;
+        // 提取JSON字符串
+        const jsonStr = html.substring(jsonStartIndex, jsonEndIndex).trim();
+        // 解析JSON
+        const jsonObj = JSON.parse(jsonStr);
+        const roomInfo = jsonObj.roomInfoRes.data.room_info;
+        const anchorInfo = jsonObj.roomInfoRes.data.anchor_info;
+        const base_info = anchorInfo.base_info;
+        const { room_id, short_id, title, uid, live_status } = roomInfo;
+        const { uname, face } = base_info;
         const liveRoomDaoData: LiveRoomData = {
           uid,
           roomid: room_id,
@@ -304,24 +310,28 @@ export async function getResentSuperChat(
 
 // 获取danmuInfo
 export async function getDanmuInfoData(roomid: number): Promise<DanmuInfoData | null> {
-  return new Promise<DanmuInfoData>((resolve, reject) => {
+  return new Promise<DanmuInfoData>(async (resolve, reject) => {
     const userInfoSessionStr = UserInfoDao.get(UserInfoDaoNS.UserInfoSession);
+    const buvid = await getBuvid3();
     const headers = {
       Cookie: userInfoSessionStr
-        ? `SESSDATA=${userInfoSessionStr};`
+        ? `SESSDATA=${userInfoSessionStr}; buvid3=${buvid};`
         : userInfoSessionStr,
+      Referer: 'https://www.bilibili.com/'
     };
-    nodeFetch(`${API_DANMU_INFO}?id=${roomid}&type=0`, {
+    const params = {
+      id: roomid,
+      type: 0,
+      web_location: 444.8,
+    }
+    const wbiParams = await getWBIParams(params)
+    const url = `${ API_DANMU_INFO }?${wbiParams}`
+    nodeFetch(url, {
       method: 'GET',
       headers,
     })
       .then((res) => res.json())
       .then((data: DanmuInfoResponse) => {
-        if (headers.Cookie) {
-          if (!data.data) {
-            window.alert(i18n.t('SessionError'));
-          }
-        }
         if (!data.data) {
           console.log('[error]', data);
           resolve(null);
@@ -332,7 +342,6 @@ export async function getDanmuInfoData(roomid: number): Promise<DanmuInfoData | 
       })
       .catch((error) => {
         console.log('error', error);
-        window.alert(i18n.t('SessionError'));
         resolve(null);
       });
   });
@@ -356,6 +365,71 @@ export async function getBuvid3(): Promise<string> {
     return buvid3;
   }
   return '';
+}
+
+// 获取WBI
+export async function getWBIParams(params: Object): Promise<string> {
+  const userInfoSessionStr = UserInfoDao.get(UserInfoDaoNS.UserInfoSession);
+  const headers = {
+    Cookie: userInfoSessionStr
+      ? `SESSDATA=${userInfoSessionStr};`
+      : userInfoSessionStr,
+    Referer: 'https://www.bilibili.com/'
+  };
+
+  const mixinKeyEncTab = [
+    46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35, 27, 43, 5, 49,
+    33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13, 37, 48, 7, 16, 24, 55, 40,
+    61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11,
+    36, 20, 34, 44, 52
+  ]
+
+// 对 imgKey 和 subKey 进行字符顺序打乱编码
+  const getMixinKey = (orig) => mixinKeyEncTab.map(n => orig[n]).join('').slice(0, 32)
+
+// 为请求参数进行 wbi 签名
+  function encWbi(params, img_key, sub_key) {
+    const mixin_key = getMixinKey(img_key + sub_key),
+      curr_time = Math.round(Date.now() / 1000),
+      chr_filter = /[!'()*]/g
+    Object.assign(params, { wts: curr_time }) // 添加 wts 字段
+    // 按照 key 重排参数
+    const query = Object
+      .keys(params)
+      .sort()
+      .map(key => {
+        // 过滤 value 中的 "!'()*" 字符
+        const value = params[key].toString().replace(chr_filter, '')
+        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      })
+      .join('&')
+    const wbi_sign = md5(query + mixin_key) // 计算 w_rid
+    return query + '&w_rid=' + wbi_sign
+  }
+
+// 获取最新的 img_key 和 sub_key
+  async function getWbiKeys() {
+    const res = await nodeFetch('https://api.bilibili.com/x/web-interface/nav', {
+      headers,
+    })
+    const { data: { wbi_img: { img_url, sub_url } } } = await res.json()
+
+    return {
+      img_key: img_url.slice(
+        img_url.lastIndexOf('/') + 1,
+        img_url.lastIndexOf('.')
+      ),
+      sub_key: sub_url.slice(
+        sub_url.lastIndexOf('/') + 1,
+        sub_url.lastIndexOf('.')
+      )
+    }
+  }
+  const web_keys = await getWbiKeys()
+  const img_key = web_keys.img_key
+  const sub_key = web_keys.sub_key
+  const query = encWbi(params, img_key, sub_key)
+  return query
 }
 
 // 获取服务器端version

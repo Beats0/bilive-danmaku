@@ -52,13 +52,17 @@ CUT_OFF             // 直播强制切断消息
 
 1. 登录认证(可选)
 
-由于 bilibili 隐私限制, 未登录情况下无法查看他人昵称。为了更好的体验可在浏览器登录 bilibili 后，在控制台 cookie 中选择 SESSDATA 的值, 复制粘贴到以下输入框点击刷新即可。
+由于 bilibili 隐私限制, 未登录情况下获取弹幕数据会导致失败。为了更好的体验可在浏览器登录 bilibili 后，在控制台 cookie 中选择 SESSDATA 的值, 复制粘贴到以下输入框点击刷新即可。
 
 <img src='./screenshot/session.png' width=450 />
 
 2. ~~翻译~~和朗读(翻译已失效)
 
-~~大量使用 google translate api，超出官方调用频率会导致请求超时，翻译或朗读失败。~~
+微软 tts 使用方式，需要使用 python 安装 [edge-tts](https://github.com/rany2/edge-tts)
+
+```py
+$ pip install edge-tts
+```
 
 3. 鼠标穿透功能
 

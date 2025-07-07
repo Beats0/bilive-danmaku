@@ -106,5 +106,7 @@
   "ParameterDescription": "参数说明",
   "ParameterDescriptionText": "由于bilibili隐私限制, 未登录情况下无法查看他人昵称。为了更好的体验可在浏览器登录bilibili后，在控制台cookie中选择SESSDATA的值, 复制粘贴到以下输入框点击刷新即可。",
   "SessionError": "uid获取失败,请检查session是否正确或是否已过期",
-  "Refresh": "刷新"
+  "Refresh": "刷新",
+  "TtsEngine": "TTS引擎",
+  "EdgeTTSVoice": "微软音源"
 }

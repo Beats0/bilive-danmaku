@@ -13,11 +13,11 @@ export const defaultConfig: ConfigStateType = {
   roomid: resentLiveData.roomid,
   shortid: resentLiveData.shortid,
   ignoreMouse: 0,
-  showAvatar: 0,
+  showAvatar: 1,
   avatarSize: 24,
-  showFanLabel: 0,
-  showLvLabel: 0,
-  showVip: 0,
+  showFanLabel: 1,
+  showLvLabel: 1,
+  showVip: 1,
   backgroundColor: 1,
   backgroundOpacity: 0.5,
   fontFamily: '',
@@ -26,7 +26,7 @@ export const defaultConfig: ConfigStateType = {
   fontMarginTop: 3,
   blockScrollBar: 0,
   showVoice: 0,
-  voiceVolume: 0.3,
+  voiceVolume: 1,
   voiceSpeed: 1,
   autoTranslate: 0,
   translateFrom: 'auto',
@@ -53,6 +53,8 @@ export const defaultConfig: ConfigStateType = {
   showGiftDanmakuList: 0,
   maxDanmakuGiftCount: 30,
   danmakuGiftListHeight: 200,
+  ttsEngine: 'edgeTTS',
+  edgeTTSVoice: 'zh-CN-XiaoxiaoNeural',
 };
 
 export default class ConfigDao {

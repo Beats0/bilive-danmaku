@@ -48,7 +48,9 @@ export enum ConfigKey {
   showGiftDanmakuList = 'showGiftDanmakuList',
   maxDanmakuGiftCount = 'maxDanmakuGiftCount',
   danmakuGiftListHeight = 'danmakuGiftListHeight',
-  showTransition = 'showTransition'
+  showTransition = 'showTransition',
+  ttsEngine = "ttsEngine",
+  edgeTTSVoice = "edgeTTSVoice",
 }
 
 export type counterStateType = {
