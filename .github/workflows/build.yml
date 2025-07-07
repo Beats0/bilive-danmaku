@@ -67,3 +67,4 @@ jobs:
           files: 'release/build/**'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
