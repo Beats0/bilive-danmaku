@@ -33,6 +33,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      # step2: setup python env(macOS)
+      - name: Install Python distutils (macOS/Linux)
+        if: matrix.os == 'macos-latest'
+        run: python3 -m pip install --upgrade pip && python3 -m pip install setuptools
+
       # step3: setup node env
       - name: Install Node and NPM
         uses: actions/setup-node@v3
