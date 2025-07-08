@@ -25,23 +25,29 @@ jobs:
     steps:
       # step1: check out repository
       - name: Checkout git repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # step2: setup node env
+      # step2: setup python env
+      - name: Setup Python env
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # step3: setup node env
       - name: Install Node and NPM
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
           cache: npm
 
-      # step3: npm install and package
+      # step4: npm install and package
       - name: Install and build
         run: |
           npm install
           npm run postinstall
           npm run package
 
-      # step4: cleanup artifacts in release
+      # step5: cleanup artifacts in release
       - name: Cleanup artifacts for windows
         if: matrix.os == 'windows-latest'
         run: |
@@ -52,14 +58,14 @@ jobs:
         run: |
           npx rimraf "release/build/!(*.dmg)"
 
-      # step5: upload artifacts
+      # step6: upload artifacts
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}
           path: release/build
 
-      # step6: create release
+      # step7: create release
       - name: Create release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
