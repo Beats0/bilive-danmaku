@@ -2,24 +2,6 @@
 
 开发文档
 
-设置源
-
-```
-npm config set registry https://registry.npmmirror.com
-yarn config set registry https://registry.npmmirror.com
-yarn config set disturl https://registry.npmmirror.com/dist
-yarn config set electron_mirror https://registry.npmmirror.com/electron/
-
-
-npm config set disturl=https://registry.npmmirror.com/-/binary/node
-npm config set ELECTRON_MIRROR=https://registry.npmmirror.com/-/binary/electron/
-yarn config set disturl https://registry.npmmirror.com/-/binary/node -g
-```
-
-eslint 配置不生效，JSX 代码格式各种警告，实在搞不动了，有代码强迫症的把 eslint 检查关了吧 = =
-
-## 命令
-
 调试
 
 ```sh

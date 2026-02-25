@@ -31,7 +31,7 @@ export const defaultConfig: ConfigStateType = {
   autoTranslate: 0,
   translateFrom: 'auto',
   translateTo: 'ja',
-  maxMessageCount: 500,
+  maxMessageCount: 2000,
   taskMaxLength: 5,
   voiceTranslateTo: 'zhCn',
   blockMode: 0,

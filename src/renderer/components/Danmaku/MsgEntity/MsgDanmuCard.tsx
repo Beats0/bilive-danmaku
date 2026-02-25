@@ -1,102 +1,32 @@
-import React, { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useState } from 'react';
 import styled from 'styled-components';
 import Tooltip from 'rc-tooltip';
 import MsgVip from './MsgVip';
 import MsgUserAvatar from './MsgUserAvatar';
 import { ConfigKey } from '../../../reducers/types';
-import { currentTranslateToCode, translate } from '../../../utils/translation';
 import { openLink } from '../../../utils/common';
-import voice from '../../../utils/vioce';
 import StyledDao, { StyledDaoNS } from '../../../dao/StyledDao';
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { selectConfig, updateConfig } from "../../../store/features/configSlice";
 import { useTranslation } from "react-i18next";
-import { selectDanmaku } from "../../../store/features/danmakuSlice";
 
-/**
- * userName 样式
- * eg:
- * const UserWrapper =  styled.span`
- *    text-shadow: 1px 1px 2px #E91E63, 0 0 0.2em #E91E63;
- * `
- * */
 const UserWrapperStr = StyledDao.get(StyledDaoNS.UserWrapper);
 const UserWrapper = styled.span`
   ${UserWrapperStr}
 `;
 
-// content 样式
-const ContentWrapperStr = StyledDao.get(StyledDaoNS.ContentWrapper);
+const ContentWrapperStr = `text-shadow: 1px 1px 2px #00b6ff, 0 0 0.2em #0fb3f5;`
 const ContentWrapper = styled.span`
   ${ContentWrapperStr}
 `;
 
 
-const BiliText = (content: string) => {
-  const danmaku = useAppSelector(selectDanmaku);
-  const { emoticonsMap } = danmaku;
-  const parsedContent = useMemo(() => {
-    // 正则表达式匹配 [表情文字]
-    const regex = /(\[.+?\])/g;
-    // 将字符串拆分为数组，例如: ["Hello ", "[妙啊]", " 视频不错"]
-    const parts = content.split(regex);
-    return parts.map((part, index) => {
-      if (emoticonsMap.has(part)) {
-        const matchItem: EmoticonRaw = emoticonsMap.get(part)
-        return (
-          <span className="v-middle pointer emoticon">
-           <img
-             key={index + Math.random()}
-             src={matchItem.url}
-             style={{width: matchItem.width, height: matchItem.height}}
-             alt={part}
-             title={part}
-           />
-          </span>
-        );
-      }
-      // 否则返回普通文本
-      return part;
-    });
-  }, [content]);
-
-  return parsedContent;
-};
-
-
-function MsgDanmu(props: DanmakuMsg) {
+function MsgDanmuCard(props: DanmakuCard) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const config = useAppSelector(selectConfig);
 
   const [showToolTip, setShowToolTip] = useState(false);
-  let [translateContent, setTranslateContent] = useState(props.content);
-
-  // 翻译文字
-  const handleTranslate = () => {
-    translate(props.content, {
-      from: 'auto',
-      to: currentTranslateToCode()
-    })
-      .then(translateObj => {
-        translateContent = `${translateObj.text}`;
-        setTranslateContent(translateContent);
-      })
-      .catch((e: any) => {
-        console.log(e);
-        translateContent = `${props.content}(${t('TranslateFailed')})`;
-        setTranslateContent(translateContent);
-      })
-      .finally(() => {
-        setShowToolTip(false);
-      });
-  };
-
-  useEffect(() => {
-    if (config.autoTranslate === 1) {
-      handleTranslate();
-    }
-  }, []);
 
   // 屏蔽用户
   const handleBlockUser = (uid: number) => {
@@ -116,16 +46,11 @@ function MsgDanmu(props: DanmakuMsg) {
     setShowToolTip(false);
   };
 
-  const handleReadDanmaku = (uname: string, text: string) => {
-    voice.resetPush(uname, text);
-  };
 
   const danmakuActionMenu = (uid: number, uname: string, text: string) => {
     return (
       <div className="danmakuActionMenu">
         <span className="danmakuActionMenuUser pointer" onClick={() => openLink(`https://space.bilibili.com/${uid}`)}>{uname}</span>
-        <span className="danmakuActionMenuItem pointer" onClick={handleTranslate}>{t('DanmakuTranslate')}</span>
-        <span className="danmakuActionMenuItem pointer" onClick={() => handleReadDanmaku(uname, text)}>{t('DanmakuRead')}</span>
         <span className="danmakuActionMenuItem pointer" onClick={() => handleBlockUser(uid)}>{t('DanmakuBlockUser')}</span>
         <span className="danmakuActionMenuItem pointer" onClick={() => handleBlockDanmaku(text)}>{t('DanmakuBlockSimilar')}</span>
       </div>
@@ -156,7 +81,7 @@ function MsgDanmu(props: DanmakuMsg) {
       {
         config.showLvLabel === 1 && <div className={`user-level-icon dp-i-block p-relative v-middle ${props.userLevel && `lv-${props.userLevel}`}`}>UL {props.userLevel}</div>
       }
-       <span className={`user-name v-middle pointer open-menu ${props.guardLevel ? 'guard' : ''}`}>
+      <span className={`user-name v-middle pointer open-menu ${props.guardLevel ? 'guard' : ''}`}>
          <UserWrapper>
            {props.username}:
          </UserWrapper>
@@ -167,11 +92,11 @@ function MsgDanmu(props: DanmakuMsg) {
         placement="top"
         onVisibleChange={v => setShowToolTip(v)}
         trigger="click"
-        overlay={danmakuActionMenu(props.userID, props.username, props.content)}
+        overlay={danmakuActionMenu(props.userID, props.username, props.card_content.title)}
       >
-        <span className="danmaku-content v-middle pointer ts-dot-2 open-menu">
+        <span className="danmaku-card-content v-middle pointer ts-dot-2 open-menu">
           <ContentWrapper>
-            {BiliText(translateContent)}
+            <span onClick={() => openLink(props.card_content.url)}>{props.card_content.title} - {props.card_content.forward_source}</span>
             {props.repeat > 0 && (<span className={`repeatNum repeat-num-${props.repeat}`}>{props.repeat}</span>)}
           </ContentWrapper>
         </span>
@@ -180,4 +105,4 @@ function MsgDanmu(props: DanmakuMsg) {
   );
 }
 
-export default memo(MsgDanmu);
+export default memo(MsgDanmuCard);

@@ -13,6 +13,8 @@ export enum CmdType {
   LIVE = 'LIVE',
   POPULAR = 'POPULAR',
   DANMU_MSG = 'DANMU_MSG',
+  DANMU_MSG_ICON = 'DANMU_MSG_ICON',
+  DANMU_MSG_CARD = 'DANMU_MSG_CARD',
   SEND_GIFT = 'SEND_GIFT',
   SPECIAL_GIFT = 'SPECIAL_GIFT',
   COMBO_SEND = 'COMBO_SEND',
@@ -41,12 +43,13 @@ function assertUnknownCmdType(cmd: any): UnknownMsg {
 export async function parseData(
   data: DanmakuData
 ): Promise<DanmakuDataFormatted> {
+  // console.log('msg',  data)
   switch (data.cmd) {
     case CmdType.LIVE:
       break;
     case CmdType.DANMU_MSG:
       const userID = data.info['2']['0'];
-      const danmakuMsg: DanmakuMsg = {
+      let danmakuMsg: DanmakuMsg  = {
         cmd: CmdType.DANMU_MSG,
         username: data.info['2']['1'],
         userID,
@@ -72,18 +75,30 @@ export async function parseData(
         // 从Dao中获取,如果有就直接添加
         danmakuMsg.face = UserAvatarDao.get(userID).avatar;
       }
-      // 不用这个了
-      // else if (config.showAvatar && userID > 1) {
-      //   // 从api获取
-      //   UserInfoApiTask.push(userID);
-      //   // 频繁请求api会导致被ban
-      //   if (
-      //     UserInfoApiTask.getTaskQueueLength() <= apiTaskConfig.taskMaxLength
-      //   ) {
-      //     await sleep(apiTaskConfig.sleepMs);
-      //   }
-      //   danmakuMsg.face = UserAvatarDao.get(userID).avatar;
-      // }
+      // DanmakuIcon
+      if (data.info['0']['12'] === 1) {
+        const danmakuIconMsg: DanmakuIcon = danmakuMsg
+        danmakuIconMsg.cmd = 'DANMU_MSG_ICON'
+        danmakuIconMsg.iconName = data.info['1']
+        danmakuIconMsg.iconUrl = data.info['0']['13'].url
+        danmakuIconMsg.width = data.info['0']['13'].width
+        danmakuIconMsg.height = data.info["0"]["13"].height;
+        if (danmakuIconMsg.width === danmakuIconMsg.height) {
+          danmakuIconMsg.width = 36
+          danmakuIconMsg.height = 36
+        } else {
+          const radio = danmakuIconMsg.width / danmakuIconMsg.height
+          danmakuIconMsg.width = 28 * radio
+          danmakuIconMsg.height = 28
+        }
+        return danmakuIconMsg;
+      } else if (data.info['0']['12'] === 3 && data.info['0']['15']) {
+        // card
+        const danmakuCardMsg: DanmakuCard = danmakuMsg
+        danmakuCardMsg.card_content = JSON.parse(data.info['0']['15'].extra).card.card_content
+        danmakuCardMsg.cmd = 'DANMU_MSG_CARD'
+        return danmakuCardMsg;
+      }
       return danmakuMsg;
     case CmdType.SEND_GIFT:
       const danmakuGiftMsg: GiftBubbleMsg = {

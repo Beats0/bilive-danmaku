@@ -293,10 +293,55 @@ a:hover {
   align-items: center;
   justify-content: center;
 }
+.flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanBox {
+  position: relative;
+}
+
+.login_qrcode_tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  background: hsla(0, 0%, 100%, .9);
+  z-index: 2;
+  cursor: pointer;
+  img {
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 16px;
+    width: 56px;
+    height: 56px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  span {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 19px;
+    color: #61666d;
+    text-align: center;
+  }
+}
 
 .v-middle {
   vertical-align: middle;
-
+}
+.emoticon {
+  display: inline-block;
+  line-height: 1;
 }
 .p-relative {
   position: relative;
@@ -810,6 +855,9 @@ span.danmaku-content {
   text-shadow: 0 1px 3px #333;
 }
 
+.danmakuIcon {
+}
+
 .guard-level-1:before,.guard-level-2:before {
   content: "";
   display: block;
@@ -935,6 +983,9 @@ span.danmaku-content {
 }
 .danmaku-content:hover {
   color: #ff94b1;
+}
+.danmaku-card-content:hover {
+  color: #aadcef;
 }
 .icon-item.warning {
   color: #f4bd00;
@@ -1689,7 +1740,7 @@ li.item {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .pay-note-panel .arrow-left {

@@ -34,10 +34,10 @@ import {
   updateConfig,
 } from '../../store/features/configSlice';
 import {
-  createSocket,
+  createSocket, fetchEmotionsData,
   fetchGiftData,
-  selectDanmaku,
-} from '../../store/features/danmakuSlice';
+  selectDanmaku
+} from "../../store/features/danmakuSlice";
 
 let notificationInstance: RCNotificationInstance | null = null;
 Notification.newInstance(
@@ -319,7 +319,8 @@ const Danmaku: FC = () => {
       onConnecting();
       initConfigSetting();
       initCssVariable();
-      dispatch(fetchGiftData());
+      dispatch(fetchGiftData(roomID));
+      dispatch(fetchEmotionsData(roomID));
       fetchResentSuperChat(roomID);
       dispatch(fetchVersionInfo());
     }

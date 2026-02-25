@@ -24,6 +24,54 @@ interface DanmakuMsg {
   repeat: number;
 }
 
+interface DanmakuIcon {
+  cmd: string;
+  username: string;
+  userID: number;
+  isAdmin: boolean;
+  isVip: boolean;
+  isVipM: boolean;
+  isVipY: boolean;
+  guardLevel: number;
+  userLevel: number;
+  face?: string;
+  fanLv: number;
+  fanName: string;
+  liveUp: string;
+  liveRoomID: number | string;
+  content: string;
+  repeat: number;
+  iconName: string;
+  iconUrl: string;
+  width: number;
+  height: number;
+}
+
+interface DanmakuCard {
+  cmd: string;
+  username: string;
+  userID: number;
+  isAdmin: boolean;
+  isVip: boolean;
+  isVipM: boolean;
+  isVipY: boolean;
+  guardLevel: number;
+  userLevel: number;
+  face?: string;
+  fanLv: number;
+  fanName: string;
+  liveUp: string;
+  liveRoomID: number | string;
+  content: string;
+  repeat: number;
+  card_content: {
+    title: string;
+    subtitle: string;
+    forward_source: string;
+    url: string;
+  }
+}
+
 interface DanmakuGift {
   cmd: string;
   username: string;
@@ -137,6 +185,13 @@ type GiftRaw = {
   gif: string;
   rights: string;
   webp: string;
+};
+
+type EmoticonRaw = {
+  name: string;
+  url: string;
+  width: number;
+  height: number;
 };
 
 type ConfigStateType = {

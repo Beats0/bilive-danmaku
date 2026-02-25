@@ -2,6 +2,8 @@ import { animated, useSpring } from 'react-spring';
 import { CmdType } from '../MsgModel';
 import MsgWelcome from './MsgWelcome';
 import MsgDanmu from './MsgDanmu';
+import MsgDanmuIcon from './MsgDanmuIcon';
+import MsgDanmuCard from './MsgDanmuCard';
 import MsgLive from './MsgLive';
 import MsgSendGift from './MsgSendGift';
 import MsgWelcomeGuard from './MsgWelcomeGuard';
@@ -42,6 +44,12 @@ export default function MsgEntity(props: MsgEntityProps) {
   switch (cmd) {
     case CmdType.DANMU_MSG:
       Msg = <MsgDanmu {...props} />;
+      break;
+    case CmdType.DANMU_MSG_ICON:
+      Msg = <MsgDanmuIcon {...props} />;
+      break;
+    case CmdType.DANMU_MSG_CARD:
+      Msg = <MsgDanmuCard {...props} />;
       break;
     case CmdType.SEND_GIFT:
       if (showGift) {

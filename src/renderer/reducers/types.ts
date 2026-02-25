@@ -61,6 +61,7 @@ export type danmakuStateType = {
   roomid: number;
   socket: SocketInstanceType;
   giftMap: Map<number, GiftRaw>;
+  emoticonsMap: Map<string, string>;
   userAvatarMap: Map<number, string>;
 };
 

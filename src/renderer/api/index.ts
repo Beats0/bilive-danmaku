@@ -106,13 +106,14 @@ export interface DanmuInfoResponse {
 
 const API_USER_INFO = 'https://api.bilibili.com/x/space/acc/info';
 const API_LIVEROOM_INFO = 'https://live.bilibili.com';
-const API_GIFT_CONFIG = `https://api.live.bilibili.com/gift/v3/live/gift_config`;
+const API_GIFT_CONFIG = `https://api.live.bilibili.com/xlive/web-room/v1/giftPanel/roomGiftList`;
 const API_RESENT_SUPER_CHAT = `https://api.live.bilibili.com/av/v1/SuperChat/enable`;
 const API_RANK_MESSAGE_LIST = `https://api.live.bilibili.com/av/v1/SuperChat/getRankMessageList`;
 const API_DANMU_INFO = `https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo`;
 const API_FINGER_SPI = `https://api.bilibili.com/x/frontend/finger/spi/`;
 const API_SERVER_PACKAGE = `https://cdn.jsdelivr.net/gh/beats0/bilive-danmaku/package.json`;
 const API_SESSION_INFO = `https://api.bilibili.com/x/web-interface/nav`;
+const API_GETEMOTICONS = `https://api.live.bilibili.com/xlive/web-ucenter/v2/emoticon/GetEmoticons`
 
 // 获取我的信息
 export async function getSessionInfoData(
@@ -178,16 +179,17 @@ export async function getUserInfo(mid: number): Promise<UserInfo> {
 }
 
 // 获取礼物数据
-export async function getGiftInfo(): Promise<Map<number, GiftRaw>> {
+export async function getGiftInfo(roomId: number): Promise<Map<number, GiftRaw>> {
   const giftMap = new Map<number, GiftRaw>();
   return new Promise((resolve, reject) => {
-    fetch(API_GIFT_CONFIG)
+    fetch(`${API_GIFT_CONFIG}?platform=pc&room_id=${roomId}`)
       .then(res => res.json())
       .then((res: { msg: string; data: any[] }) => {
         if (res.code === 0) {
           const { data } = res;
-          for (let i = 0; i < data.length; i++) {
-            giftMap.set(data[i].id, data[i]);
+          const giftList = data.gift_config.base_config.list || []
+          for (let i = 0; i < giftList.length; i++) {
+            giftMap.set(giftList[i].id, giftList[i]);
           }
           resolve(giftMap);
         }
@@ -430,6 +432,56 @@ export async function getWBIParams(params: Object): Promise<string> {
   const sub_key = web_keys.sub_key
   const query = encWbi(params, img_key, sub_key)
   return query
+}
+
+// 获取表情
+export async function getEmoticons(roomId: number): Promise<Map<string, EmoticonRaw>> {
+  const emoticonsMap = new Map<string, EmoticonRaw>();
+  const userInfoSessionStr = UserInfoDao.get(UserInfoDaoNS.UserInfoSession);
+  const buvid = await getBuvid3();
+  const headers = {
+    Cookie: userInfoSessionStr
+      ? `SESSDATA=${userInfoSessionStr}; buvid3=${buvid};`
+      : userInfoSessionStr,
+  };
+  return new Promise((resolve, reject) => {
+    nodeFetch(`${API_GETEMOTICONS}?platform=pc&room_id=${roomId}`, {
+      method: 'GET',
+      headers,
+    })
+      .then(res => res.json())
+      .then((res: { msg: string; data: any[] }) => {
+        if (res.code === 0) {
+          const { data = [] } = res.data;
+          for (let i = 0; i < data.length; i++) {
+            const items = data[i].emoticons;
+            for (let j = 0; j < items.length; j++) {
+              const item = items[j];
+              const emoticon: EmoticonRaw = {
+                name: item.emoji,
+                url: item.url,
+                width: item.width,
+                height: item.height
+              };
+              if (emoticon.width === emoticon.height) {
+                emoticon.width = 24;
+                emoticon.height = 24;
+              } else {
+                const radio = emoticon.width / emoticon.height;
+                emoticon.width = 24 * radio;
+                emoticon.height = 24;
+              }
+              emoticonsMap.set(emoticon.name, emoticon);
+            }
+          }
+          resolve(emoticonsMap);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        resolve(emoticonsMap);
+      });
+  });
 }
 
 // 获取服务器端version
